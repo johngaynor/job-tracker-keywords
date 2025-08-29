@@ -164,6 +164,16 @@ export function JobsKanban() {
                               💰 {job.salaryEstimate}
                             </p>
                           )}
+                          {job.interestLevel && (
+                            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                              {job.interestLevel <= 3
+                                ? "🔴"
+                                : job.interestLevel <= 6
+                                ? "🟡"
+                                : "🟢"}{" "}
+                              Interest: {job.interestLevel}/10
+                            </p>
+                          )}
                           {job.link && (
                             <a
                               href={job.link}
@@ -181,17 +191,16 @@ export function JobsKanban() {
                         </div>
                         <div className="flex flex-col gap-1 ml-2">
                           <ActivityLogDialog
-                            jobId={job.id!}
-                            jobTitle={job.title}
+                            job={job}
                           />
                           <JobUpdateDialog job={job} onJobUpdated={loadJobs} />
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-6 w-6 p-0"
+                            className="h-8 w-8 p-0"
                             onClick={() => handleDeleteJob(job.id!)}
                           >
-                            <Trash2 className="h-3 w-3" />
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>

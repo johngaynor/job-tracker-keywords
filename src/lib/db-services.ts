@@ -64,7 +64,8 @@ export const jobService = {
     notes?: string,
     link?: string,
     referenceNumber?: string,
-    salaryEstimate?: string
+    salaryEstimate?: string,
+    interestLevel?: number
   ): Promise<number> {
     const now = new Date();
     return await db.jobs.add({
@@ -74,6 +75,7 @@ export const jobService = {
       link,
       referenceNumber,
       salaryEstimate,
+      interestLevel,
       status: "not applied",
       createdAt: now,
       updatedAt: now,

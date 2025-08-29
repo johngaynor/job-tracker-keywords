@@ -161,7 +161,8 @@ export class ImportExportService {
             job.notes,
             job.link,
             job.referenceNumber,
-            job.salaryEstimate
+            job.salaryEstimate,
+            job.interestLevel
           );
 
           // Update status if different from default

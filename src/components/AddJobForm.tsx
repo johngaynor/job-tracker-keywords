@@ -116,6 +116,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [jobLink, setJobLink] = useState("");
   const [jobReferenceNumber, setJobReferenceNumber] = useState("");
   const [jobSalaryEstimate, setJobSalaryEstimate] = useState("");
+  const [jobInterestLevel, setJobInterestLevel] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -162,6 +163,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
     setJobLink("");
     setJobReferenceNumber("");
     setJobSalaryEstimate("");
+    setJobInterestLevel("");
     setKeywords([]);
     setNewKeyword("");
 
@@ -194,7 +196,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         jobNotes.trim() || undefined,
         jobLink.trim() || undefined,
         jobReferenceNumber.trim() || undefined,
-        jobSalaryEstimate.trim() || undefined
+        jobSalaryEstimate.trim() || undefined,
+        jobInterestLevel ? parseInt(jobInterestLevel) : undefined
       );
 
       // Add keywords
@@ -220,6 +223,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       setJobLink("");
       setJobReferenceNumber("");
       setJobSalaryEstimate("");
+      setJobInterestLevel("");
       setKeywords([]);
       setNewKeyword("");
 
@@ -303,7 +307,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
             </div>
           )}
 
-          {/* Job Title and Salary row */}
+          {/* Row 1: Employer (already above), Job Title, Job Link */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="jobTitle">Job Title</Label>
@@ -313,6 +317,31 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 onChange={(e) => setJobTitle(e.target.value)}
                 placeholder="Enter job title"
                 required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="jobLink">Job Link (optional)</Label>
+              <Input
+                id="jobLink"
+                type="url"
+                value={jobLink}
+                onChange={(e) => setJobLink(e.target.value)}
+                placeholder="https://company.com/job-posting"
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Reference Number, Salary Estimate, Interest Level */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="jobReferenceNumber">
+                Reference Number (optional)
+              </Label>
+              <Input
+                id="jobReferenceNumber"
+                value={jobReferenceNumber}
+                onChange={(e) => setJobReferenceNumber(e.target.value)}
+                placeholder="Job reference/code"
               />
             </div>
             <div className="space-y-2">
@@ -326,30 +355,23 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 placeholder="e.g., $80,000 - $100,000, $120k/year"
               />
             </div>
-          </div>
-
-          {/* Job Link and Reference Number row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="jobLink">Job Link (optional)</Label>
-              <Input
-                id="jobLink"
-                type="url"
-                value={jobLink}
-                onChange={(e) => setJobLink(e.target.value)}
-                placeholder="https://company.com/job-posting"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="jobReferenceNumber">
-                Reference Number (optional)
-              </Label>
-              <Input
-                id="jobReferenceNumber"
-                value={jobReferenceNumber}
-                onChange={(e) => setJobReferenceNumber(e.target.value)}
-                placeholder="Job reference/code"
-              />
+              <Label htmlFor="jobInterestLevel">Interest Level (1-10)</Label>
+              <Select
+                value={jobInterestLevel}
+                onValueChange={setJobInterestLevel}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select interest level" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
+                    <SelectItem key={level} value={level.toString()}>
+                      {level} {level <= 3 ? "🔴" : level <= 6 ? "🟡" : "🟢"}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

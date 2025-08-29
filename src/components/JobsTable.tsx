@@ -106,6 +106,7 @@ export function JobsTable() {
             <TableHead>Company</TableHead>
             <TableHead>Position</TableHead>
             <TableHead>Salary</TableHead>
+            <TableHead>Interest</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Date Created</TableHead>
             <TableHead>Keywords</TableHead>
@@ -143,6 +144,22 @@ export function JobsTable() {
               <TableCell>
                 {job.salaryEstimate ? (
                   <p className="text-sm font-medium">{job.salaryEstimate}</p>
+                ) : (
+                  <span className="text-zinc-500 text-sm">-</span>
+                )}
+              </TableCell>
+              <TableCell>
+                {job.interestLevel ? (
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">{job.interestLevel}</span>
+                    <span>
+                      {job.interestLevel <= 3
+                        ? "🔴"
+                        : job.interestLevel <= 6
+                        ? "🟡"
+                        : "🟢"}
+                    </span>
+                  </div>
                 ) : (
                   <span className="text-zinc-500 text-sm">-</span>
                 )}
@@ -214,7 +231,7 @@ export function JobsTable() {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex items-center justify-end gap-2">
-                  <ActivityLogDialog jobId={job.id!} jobTitle={job.title} />
+                  <ActivityLogDialog job={job} />
                   <JobUpdateDialog job={job} onJobUpdated={loadJobs} />
                   <Button
                     variant="outline"

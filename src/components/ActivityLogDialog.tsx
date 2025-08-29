@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,36 +20,35 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { activityService } from "@/lib/db-services";
-import { Activity } from "@/lib/database";
+import { Activity, Job } from "@/lib/database";
 import { FileText, Calendar, ArrowUpDown } from "lucide-react";
 
 interface ActivityLogDialogProps {
-  jobId: number;
-  jobTitle: string;
+  job: Job & { employer: { name: string } };
 }
 
-export function ActivityLogDialog({ jobId, jobTitle }: ActivityLogDialogProps) {
+export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
   const [open, setOpen] = useState(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const loadActivities = async () => {
+  const loadActivities = useCallback(async () => {
     if (!open) return;
 
     setLoading(true);
     try {
-      const jobActivities = await activityService.getByJobId(jobId);
+      const jobActivities = await activityService.getByJobId(job.id!);
       setActivities(jobActivities);
     } catch (error) {
       console.error("Error loading activities:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [open, job.id]);
 
   useEffect(() => {
     loadActivities();
-  }, [open, jobId, loadActivities]);
+  }, [open, job.id, loadActivities]);
 
   const getActivityTypeColor = (type: string) => {
     switch (type) {
@@ -83,7 +82,7 @@ export function ActivityLogDialog({ jobId, jobTitle }: ActivityLogDialogProps) {
             Activity Log
           </DialogTitle>
           <DialogDescription>
-            Activity history for &quot;{jobTitle}&quot;
+            Activity history for {job.employer.name} - {job.title} {job.referenceNumber && `(${job.referenceNumber})`}
           </DialogDescription>
         </DialogHeader>
 
@@ -108,7 +107,6 @@ export function ActivityLogDialog({ jobId, jobTitle }: ActivityLogDialogProps) {
                     <TableHead>Date</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Activity</TableHead>
-                    <TableHead>Details</TableHead>
                     <TableHead>Notes</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -116,12 +114,14 @@ export function ActivityLogDialog({ jobId, jobTitle }: ActivityLogDialogProps) {
                   {activities.map((activity) => (
                     <TableRow key={activity.id}>
                       <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Calendar className="h-3 w-3 text-zinc-500" />
-                          <span className="whitespace-nowrap">
-                            {new Date(activity.createdAt).toLocaleDateString()}
-                          </span>
-                          <span className="text-xs text-zinc-500">
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1 text-sm">
+                            <Calendar className="h-3 w-3 text-zinc-500" />
+                            <span className="whitespace-nowrap">
+                              {new Date(activity.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <span className="text-xs text-zinc-500 ml-4">
                             {new Date(activity.createdAt).toLocaleTimeString(
                               [],
                               {
@@ -143,26 +143,24 @@ export function ActivityLogDialog({ jobId, jobTitle }: ActivityLogDialogProps) {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className="font-medium">
-                          {formatActivityCategory(activity.category)}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        {activity.type === "status_change" &&
-                        activity.previousStatus &&
-                        activity.newStatus ? (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Badge variant="outline" className="text-xs">
-                              {activity.previousStatus}
-                            </Badge>
-                            <ArrowUpDown className="h-3 w-3 text-zinc-500" />
-                            <Badge variant="outline" className="text-xs">
-                              {activity.newStatus}
-                            </Badge>
-                          </div>
-                        ) : (
-                          <span className="text-zinc-500 text-sm">-</span>
-                        )}
+                        <div className="flex flex-col gap-1">
+                          <span className="font-medium">
+                            {formatActivityCategory(activity.category)}
+                          </span>
+                          {activity.type === "status_change" &&
+                          activity.previousStatus &&
+                          activity.newStatus && (
+                            <div className="flex items-center gap-2 text-sm">
+                              <Badge variant="outline" className="text-xs">
+                                {activity.previousStatus}
+                              </Badge>
+                              <ArrowUpDown className="h-3 w-3 text-zinc-500" />
+                              <Badge variant="outline" className="text-xs">
+                                {activity.newStatus}
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         {activity.notes ? (
