@@ -13,8 +13,15 @@ export interface Job {
   employerId: number;
   title: string;
   notes?: string;
+  link?: string;
   appliedDate: Date;
-  status: "applied" | "interview" | "rejected" | "offer" | "withdrawn";
+  status:
+    | "not applied"
+    | "applied"
+    | "interview"
+    | "rejected"
+    | "offer"
+    | "withdrawn";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,7 +43,7 @@ export class EmployerKeywordsDB extends Dexie {
     super("EmployerKeywordsDB");
     this.version(1).stores({
       employers: "++id, name, notes, createdAt, updatedAt",
-      jobs: "++id, employerId, title, notes, appliedDate, status, [employerId+title], createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, appliedDate, status, [employerId+title], createdAt, updatedAt",
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
     });
   }

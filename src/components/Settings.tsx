@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { ImportExport } from '@/components/ImportExport';
-import { ImportExportService } from '@/lib/import-export';
-import { 
-  Trash2, 
-  AlertTriangle, 
-  Settings as SettingsIcon
-} from 'lucide-react';
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ImportExport } from "@/components/ImportExport";
+import { ImportExportService } from "@/lib/import-export";
+import { Trash2, AlertTriangle, Settings as SettingsIcon } from "lucide-react";
 
 interface SettingsProps {
   onDataChanged: () => void;
@@ -23,27 +26,35 @@ export function Settings({ onDataChanged }: SettingsProps) {
 
   const handleFullWipe = async () => {
     setIsWiping(true);
-    
+
     try {
       // Import an empty dataset with clearExisting=true to wipe everything
-      await ImportExportService.importData({
-        version: '1.0',
-        exportDate: new Date().toISOString(),
-        employers: [],
-        jobs: [],
-        keywords: []
-      }, { clearExisting: true });
-      
+      await ImportExportService.importData(
+        {
+          version: "1.0",
+          exportDate: new Date().toISOString(),
+          employers: [],
+          jobs: [],
+          keywords: [],
+        },
+        { clearExisting: true }
+      );
+
       setWipeComplete(true);
+      toast.success("All data deleted successfully!", {
+        description: "Your database has been completely wiped."
+      });
       onDataChanged();
-      
+
       // Hide the success message after 3 seconds
       setTimeout(() => {
         setWipeComplete(false);
       }, 3000);
     } catch (error) {
-      console.error('Error wiping data:', error);
-      alert('Failed to wipe data. Please try again.');
+      console.error("Error wiping data:", error);
+      toast.error("Failed to delete data", {
+        description: "Please try again."
+      });
     } finally {
       setIsWiping(false);
       setShowWipeConfirm(false);
@@ -87,14 +98,15 @@ export function Settings({ onDataChanged }: SettingsProps) {
           <div className="flex items-start gap-2 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
             <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-red-700 dark:text-red-300">
-              <strong>Warning:</strong> This will permanently delete all employers, job applications, 
-              and keywords from your database. Make sure to export your data first if you want to keep a backup.
+              <strong>Warning:</strong> This will permanently delete all
+              employers, job applications, and keywords from your database. Make
+              sure to export your data first if you want to keep a backup.
             </div>
           </div>
 
           {/* Confirmation Flow */}
           {!showWipeConfirm ? (
-            <Button 
+            <Button
               variant="destructive"
               onClick={confirmWipe}
               disabled={isWiping}
@@ -110,21 +122,22 @@ export function Settings({ onDataChanged }: SettingsProps) {
                   Are you absolutely sure?
                 </p>
                 <p className="text-sm text-red-700 dark:text-red-300">
-                  This will delete all your data permanently. This action cannot be undone.
+                  This will delete all your data permanently. This action cannot
+                  be undone.
                 </p>
               </div>
-              
+
               <div className="flex gap-2">
-                <Button 
+                <Button
                   variant="destructive"
                   onClick={handleFullWipe}
                   disabled={isWiping}
                   className="flex items-center gap-2"
                 >
                   <Trash2 className="h-4 w-4" />
-                  {isWiping ? 'Deleting...' : 'Yes, Delete Everything'}
+                  {isWiping ? "Deleting..." : "Yes, Delete Everything"}
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
                   onClick={cancelWipe}
                   disabled={isWiping}
@@ -158,16 +171,18 @@ export function Settings({ onDataChanged }: SettingsProps) {
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
           <div>
-            <strong>Storage:</strong> All your data is stored locally in your browser using IndexedDB. 
-            No data is sent to any external servers.
+            <strong>Storage:</strong> All your data is stored locally in your
+            browser using IndexedDB. No data is sent to any external servers.
           </div>
           <div>
-            <strong>Privacy:</strong> Your employer and job application data remains completely private 
-            and is only accessible from this browser on this device.
+            <strong>Privacy:</strong> Your employer and job application data
+            remains completely private and is only accessible from this browser
+            on this device.
           </div>
           <div>
-            <strong>Backup:</strong> Use the export function to create backups of your data. 
-            This is especially important before clearing browser data or switching devices.
+            <strong>Backup:</strong> Use the export function to create backups
+            of your data. This is especially important before clearing browser
+            data or switching devices.
           </div>
         </CardContent>
       </Card>

@@ -1,12 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { jobService, keywordService, employerService } from '@/lib/db-services';
-import { Job, Keyword, Employer } from '@/lib/database';
-import { Trash2, Edit, Calendar, Building } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { jobService, keywordService, employerService } from "@/lib/db-services";
+import { Job, Keyword, Employer } from "@/lib/database";
+import { Trash2, Edit, Calendar, Building } from "lucide-react";
 
 interface JobWithEmployer extends Job {
   employer: Employer;
@@ -32,7 +39,7 @@ export function JobsList() {
 
       setJobs(jobsWithKeywords);
     } catch (error) {
-      console.error('Error loading jobs:', error);
+      console.error("Error loading jobs:", error);
     } finally {
       setLoading(false);
     }
@@ -43,24 +50,36 @@ export function JobsList() {
   }, []);
 
   const handleDeleteJob = async (jobId: number) => {
-    if (confirm('Are you sure you want to delete this job application?')) {
+    if (confirm("Are you sure you want to delete this job application?")) {
       try {
         await jobService.delete(jobId);
+        toast.success("Job application deleted successfully");
         await loadJobs();
       } catch (error) {
-        console.error('Error deleting job:', error);
+        console.error("Error deleting job:", error);
+        toast.error("Failed to delete job application", {
+          description: "Please try again."
+        });
       }
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'applied': return 'bg-blue-100 text-blue-800';
-      case 'interview': return 'bg-yellow-100 text-yellow-800';
-      case 'offer': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      case 'withdrawn': return 'bg-zinc-100 text-zinc-800';
-      default: return 'bg-zinc-100 text-zinc-800';
+      case "not applied":
+        return "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200";
+      case "applied":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "interview":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+      case "offer":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "rejected":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "withdrawn":
+        return "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200";
+      default:
+        return "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200";
     }
   };
 
@@ -93,13 +112,27 @@ export function JobsList() {
                   {job.employer.name}
                 </CardTitle>
                 {job.employer.notes && (
-                  <p className="text-sm text-zinc-600 italic">{job.employer.notes}</p>
+                  <p className="text-sm text-zinc-600 italic">
+                    {job.employer.notes}
+                  </p>
                 )}
                 <CardDescription className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
                   {job.title}
                 </CardDescription>
                 {job.notes && (
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 italic">{job.notes}</p>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 italic">
+                    {job.notes}
+                  </p>
+                )}
+                {job.link && (
+                  <a
+                    href={job.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                  >
+                    🔗 View Job Posting
+                  </a>
                 )}
                 <div className="flex items-center gap-4 text-sm text-zinc-500">
                   <div className="flex items-center gap-1">
@@ -125,14 +158,16 @@ export function JobsList() {
           <CardContent>
             {job.keywords.length > 0 ? (
               <div className="space-y-2">
-                <h4 className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Keywords:</h4>
+                <h4 className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
+                  Keywords:
+                </h4>
                 <div className="flex flex-wrap gap-2">
                   {job.keywords
                     .sort((a, b) => a.keyword.localeCompare(b.keyword))
                     .map((keyword) => (
-                      <Badge 
+                      <Badge
                         key={keyword.id}
-                        variant="secondary" 
+                        variant="secondary"
                         className="capitalize"
                       >
                         {keyword.keyword}

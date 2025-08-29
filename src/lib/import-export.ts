@@ -1,5 +1,5 @@
-import { employerService, jobService, keywordService } from './db-services';
-import { Employer, Job, Keyword } from './database';
+import { employerService, jobService, keywordService } from "./db-services";
+import { Employer, Job, Keyword } from "./database";
 
 export interface ExportData {
   version: string;
@@ -10,7 +10,7 @@ export interface ExportData {
 }
 
 export class ImportExportService {
-  private static readonly CURRENT_VERSION = '1.0';
+  private static readonly CURRENT_VERSION = "1.0";
 
   /**
    * Export all data to a JSON structure
@@ -20,7 +20,7 @@ export class ImportExportService {
       const [employers, jobs, keywords] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
-        keywordService.getAll()
+        keywordService.getAll(),
       ]);
 
       return {
@@ -28,11 +28,11 @@ export class ImportExportService {
         exportDate: new Date().toISOString(),
         employers,
         jobs,
-        keywords
+        keywords,
       };
     } catch (error) {
-      console.error('Error exporting data:', error);
-      throw new Error('Failed to export data');
+      console.error("Error exporting data:", error);
+      throw new Error("Failed to export data");
     }
   }
 
@@ -43,37 +43,46 @@ export class ImportExportService {
     try {
       const data = await this.exportData();
       const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: 'application/json'
+        type: "application/json",
       });
-      
+
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `employer-keywords-export-${new Date().toISOString().split('T')[0]}.json`;
+
+      // Create filename with date and time
+      const now = new Date();
+      const dateStr = now.toISOString().split("T")[0]; // YYYY-MM-DD
+      const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-"); // HH-MM-SS
+      a.download = `employer-keywords-export-${dateStr}-${timeStr}.json`;
+
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading export:', error);
-      throw new Error('Failed to download export file');
+      console.error("Error downloading export:", error);
+      throw new Error("Failed to download export file");
     }
   }
 
   /**
    * Import data from a JSON structure
    */
-  static async importData(data: ExportData, options: {
-    clearExisting?: boolean;
-    skipDuplicates?: boolean;
-  } = {}): Promise<{
+  static async importData(
+    data: ExportData,
+    options: {
+      clearExisting?: boolean;
+      skipDuplicates?: boolean;
+    } = {}
+  ): Promise<{
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
     skipped: number;
   }> {
     const { clearExisting = false, skipDuplicates = true } = options;
-    
+
     try {
       // Validate data structure
       this.validateImportData(data);
@@ -101,7 +110,10 @@ export class ImportExportService {
             }
           }
 
-          const newId = await employerService.create(employer.name, employer.notes);
+          const newId = await employerService.create(
+            employer.name,
+            employer.notes
+          );
           employerIdMap.set(employer.id!, newId);
           employersImported++;
         } catch (error) {
@@ -122,7 +134,10 @@ export class ImportExportService {
           }
 
           if (skipDuplicates) {
-            const existing = await jobService.findByTitleAndEmployer(job.title, newEmployerId);
+            const existing = await jobService.findByTitleAndEmployer(
+              job.title,
+              newEmployerId
+            );
             if (existing) {
               jobIdMap.set(job.id!, existing.id!);
               skipped++;
@@ -134,14 +149,15 @@ export class ImportExportService {
             newEmployerId,
             job.title,
             job.notes,
+            job.link,
             new Date(job.appliedDate)
           );
-          
+
           // Update status if different from default
-          if (job.status !== 'applied') {
+          if (job.status !== "not applied") {
             await jobService.updateStatus(newId, job.status);
           }
-          
+
           jobIdMap.set(job.id!, newId);
           jobsImported++;
         } catch (error) {
@@ -161,7 +177,10 @@ export class ImportExportService {
           }
 
           if (skipDuplicates) {
-            const existing = await keywordService.findByJobAndKeyword(newJobId, keyword.keyword);
+            const existing = await keywordService.findByJobAndKeyword(
+              newJobId,
+              keyword.keyword
+            );
             if (existing) {
               skipped++;
               continue;
@@ -180,21 +199,24 @@ export class ImportExportService {
         employersImported,
         jobsImported,
         keywordsImported,
-        skipped
+        skipped,
       };
     } catch (error) {
-      console.error('Error importing data:', error);
-      throw new Error('Failed to import data');
+      console.error("Error importing data:", error);
+      throw new Error("Failed to import data");
     }
   }
 
   /**
    * Import data from uploaded file
    */
-  static async importFromFile(file: File, options?: {
-    clearExisting?: boolean;
-    skipDuplicates?: boolean;
-  }): Promise<{
+  static async importFromFile(
+    file: File,
+    options?: {
+      clearExisting?: boolean;
+      skipDuplicates?: boolean;
+    }
+  ): Promise<{
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
@@ -202,7 +224,7 @@ export class ImportExportService {
   }> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
@@ -210,14 +232,14 @@ export class ImportExportService {
           const result = await this.importData(data, options);
           resolve(result);
         } catch (error) {
-          reject(new Error('Invalid file format or corrupted data'));
+          reject(new Error("Invalid file format or corrupted data"));
         }
       };
-      
+
       reader.onerror = () => {
-        reject(new Error('Failed to read file'));
+        reject(new Error("Failed to read file"));
       };
-      
+
       reader.readAsText(file);
     });
   }
@@ -226,34 +248,38 @@ export class ImportExportService {
    * Validate import data structure
    */
   private static validateImportData(data: any): asserts data is ExportData {
-    if (!data || typeof data !== 'object') {
-      throw new Error('Invalid data format');
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid data format");
     }
 
     if (!data.version || !data.exportDate) {
-      throw new Error('Missing required metadata');
+      throw new Error("Missing required metadata");
     }
 
-    if (!Array.isArray(data.employers) || !Array.isArray(data.jobs) || !Array.isArray(data.keywords)) {
-      throw new Error('Invalid data structure');
+    if (
+      !Array.isArray(data.employers) ||
+      !Array.isArray(data.jobs) ||
+      !Array.isArray(data.keywords)
+    ) {
+      throw new Error("Invalid data structure");
     }
 
     // Basic validation of data arrays
     for (const employer of data.employers) {
-      if (!employer.name || typeof employer.name !== 'string') {
-        throw new Error('Invalid employer data');
+      if (!employer.name || typeof employer.name !== "string") {
+        throw new Error("Invalid employer data");
       }
     }
 
     for (const job of data.jobs) {
       if (!job.title || !job.employerId || !job.appliedDate) {
-        throw new Error('Invalid job data');
+        throw new Error("Invalid job data");
       }
     }
 
     for (const keyword of data.keywords) {
       if (!keyword.keyword || !keyword.jobId) {
-        throw new Error('Invalid keyword data');
+        throw new Error("Invalid keyword data");
       }
     }
   }
@@ -281,23 +307,23 @@ export class ImportExportService {
       const [employers, jobs, keywords] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
-        keywordService.getAll()
+        keywordService.getAll(),
       ]);
 
       // Find the most recent update
       const lastModified = [...employers, ...jobs, ...keywords]
-        .map(item => new Date(item.updatedAt))
+        .map((item) => new Date(item.updatedAt))
         .sort((a, b) => b.getTime() - a.getTime())[0];
 
       return {
         totalEmployers: employers.length,
         totalJobs: jobs.length,
         totalKeywords: keywords.length,
-        lastModified
+        lastModified,
       };
     } catch (error) {
-      console.error('Error getting export stats:', error);
-      throw new Error('Failed to get statistics');
+      console.error("Error getting export stats:", error);
+      throw new Error("Failed to get statistics");
     }
   }
 }

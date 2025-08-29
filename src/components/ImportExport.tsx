@@ -1,25 +1,32 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { ImportExportService } from '@/lib/import-export';
-import { 
-  Download, 
-  Upload, 
-  Database, 
-  AlertTriangle, 
-  CheckCircle, 
+import { useState, useRef } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { ImportExportService } from "@/lib/import-export";
+import {
+  Download,
+  Upload,
+  Database,
+  AlertTriangle,
+  CheckCircle,
   FileText,
   Calendar,
   Building,
   Briefcase,
-  Hash
-} from 'lucide-react';
+  Hash,
+} from "lucide-react";
 
 interface ImportExportProps {
   onDataChanged: () => void;
@@ -43,7 +50,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     lastModified?: Date;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadExportStats = async () => {
@@ -51,18 +58,25 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
       const stats = await ImportExportService.getExportStats();
       setExportStats(stats);
     } catch (err) {
-      console.error('Error loading export stats:', err);
+      console.error("Error loading export stats:", err);
     }
   };
 
   const handleExport = async () => {
     setIsExporting(true);
     setError(null);
-    
+
     try {
       await ImportExportService.downloadExport();
+      toast.success("Data exported successfully!", {
+        description: "Your backup file has been downloaded."
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to export data');
+      const errorMessage = err instanceof Error ? err.message : "Failed to export data";
+      setError(errorMessage);
+      toast.error("Export failed", {
+        description: errorMessage
+      });
     } finally {
       setIsExporting(false);
     }
@@ -72,18 +86,25 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     setIsImporting(true);
     setError(null);
     setImportResult(null);
-    
+
     try {
       const result = await ImportExportService.importFromFile(file, {
         clearExisting,
-        skipDuplicates
+        skipDuplicates,
       });
-      
+
       setImportResult(result);
+      toast.success("Data imported successfully!", {
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, and ${result.keywordsImported} keywords.`
+      });
       onDataChanged();
       await loadExportStats();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to import data');
+      const errorMessage = err instanceof Error ? err.message : "Failed to import data";
+      setError(errorMessage);
+      toast.error("Import failed", {
+        description: errorMessage
+      });
     } finally {
       setIsImporting(false);
     }
@@ -110,7 +131,8 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             Export Data
           </CardTitle>
           <CardDescription>
-            Download all your employer, job, and keyword data as a JSON file for backup or transfer
+            Download all your employer, job, and keyword data as a JSON file for
+            backup or transfer
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -121,21 +143,27 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   <Building className="h-4 w-4" />
                   Employers
                 </div>
-                <div className="text-2xl font-bold">{exportStats.totalEmployers}</div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalEmployers}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <Briefcase className="h-4 w-4" />
                   Jobs
                 </div>
-                <div className="text-2xl font-bold">{exportStats.totalJobs}</div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalJobs}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <Hash className="h-4 w-4" />
                   Keywords
                 </div>
-                <div className="text-2xl font-bold">{exportStats.totalKeywords}</div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalKeywords}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -143,26 +171,25 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   Last Modified
                 </div>
                 <div className="text-sm">
-                  {exportStats.lastModified 
+                  {exportStats.lastModified
                     ? exportStats.lastModified.toLocaleDateString()
-                    : 'N/A'
-                  }
+                    : "N/A"}
                 </div>
               </div>
             </div>
           )}
-          
+
           <div className="flex gap-2">
-            <Button 
-              onClick={handleExport} 
+            <Button
+              onClick={handleExport}
               disabled={isExporting}
               className="flex items-center gap-2"
             >
               <Download className="h-4 w-4" />
-              {isExporting ? 'Exporting...' : 'Export Data'}
+              {isExporting ? "Exporting..." : "Export Data"}
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={loadExportStats}
               className="flex items-center gap-2"
             >
@@ -190,25 +217,32 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
           {/* Import Options */}
           <div className="space-y-3 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
             <Label className="text-sm font-medium">Import Options</Label>
-            
+
             <div className="flex items-center space-x-2">
-              <Checkbox 
+              <Checkbox
                 id="clearExisting"
                 checked={clearExisting}
-                onCheckedChange={(checked: boolean) => setClearExisting(checked)}
+                onCheckedChange={(checked: boolean) =>
+                  setClearExisting(checked)
+                }
               />
               <Label htmlFor="clearExisting" className="text-sm cursor-pointer">
                 Clear existing data before import
               </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <Checkbox 
+              <Checkbox
                 id="skipDuplicates"
                 checked={skipDuplicates}
-                onCheckedChange={(checked: boolean) => setSkipDuplicates(checked)}
+                onCheckedChange={(checked: boolean) =>
+                  setSkipDuplicates(checked)
+                }
               />
-              <Label htmlFor="skipDuplicates" className="text-sm cursor-pointer">
+              <Label
+                htmlFor="skipDuplicates"
+                className="text-sm cursor-pointer"
+              >
                 Skip duplicate entries (recommended)
               </Label>
             </div>
@@ -217,8 +251,8 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
               <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded">
                 <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-red-700 dark:text-red-300">
-                  <strong>Warning:</strong> This will permanently delete all existing data before importing. 
-                  Make sure you have a backup!
+                  <strong>Warning:</strong> This will permanently delete all
+                  existing data before importing. Make sure you have a backup!
                 </div>
               </div>
             )}
@@ -232,14 +266,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             onChange={handleFileSelect}
             className="hidden"
           />
-          
-          <Button 
+
+          <Button
             onClick={triggerFileSelect}
             disabled={isImporting}
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            {isImporting ? 'Importing...' : 'Choose File to Import'}
+            {isImporting ? "Importing..." : "Choose File to Import"}
           </Button>
 
           {/* Import Results */}
@@ -251,23 +285,37 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   Import Completed Successfully!
                 </span>
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="text-green-600 dark:text-green-400">Employers</div>
-                  <div className="font-medium">{importResult.employersImported} imported</div>
+                  <div className="text-green-600 dark:text-green-400">
+                    Employers
+                  </div>
+                  <div className="font-medium">
+                    {importResult.employersImported} imported
+                  </div>
                 </div>
                 <div>
                   <div className="text-green-600 dark:text-green-400">Jobs</div>
-                  <div className="font-medium">{importResult.jobsImported} imported</div>
+                  <div className="font-medium">
+                    {importResult.jobsImported} imported
+                  </div>
                 </div>
                 <div>
-                  <div className="text-green-600 dark:text-green-400">Keywords</div>
-                  <div className="font-medium">{importResult.keywordsImported} imported</div>
+                  <div className="text-green-600 dark:text-green-400">
+                    Keywords
+                  </div>
+                  <div className="font-medium">
+                    {importResult.keywordsImported} imported
+                  </div>
                 </div>
                 <div>
-                  <div className="text-green-600 dark:text-green-400">Skipped</div>
-                  <div className="font-medium">{importResult.skipped} items</div>
+                  <div className="text-green-600 dark:text-green-400">
+                    Skipped
+                  </div>
+                  <div className="font-medium">
+                    {importResult.skipped} items
+                  </div>
                 </div>
               </div>
             </div>
@@ -278,9 +326,13 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
-                <span className="font-medium text-red-800 dark:text-red-200">Error</span>
+                <span className="font-medium text-red-800 dark:text-red-200">
+                  Error
+                </span>
               </div>
-              <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
+              <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+                {error}
+              </p>
             </div>
           )}
         </CardContent>
@@ -293,16 +345,19 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
           <div>
-            <strong>Export:</strong> Creates a JSON file containing all your employers, jobs, and keywords. 
-            This file can be used as a backup or to transfer data to another device.
+            <strong>Export:</strong> Creates a JSON file containing all your
+            employers, jobs, and keywords. This file can be used as a backup or
+            to transfer data to another device.
           </div>
           <div>
-            <strong>Import:</strong> Uploads a previously exported JSON file and adds the data to your current database. 
-            You can choose to clear existing data first or merge with existing data.
+            <strong>Import:</strong> Uploads a previously exported JSON file and
+            adds the data to your current database. You can choose to clear
+            existing data first or merge with existing data.
           </div>
           <div>
-            <strong>Skip Duplicates:</strong> When enabled, the import process will skip entries that already exist 
-            (same employer name, same job title + employer, same keyword + job).
+            <strong>Skip Duplicates:</strong> When enabled, the import process
+            will skip entries that already exist (same employer name, same job
+            title + employer, same keyword + job).
           </div>
         </CardContent>
       </Card>

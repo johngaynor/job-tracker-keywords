@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,24 +23,83 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { employerService, jobService, keywordService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
-import { Plus, X } from 'lucide-react';
+import { Plus, X } from "lucide-react";
 
 // Default keywords organized by category
 const TECHNICAL_SKILLS = [
-  'react', 'javascript', 'typescript', 'node.js', 'python', 'java', 'c#', 'php',
-  'html', 'css', 'sql', 'mongodb', 'postgresql', 'mysql', 'aws', 'azure', 'docker',
-  'kubernetes', 'git', 'rest api', 'graphql', 'microservices', 'ci/cd', 'testing',
-  'jest', 'cypress', 'selenium', 'linux', 'windows', 'macos', 'angular', 'vue.js',
-  'express.js', 'spring', 'django', 'flask', 'laravel', 'ruby on rails', 'golang',
-  'rust', 'swift', 'kotlin', 'flutter', 'react native', 'terraform', 'jenkins'
+  "react",
+  "javascript",
+  "typescript",
+  "node.js",
+  "python",
+  "java",
+  "c#",
+  "php",
+  "html",
+  "css",
+  "sql",
+  "mongodb",
+  "postgresql",
+  "mysql",
+  "aws",
+  "azure",
+  "docker",
+  "kubernetes",
+  "git",
+  "rest api",
+  "graphql",
+  "microservices",
+  "ci/cd",
+  "testing",
+  "jest",
+  "cypress",
+  "selenium",
+  "linux",
+  "windows",
+  "macos",
+  "angular",
+  "vue.js",
+  "express.js",
+  "spring",
+  "django",
+  "flask",
+  "laravel",
+  "ruby on rails",
+  "golang",
+  "rust",
+  "swift",
+  "kotlin",
+  "flutter",
+  "react native",
+  "terraform",
+  "jenkins",
 ];
 
 const SOFT_SKILLS = [
-  'communication', 'teamwork', 'leadership', 'problem solving', 'analytical thinking',
-  'project management', 'remote work', 'collaboration', 'mentoring', 'training',
-  'agile', 'scrum', 'adaptability', 'creativity', 'time management', 'critical thinking',
-  'decision making', 'conflict resolution', 'presentation skills', 'customer service',
-  'strategic planning', 'multitasking', 'attention to detail', 'organizational skills'
+  "communication",
+  "teamwork",
+  "leadership",
+  "problem solving",
+  "analytical thinking",
+  "project management",
+  "remote work",
+  "collaboration",
+  "mentoring",
+  "training",
+  "agile",
+  "scrum",
+  "adaptability",
+  "creativity",
+  "time management",
+  "critical thinking",
+  "decision making",
+  "conflict resolution",
+  "presentation skills",
+  "customer service",
+  "strategic planning",
+  "multitasking",
+  "attention to detail",
+  "organizational skills",
 ];
 
 interface AddJobFormProps {
@@ -53,6 +113,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [newEmployerNotes, setNewEmployerNotes] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [jobNotes, setJobNotes] = useState("");
+  const [jobLink, setJobLink] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -112,9 +173,10 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       }
 
       const jobId = await jobService.create(
-        employerId, 
+        employerId,
         jobTitle.trim(),
-        jobNotes.trim() || undefined
+        jobNotes.trim() || undefined,
+        jobLink.trim() || undefined
       );
 
       // Add keywords
@@ -122,18 +184,27 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         await keywordService.create(jobId, keyword);
       }
 
+      // Show success toast
+      toast.success("Job application added successfully!", {
+        description: `Added "${jobTitle}" at ${selectedEmployer === "new" ? newEmployerName : employers.find(e => e.id === parseInt(selectedEmployer))?.name}`
+      });
+
       // Reset form
       setSelectedEmployer("");
       setNewEmployerName("");
       setNewEmployerNotes("");
       setJobTitle("");
       setJobNotes("");
+      setJobLink("");
       setKeywords([]);
       setNewKeyword("");
 
       onJobAdded();
     } catch (error) {
       console.error("Error adding job:", error);
+      toast.error("Failed to add job application", {
+        description: "Please try again or check your input."
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -216,6 +287,17 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="jobLink">Job Link (optional)</Label>
+            <Input
+              id="jobLink"
+              type="url"
+              value={jobLink}
+              onChange={(e) => setJobLink(e.target.value)}
+              placeholder="https://company.com/job-posting"
+            />
+          </div>
+
           <div className="space-y-4">
             <Label>Keywords</Label>
 
@@ -245,19 +327,74 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 </div>
 
                 {/* Keyword suggestions based on search */}
-                {newKeyword.length > 0 && (filteredTechnicalSkills.length > 0 || filteredSoftSkills.length > 0) && (
-                  <div className="space-y-3">
+                {newKeyword.length > 0 &&
+                  (filteredTechnicalSkills.length > 0 ||
+                    filteredSoftSkills.length > 0) && (
+                    <div className="space-y-3">
+                      <Label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                        Suggestions:
+                      </Label>
+
+                      {filteredTechnicalSkills.length > 0 && (
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                            Technical Skills
+                          </Label>
+                          <div className="flex flex-wrap gap-1">
+                            {filteredTechnicalSkills.map((keyword) => (
+                              <Badge
+                                key={keyword}
+                                variant="outline"
+                                className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800 transition-colors"
+                                onClick={() => addDefaultKeyword(keyword)}
+                              >
+                                {keyword}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {filteredSoftSkills.length > 0 && (
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium text-green-600 dark:text-green-400">
+                            Soft Skills
+                          </Label>
+                          <div className="flex flex-wrap gap-1">
+                            {filteredSoftSkills.map((keyword) => (
+                              <Badge
+                                key={keyword}
+                                variant="outline"
+                                className="cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800 transition-colors"
+                                onClick={() => addDefaultKeyword(keyword)}
+                              >
+                                {keyword}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                {/* Show categorized keywords when no input */}
+                {newKeyword.length === 0 && (
+                  <div className="space-y-4">
                     <Label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                      Suggestions:
+                      Select from categories:
                     </Label>
-                    
-                    {filteredTechnicalSkills.length > 0 && (
-                      <div className="space-y-1">
-                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                          Technical Skills
-                        </Label>
-                        <div className="flex flex-wrap gap-1">
-                          {filteredTechnicalSkills.map((keyword) => (
+
+                    {/* Technical Skills */}
+                    <div className="space-y-2">
+                      <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                        Technical Skills
+                      </Label>
+                      <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto">
+                        {TECHNICAL_SKILLS.filter(
+                          (keyword) => !keywords.includes(keyword.toLowerCase())
+                        )
+                          .slice(0, 15)
+                          .map((keyword) => (
                             <Badge
                               key={keyword}
                               variant="outline"
@@ -267,55 +404,6 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                               {keyword}
                             </Badge>
                           ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {filteredSoftSkills.length > 0 && (
-                      <div className="space-y-1">
-                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">
-                          Soft Skills
-                        </Label>
-                        <div className="flex flex-wrap gap-1">
-                          {filteredSoftSkills.map((keyword) => (
-                            <Badge
-                              key={keyword}
-                              variant="outline"
-                              className="cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800 transition-colors"
-                              onClick={() => addDefaultKeyword(keyword)}
-                            >
-                              {keyword}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Show categorized keywords when no input */}
-                {newKeyword.length === 0 && (
-                  <div className="space-y-4">
-                    <Label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                      Select from categories:
-                    </Label>
-                    
-                    {/* Technical Skills */}
-                    <div className="space-y-2">
-                      <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                        Technical Skills
-                      </Label>
-                      <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto">
-                        {TECHNICAL_SKILLS.filter(keyword => !keywords.includes(keyword.toLowerCase())).slice(0, 15).map((keyword) => (
-                          <Badge
-                            key={keyword}
-                            variant="outline"
-                            className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800 transition-colors"
-                            onClick={() => addDefaultKeyword(keyword)}
-                          >
-                            {keyword}
-                          </Badge>
-                        ))}
                       </div>
                     </div>
 
@@ -325,16 +413,20 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                         Soft Skills
                       </Label>
                       <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto">
-                        {SOFT_SKILLS.filter(keyword => !keywords.includes(keyword.toLowerCase())).slice(0, 15).map((keyword) => (
-                          <Badge
-                            key={keyword}
-                            variant="outline"
-                            className="cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800 transition-colors"
-                            onClick={() => addDefaultKeyword(keyword)}
-                          >
-                            {keyword}
-                          </Badge>
-                        ))}
+                        {SOFT_SKILLS.filter(
+                          (keyword) => !keywords.includes(keyword.toLowerCase())
+                        )
+                          .slice(0, 15)
+                          .map((keyword) => (
+                            <Badge
+                              key={keyword}
+                              variant="outline"
+                              className="cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800 transition-colors"
+                              onClick={() => addDefaultKeyword(keyword)}
+                            >
+                              {keyword}
+                            </Badge>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -343,7 +435,9 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
 
               {/* Right column: Added keywords */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Added Keywords ({keywords.length}):</Label>
+                <Label className="text-sm font-medium">
+                  Added Keywords ({keywords.length}):
+                </Label>
                 {keywords.length > 0 ? (
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {keywords.map((keyword, index) => (
@@ -351,7 +445,9 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                         key={index}
                         className="flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-800 rounded"
                       >
-                        <span className="font-medium capitalize flex-1">{keyword}</span>
+                        <span className="font-medium capitalize flex-1">
+                          {keyword}
+                        </span>
                         <Button
                           type="button"
                           variant="ghost"

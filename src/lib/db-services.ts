@@ -62,6 +62,7 @@ export const jobService = {
     employerId: number,
     title: string,
     notes?: string,
+    link?: string,
     appliedDate: Date = new Date()
   ): Promise<number> {
     const now = new Date();
@@ -69,8 +70,9 @@ export const jobService = {
       employerId,
       title,
       notes,
+      link,
       appliedDate,
-      status: "applied",
+      status: "not applied",
       createdAt: now,
       updatedAt: now,
     });
@@ -114,14 +116,26 @@ export const jobService = {
     return result;
   },
 
-  async findByTitleAndEmployer(title: string, employerId: number): Promise<Job | undefined> {
+  async findByTitleAndEmployer(
+    title: string,
+    employerId: number
+  ): Promise<Job | undefined> {
     return await db.jobs
       .where("[employerId+title]")
       .equals([employerId, title])
       .first();
   },
 
-  async updateStatus(id: number, status: "applied" | "interview" | "rejected" | "offer" | "withdrawn"): Promise<number> {
+  async updateStatus(
+    id: number,
+    status:
+      | "not applied"
+      | "applied"
+      | "interview"
+      | "rejected"
+      | "offer"
+      | "withdrawn"
+  ): Promise<number> {
     return await this.update(id, { status });
   },
 
@@ -212,7 +226,10 @@ export const keywordService = {
       .sort((a, b) => b.totalCount - a.totalCount);
   },
 
-  async findByJobAndKeyword(jobId: number, keyword: string): Promise<Keyword | undefined> {
+  async findByJobAndKeyword(
+    jobId: number,
+    keyword: string
+  ): Promise<Keyword | undefined> {
     return await db.keywords
       .where("[jobId+keyword]")
       .equals([jobId, keyword.toLowerCase()])
