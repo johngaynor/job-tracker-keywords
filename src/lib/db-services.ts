@@ -64,7 +64,7 @@ export const jobService = {
     notes?: string,
     link?: string,
     referenceNumber?: string,
-    appliedDate: Date = new Date()
+    salaryEstimate?: string
   ): Promise<number> {
     const now = new Date();
     return await db.jobs.add({
@@ -73,7 +73,7 @@ export const jobService = {
       notes,
       link,
       referenceNumber,
-      appliedDate,
+      salaryEstimate,
       status: "not applied",
       createdAt: now,
       updatedAt: now,
@@ -81,7 +81,7 @@ export const jobService = {
   },
 
   async getAll(): Promise<Job[]> {
-    return await db.jobs.orderBy("appliedDate").reverse().toArray();
+    return await db.jobs.orderBy("createdAt").reverse().toArray();
   },
 
   async getByEmployerId(employerId: number): Promise<Job[]> {
@@ -106,7 +106,7 @@ export const jobService = {
   },
 
   async getJobsWithEmployers(): Promise<(Job & { employer: Employer })[]> {
-    const jobs = await db.jobs.orderBy("appliedDate").reverse().toArray();
+    const jobs = await db.jobs.orderBy("createdAt").reverse().toArray();
     const result: (Job & { employer: Employer })[] = [];
 
     for (const job of jobs) {

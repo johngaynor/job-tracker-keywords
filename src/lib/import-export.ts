@@ -161,7 +161,7 @@ export class ImportExportService {
             job.notes,
             job.link,
             job.referenceNumber,
-            new Date(job.appliedDate)
+            job.salaryEstimate
           );
 
           // Update status if different from default
@@ -317,7 +317,7 @@ export class ImportExportService {
     }
 
     for (const job of data.jobs) {
-      if (!job.title || !job.employerId || !job.appliedDate) {
+      if (!job.title || !job.employerId) {
         throw new Error("Invalid job data");
       }
     }

@@ -115,6 +115,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [jobNotes, setJobNotes] = useState("");
   const [jobLink, setJobLink] = useState("");
   const [jobReferenceNumber, setJobReferenceNumber] = useState("");
+  const [jobSalaryEstimate, setJobSalaryEstimate] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -160,6 +161,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
     setJobNotes("");
     setJobLink("");
     setJobReferenceNumber("");
+    setJobSalaryEstimate("");
     setKeywords([]);
     setNewKeyword("");
 
@@ -191,7 +193,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         jobTitle.trim(),
         jobNotes.trim() || undefined,
         jobLink.trim() || undefined,
-        jobReferenceNumber.trim() || undefined
+        jobReferenceNumber.trim() || undefined,
+        jobSalaryEstimate.trim() || undefined
       );
 
       // Add keywords
@@ -216,6 +219,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       setJobNotes("");
       setJobLink("");
       setJobReferenceNumber("");
+      setJobSalaryEstimate("");
       setKeywords([]);
       setNewKeyword("");
 
@@ -299,8 +303,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
             </div>
           )}
 
-          {/* Job Title, Link, and Reference Number row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Job Title and Salary row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="jobTitle">Job Title</Label>
               <Input
@@ -311,6 +315,21 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 required
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="jobSalaryEstimate">
+                Salary Estimate (optional)
+              </Label>
+              <Input
+                id="jobSalaryEstimate"
+                value={jobSalaryEstimate}
+                onChange={(e) => setJobSalaryEstimate(e.target.value)}
+                placeholder="e.g., $80,000 - $100,000, $120k/year"
+              />
+            </div>
+          </div>
+
+          {/* Job Link and Reference Number row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="jobLink">Job Link (optional)</Label>
               <Input
