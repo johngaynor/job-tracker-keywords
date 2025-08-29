@@ -5,8 +5,10 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // since GitHub Pages can’t handle Next’s Image Optimization
   },
-  basePath: "/job-tracker-keywords", // https://johngaynor.github.io/job-tracker-keywords
-  assetPrefix: "/job-tracker-keywords",
+  basePath:
+    process.env.NODE_ENV === "production" ? "/job-tracker-keywords" : "",
+  assetPrefix:
+    process.env.NODE_ENV === "production" ? "/job-tracker-keywords/" : "",
 };
 
 export default nextConfig;
