@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { JobUpdateDialog } from "@/components/JobUpdateDialog";
 import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
 import { Trash2, Edit, Calendar, Building } from "lucide-react";
@@ -58,7 +59,7 @@ export function JobsList() {
       } catch (error) {
         console.error("Error deleting job:", error);
         toast.error("Failed to delete job application", {
-          description: "Please try again."
+          description: "Please try again.",
         });
       }
     }
@@ -145,6 +146,7 @@ export function JobsList() {
                 </div>
               </div>
               <div className="flex gap-2">
+                <JobUpdateDialog job={job} onJobUpdated={loadJobs} />
                 <Button
                   variant="outline"
                   size="icon"

@@ -1,4 +1,4 @@
-import { db, Employer, Job, Keyword } from "./database";
+import { db, Employer, Job, Keyword, Activity } from "./database";
 
 // Employer operations
 export const employerService = {
@@ -63,6 +63,7 @@ export const jobService = {
     title: string,
     notes?: string,
     link?: string,
+    referenceNumber?: string,
     appliedDate: Date = new Date()
   ): Promise<number> {
     const now = new Date();
@@ -71,6 +72,7 @@ export const jobService = {
       title,
       notes,
       link,
+      referenceNumber,
       appliedDate,
       status: "not applied",
       createdAt: now,
@@ -99,6 +101,7 @@ export const jobService = {
 
   async delete(id: number): Promise<void> {
     await keywordService.deleteByJobId(id);
+    await activityService.deleteByJobId(id);
     await db.jobs.delete(id);
   },
 
@@ -238,5 +241,62 @@ export const keywordService = {
 
   async deleteAll(): Promise<void> {
     await db.keywords.clear();
+  },
+};
+
+// Activity operations
+export const activityService = {
+  async create(
+    jobId: number,
+    type: "status_change" | "activity",
+    category: string,
+    notes?: string,
+    previousStatus?: string,
+    newStatus?: string
+  ): Promise<number> {
+    const now = new Date();
+    return await db.activities.add({
+      jobId,
+      type,
+      category,
+      notes,
+      previousStatus,
+      newStatus,
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+
+  async getByJobId(jobId: number): Promise<Activity[]> {
+    return await db.activities
+      .where("jobId")
+      .equals(jobId)
+      .toArray()
+      .then((activities) =>
+        activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      );
+  },
+
+  async getAll(): Promise<Activity[]> {
+    return await db.activities.orderBy("createdAt").reverse().toArray();
+  },
+
+  async update(id: number, updates: Partial<Activity>): Promise<number> {
+    return await db.activities.update(id, {
+      ...updates,
+      updatedAt: new Date(),
+    });
+  },
+
+  async delete(id: number): Promise<void> {
+    await db.activities.delete(id);
+  },
+
+  async deleteByJobId(jobId: number): Promise<number> {
+    return await db.activities.where("jobId").equals(jobId).delete();
+  },
+
+  async deleteAll(): Promise<void> {
+    await db.activities.clear();
   },
 };

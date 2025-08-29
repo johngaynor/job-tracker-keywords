@@ -22,7 +22,6 @@ import {
   AlertTriangle,
   CheckCircle,
   FileText,
-  Calendar,
   Building,
   Briefcase,
   Hash,
@@ -41,12 +40,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
+    activitiesImported: number;
     skipped: number;
   } | null>(null);
   const [exportStats, setExportStats] = useState<{
     totalEmployers: number;
     totalJobs: number;
     totalKeywords: number;
+    totalActivities: number;
     lastModified?: Date;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -69,13 +70,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     try {
       await ImportExportService.downloadExport();
       toast.success("Data exported successfully!", {
-        description: "Your backup file has been downloaded."
+        description: "Your backup file has been downloaded.",
       });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to export data";
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to export data";
       setError(errorMessage);
       toast.error("Export failed", {
-        description: errorMessage
+        description: errorMessage,
       });
     } finally {
       setIsExporting(false);
@@ -95,15 +97,16 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
 
       setImportResult(result);
       toast.success("Data imported successfully!", {
-        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, and ${result.keywordsImported} keywords.`
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, and ${result.activitiesImported} activities.`,
       });
       onDataChanged();
       await loadExportStats();
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to import data";
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to import data";
       setError(errorMessage);
       toast.error("Import failed", {
-        description: errorMessage
+        description: errorMessage,
       });
     } finally {
       setIsImporting(false);
@@ -167,13 +170,11 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  <Calendar className="h-4 w-4" />
-                  Last Modified
+                  <FileText className="h-4 w-4" />
+                  Activities
                 </div>
-                <div className="text-sm">
-                  {exportStats.lastModified
-                    ? exportStats.lastModified.toLocaleDateString()
-                    : "N/A"}
+                <div className="text-2xl font-bold">
+                  {exportStats.totalActivities}
                 </div>
               </div>
             </div>
@@ -307,6 +308,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   </div>
                   <div className="font-medium">
                     {importResult.keywordsImported} imported
+                  </div>
+                </div>
+                <div>
+                  <div className="text-green-600 dark:text-green-400">
+                    Activities
+                  </div>
+                  <div className="font-medium">
+                    {importResult.activitiesImported} imported
                   </div>
                 </div>
                 <div>

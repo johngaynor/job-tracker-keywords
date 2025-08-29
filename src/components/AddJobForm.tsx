@@ -23,7 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { employerService, jobService, keywordService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
-import { Plus, X } from "lucide-react";
+import { Plus, X, RotateCcw } from "lucide-react";
 
 // Default keywords organized by category
 const TECHNICAL_SKILLS = [
@@ -114,6 +114,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [jobTitle, setJobTitle] = useState("");
   const [jobNotes, setJobNotes] = useState("");
   const [jobLink, setJobLink] = useState("");
+  const [jobReferenceNumber, setJobReferenceNumber] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -152,6 +153,20 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       !keywords.includes(keyword.toLowerCase())
   ).slice(0, 8); // Limit to 8 suggestions per category
 
+  const resetForm = () => {
+    setSelectedEmployer("");
+    setNewEmployerName("");
+    setNewEmployerNotes("");
+    setJobTitle("");
+    setJobNotes("");
+    setJobLink("");
+    setJobReferenceNumber("");
+    setKeywords([]);
+    setNewKeyword("");
+
+    toast.success("Form reset successfully!");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!jobTitle.trim() || (!selectedEmployer && !newEmployerName.trim()))
@@ -176,7 +191,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         employerId,
         jobTitle.trim(),
         jobNotes.trim() || undefined,
-        jobLink.trim() || undefined
+        jobLink.trim() || undefined,
+        jobReferenceNumber.trim() || undefined
       );
 
       // Add keywords
@@ -186,7 +202,11 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
 
       // Show success toast
       toast.success("Job application added successfully!", {
-        description: `Added "${jobTitle}" at ${selectedEmployer === "new" ? newEmployerName : employers.find(e => e.id === parseInt(selectedEmployer))?.name}`
+        description: `Added "${jobTitle}" at ${
+          selectedEmployer === "new"
+            ? newEmployerName
+            : employers.find((e) => e.id === parseInt(selectedEmployer))?.name
+        }`,
       });
 
       // Reset form
@@ -196,6 +216,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       setJobTitle("");
       setJobNotes("");
       setJobLink("");
+      setJobReferenceNumber("");
       setKeywords([]);
       setNewKeyword("");
 
@@ -203,7 +224,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
     } catch (error) {
       console.error("Error adding job:", error);
       toast.error("Failed to add job application", {
-        description: "Please try again or check your input."
+        description: "Please try again or check your input.",
       });
     } finally {
       setIsSubmitting(false);
@@ -213,10 +234,24 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Job Application</CardTitle>
-        <CardDescription>
-          Track keywords for a new job application
-        </CardDescription>
+        <div className="flex items-start justify-between">
+          <div>
+            <CardTitle>Add New Job Application</CardTitle>
+            <CardDescription>
+              Track keywords for a new job application
+            </CardDescription>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={resetForm}
+            className="flex items-center gap-2"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Reset Form
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -265,7 +300,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Job Title, Link, and Reference Number row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="jobTitle">Job Title</Label>
               <Input
@@ -277,24 +313,37 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="jobNotes">Job Notes (optional)</Label>
+              <Label htmlFor="jobLink">Job Link (optional)</Label>
               <Input
-                id="jobNotes"
-                value={jobNotes}
-                onChange={(e) => setJobNotes(e.target.value)}
-                placeholder="Notes about this specific job"
+                id="jobLink"
+                type="url"
+                value={jobLink}
+                onChange={(e) => setJobLink(e.target.value)}
+                placeholder="https://company.com/job-posting"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="jobReferenceNumber">
+                Reference Number (optional)
+              </Label>
+              <Input
+                id="jobReferenceNumber"
+                value={jobReferenceNumber}
+                onChange={(e) => setJobReferenceNumber(e.target.value)}
+                placeholder="Job reference/code"
               />
             </div>
           </div>
 
+          {/* Job Notes textarea */}
           <div className="space-y-2">
-            <Label htmlFor="jobLink">Job Link (optional)</Label>
-            <Input
-              id="jobLink"
-              type="url"
-              value={jobLink}
-              onChange={(e) => setJobLink(e.target.value)}
-              placeholder="https://company.com/job-posting"
+            <Label htmlFor="jobNotes">Job Notes (optional)</Label>
+            <Textarea
+              id="jobNotes"
+              value={jobNotes}
+              onChange={(e) => setJobNotes(e.target.value)}
+              placeholder="Notes about this specific job..."
+              rows={3}
             />
           </div>
 

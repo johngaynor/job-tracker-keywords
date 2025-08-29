@@ -1,5 +1,10 @@
-import { employerService, jobService, keywordService } from "./db-services";
-import { Employer, Job, Keyword } from "./database";
+import {
+  employerService,
+  jobService,
+  keywordService,
+  activityService,
+} from "./db-services";
+import { Employer, Job, Keyword, Activity } from "./database";
 
 export interface ExportData {
   version: string;
@@ -7,6 +12,7 @@ export interface ExportData {
   employers: Employer[];
   jobs: Job[];
   keywords: Keyword[];
+  activities: Activity[];
 }
 
 export class ImportExportService {
@@ -17,10 +23,11 @@ export class ImportExportService {
    */
   static async exportData(): Promise<ExportData> {
     try {
-      const [employers, jobs, keywords] = await Promise.all([
+      const [employers, jobs, keywords, activities] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
         keywordService.getAll(),
+        activityService.getAll(),
       ]);
 
       return {
@@ -29,6 +36,7 @@ export class ImportExportService {
         employers,
         jobs,
         keywords,
+        activities,
       };
     } catch (error) {
       console.error("Error exporting data:", error);
@@ -79,6 +87,7 @@ export class ImportExportService {
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
+    activitiesImported: number;
     skipped: number;
   }> {
     const { clearExisting = false, skipDuplicates = true } = options;
@@ -90,6 +99,7 @@ export class ImportExportService {
       let employersImported = 0;
       let jobsImported = 0;
       let keywordsImported = 0;
+      let activitiesImported = 0;
       let skipped = 0;
 
       // Clear existing data if requested
@@ -150,6 +160,7 @@ export class ImportExportService {
             job.title,
             job.notes,
             job.link,
+            job.referenceNumber,
             new Date(job.appliedDate)
           );
 
@@ -195,10 +206,41 @@ export class ImportExportService {
         }
       }
 
+      // Import activities
+      for (const activity of data.activities || []) {
+        try {
+          const newJobId = jobIdMap.get(activity.jobId);
+          if (!newJobId) {
+            console.warn(
+              `Skipping activity for job ${activity.jobId} - job not found`
+            );
+            skipped++;
+            continue;
+          }
+
+          await activityService.create(
+            newJobId,
+            activity.type,
+            activity.category,
+            activity.notes,
+            activity.previousStatus,
+            activity.newStatus
+          );
+          activitiesImported++;
+        } catch (error) {
+          console.warn(
+            `Failed to import activity: ${activity.category}`,
+            error
+          );
+          skipped++;
+        }
+      }
+
       return {
         employersImported,
         jobsImported,
         keywordsImported,
+        activitiesImported,
         skipped,
       };
     } catch (error) {
@@ -220,6 +262,7 @@ export class ImportExportService {
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
+    activitiesImported: number;
     skipped: number;
   }> {
     return new Promise((resolve, reject) => {
@@ -259,7 +302,8 @@ export class ImportExportService {
     if (
       !Array.isArray(data.employers) ||
       !Array.isArray(data.jobs) ||
-      !Array.isArray(data.keywords)
+      !Array.isArray(data.keywords) ||
+      !Array.isArray(data.activities || [])
     ) {
       throw new Error("Invalid data structure");
     }
@@ -289,6 +333,7 @@ export class ImportExportService {
    */
   private static async clearAllData(): Promise<void> {
     // Clear in reverse dependency order
+    await activityService.deleteAll();
     await keywordService.deleteAll();
     await jobService.deleteAll();
     await employerService.deleteAll();
@@ -301,17 +346,19 @@ export class ImportExportService {
     totalEmployers: number;
     totalJobs: number;
     totalKeywords: number;
+    totalActivities: number;
     lastModified?: Date;
   }> {
     try {
-      const [employers, jobs, keywords] = await Promise.all([
+      const [employers, jobs, keywords, activities] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
         keywordService.getAll(),
+        activityService.getAll(),
       ]);
 
       // Find the most recent update
-      const lastModified = [...employers, ...jobs, ...keywords]
+      const lastModified = [...employers, ...jobs, ...keywords, ...activities]
         .map((item) => new Date(item.updatedAt))
         .sort((a, b) => b.getTime() - a.getTime())[0];
 
@@ -319,6 +366,7 @@ export class ImportExportService {
         totalEmployers: employers.length,
         totalJobs: jobs.length,
         totalKeywords: keywords.length,
+        totalActivities: activities.length,
         lastModified,
       };
     } catch (error) {

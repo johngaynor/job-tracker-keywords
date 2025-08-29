@@ -14,6 +14,7 @@ export interface Job {
   title: string;
   notes?: string;
   link?: string;
+  referenceNumber?: string;
   appliedDate: Date;
   status:
     | "not applied"
@@ -34,17 +35,32 @@ export interface Keyword {
   updatedAt: Date;
 }
 
+export interface Activity {
+  id?: number;
+  jobId: number;
+  type: "status_change" | "activity";
+  category: string;
+  notes?: string;
+  previousStatus?: string; // For status changes only
+  newStatus?: string; // For status changes only
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export class EmployerKeywordsDB extends Dexie {
   employers!: Table<Employer>;
   jobs!: Table<Job>;
   keywords!: Table<Keyword>;
+  activities!: Table<Activity>;
 
   constructor() {
     super("EmployerKeywordsDB");
     this.version(1).stores({
       employers: "++id, name, notes, createdAt, updatedAt",
-      jobs: "++id, employerId, title, notes, link, appliedDate, status, [employerId+title], createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, referenceNumber, appliedDate, status, [employerId+title], createdAt, updatedAt",
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
+      activities:
+        "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
     });
   }
 }

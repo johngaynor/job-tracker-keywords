@@ -36,13 +36,14 @@ export function Settings({ onDataChanged }: SettingsProps) {
           employers: [],
           jobs: [],
           keywords: [],
+          activities: [],
         },
         { clearExisting: true }
       );
 
       setWipeComplete(true);
       toast.success("All data deleted successfully!", {
-        description: "Your database has been completely wiped."
+        description: "Your database has been completely wiped.",
       });
       onDataChanged();
 
@@ -53,7 +54,7 @@ export function Settings({ onDataChanged }: SettingsProps) {
     } catch (error) {
       console.error("Error wiping data:", error);
       toast.error("Failed to delete data", {
-        description: "Please try again."
+        description: "Please try again.",
       });
     } finally {
       setIsWiping(false);
