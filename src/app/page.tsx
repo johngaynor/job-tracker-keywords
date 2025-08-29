@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { AddJobForm } from "@/components/AddJobForm";
 import { JobsList } from "@/components/JobsList";
 import { KeywordStats } from "@/components/KeywordStats";
+import { ImportExport } from "@/components/ImportExport";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { employerService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Briefcase, BarChart3, Plus } from "lucide-react";
+import { Briefcase, BarChart3, Plus, Settings } from "lucide-react";
 
 export default function Home() {
   const [employers, setEmployers] = useState<Employer[]>([]);
@@ -50,7 +51,7 @@ export default function Home() {
 
         {/* Main Content */}
         <Tabs defaultValue="add" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="add" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Add Application
@@ -62,6 +63,10 @@ export default function Home() {
             <TabsTrigger value="stats" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Statistics
+            </TabsTrigger>
+            <TabsTrigger value="data" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Import/Export
             </TabsTrigger>
           </TabsList>
 
@@ -75,6 +80,10 @@ export default function Home() {
 
           <TabsContent value="stats" className="space-y-6">
             <KeywordStats key={refreshKey} />
+          </TabsContent>
+
+          <TabsContent value="data" className="space-y-6">
+            <ImportExport onDataChanged={handleJobAdded} />
           </TabsContent>
         </Tabs>
       </div>

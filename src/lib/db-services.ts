@@ -38,6 +38,22 @@ export const employerService = {
     await db.jobs.where("employerId").equals(id).delete();
     await db.employers.delete(id);
   },
+
+  async findByName(name: string): Promise<Employer | undefined> {
+    return await db.employers.where("name").equalsIgnoreCase(name).first();
+  },
+
+  async deleteAll(): Promise<void> {
+    // First delete all related data
+    const jobs = await db.jobs.toArray();
+    for (const job of jobs) {
+      if (job.id) {
+        await keywordService.deleteByJobId(job.id);
+      }
+    }
+    await db.jobs.clear();
+    await db.employers.clear();
+  },
 };
 
 // Job operations
@@ -96,6 +112,28 @@ export const jobService = {
     }
 
     return result;
+  },
+
+  async findByTitleAndEmployer(title: string, employerId: number): Promise<Job | undefined> {
+    return await db.jobs
+      .where("[employerId+title]")
+      .equals([employerId, title])
+      .first();
+  },
+
+  async updateStatus(id: number, status: "applied" | "interview" | "rejected" | "offer" | "withdrawn"): Promise<number> {
+    return await this.update(id, { status });
+  },
+
+  async deleteAll(): Promise<void> {
+    // First delete all related keywords
+    const jobs = await db.jobs.toArray();
+    for (const job of jobs) {
+      if (job.id) {
+        await keywordService.deleteByJobId(job.id);
+      }
+    }
+    await db.jobs.clear();
   },
 };
 
@@ -172,5 +210,16 @@ export const keywordService = {
         jobCount: data.jobIds.size,
       }))
       .sort((a, b) => b.totalCount - a.totalCount);
+  },
+
+  async findByJobAndKeyword(jobId: number, keyword: string): Promise<Keyword | undefined> {
+    return await db.keywords
+      .where("[jobId+keyword]")
+      .equals([jobId, keyword.toLowerCase()])
+      .first();
+  },
+
+  async deleteAll(): Promise<void> {
+    await db.keywords.clear();
   },
 };

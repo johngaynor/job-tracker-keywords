@@ -36,7 +36,7 @@ export class EmployerKeywordsDB extends Dexie {
     super("EmployerKeywordsDB");
     this.version(1).stores({
       employers: "++id, name, notes, createdAt, updatedAt",
-      jobs: "++id, employerId, title, notes, appliedDate, status, createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, appliedDate, status, [employerId+title], createdAt, updatedAt",
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
     });
   }
