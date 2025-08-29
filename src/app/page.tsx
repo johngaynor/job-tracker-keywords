@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { AddJobForm } from "@/components/AddJobForm";
 import { JobsList } from "@/components/JobsList";
 import { KeywordStats } from "@/components/KeywordStats";
-import { ImportExport } from "@/components/ImportExport";
+import { Settings as SettingsComponent } from "@/components/Settings";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { employerService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
@@ -65,8 +65,8 @@ export default function Home() {
               Statistics
             </TabsTrigger>
             <TabsTrigger value="data" className="flex items-center gap-2">
-              <Database className="h-4 w-4" />
-              Import/Export
+              <Settings className="h-4 w-4" />
+              Settings
             </TabsTrigger>
           </TabsList>
 
@@ -83,7 +83,7 @@ export default function Home() {
           </TabsContent>
 
           <TabsContent value="data" className="space-y-6">
-            <ImportExport onDataChanged={handleJobAdded} />
+            <SettingsComponent onDataChanged={handleJobAdded} />
           </TabsContent>
         </Tabs>
       </div>
