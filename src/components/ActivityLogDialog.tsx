@@ -82,7 +82,8 @@ export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
             Activity Log
           </DialogTitle>
           <DialogDescription>
-            Activity history for {job.employer.name} - {job.title} {job.referenceNumber && `(${job.referenceNumber})`}
+            Activity history for {job.employer.name} - {job.title}{" "}
+            {job.referenceNumber && `(${job.referenceNumber})`}
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +119,9 @@ export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
                           <div className="flex items-center gap-1 text-sm">
                             <Calendar className="h-3 w-3 text-zinc-500" />
                             <span className="whitespace-nowrap">
-                              {new Date(activity.createdAt).toLocaleDateString()}
+                              {new Date(
+                                activity.createdAt
+                              ).toLocaleDateString()}
                             </span>
                           </div>
                           <span className="text-xs text-zinc-500 ml-4">
@@ -148,18 +151,18 @@ export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
                             {formatActivityCategory(activity.category)}
                           </span>
                           {activity.type === "status_change" &&
-                          activity.previousStatus &&
-                          activity.newStatus && (
-                            <div className="flex items-center gap-2 text-sm">
-                              <Badge variant="outline" className="text-xs">
-                                {activity.previousStatus}
-                              </Badge>
-                              <ArrowUpDown className="h-3 w-3 text-zinc-500" />
-                              <Badge variant="outline" className="text-xs">
-                                {activity.newStatus}
-                              </Badge>
-                            </div>
-                          )}
+                            activity.previousStatus &&
+                            activity.newStatus && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Badge variant="outline" className="text-xs">
+                                  {activity.previousStatus}
+                                </Badge>
+                                <ArrowUpDown className="h-3 w-3 text-zinc-500" />
+                                <Badge variant="outline" className="text-xs">
+                                  {activity.newStatus}
+                                </Badge>
+                              </div>
+                            )}
                         </div>
                       </TableCell>
                       <TableCell>
