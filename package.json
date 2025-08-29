@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "next build && gh-pages -d out --repo https://github.com/johngaynor/job-tracker-keywords.git"
+    "deploy": "next build && gh-pages -d out -t -f -r https://github.com/johngaynor/job-tracker-keywords.git"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
