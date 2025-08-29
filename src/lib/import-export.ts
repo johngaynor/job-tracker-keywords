@@ -275,6 +275,7 @@ export class ImportExportService {
           const result = await this.importData(data, options);
           resolve(result);
         } catch (error) {
+          console.log(error);
           reject(new Error("Invalid file format or corrupted data"));
         }
       };

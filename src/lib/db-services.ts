@@ -107,7 +107,7 @@ export const jobService = {
 
   async getJobsWithEmployers(): Promise<(Job & { employer: Employer })[]> {
     const jobs = await db.jobs.orderBy("appliedDate").reverse().toArray();
-    const result = [];
+    const result: (Job & { employer: Employer })[] = [];
 
     for (const job of jobs) {
       const employer = await db.employers.get(job.employerId);

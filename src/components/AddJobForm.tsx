@@ -140,7 +140,6 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   };
 
   // Filter keywords from both categories based on input and exclude already added keywords
-  const allKeywords = [...TECHNICAL_SKILLS, ...SOFT_SKILLS];
   const filteredTechnicalSkills = TECHNICAL_SKILLS.filter(
     (keyword) =>
       keyword.toLowerCase().includes(newKeyword.toLowerCase()) &&

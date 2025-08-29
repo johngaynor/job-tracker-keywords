@@ -162,7 +162,7 @@ export function JobUpdateDialog({ job, onJobUpdated }: JobUpdateDialogProps) {
             Update Job Application
           </DialogTitle>
           <DialogDescription>
-            Update the status or log activity for "{job.title}"
+            Update the status or log activity for &quot;{job.title}&quot;
           </DialogDescription>
         </DialogHeader>
 

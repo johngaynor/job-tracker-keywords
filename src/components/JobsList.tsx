@@ -12,9 +12,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JobUpdateDialog } from "@/components/JobUpdateDialog";
-import { jobService, keywordService, employerService } from "@/lib/db-services";
+import { jobService, keywordService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
-import { Trash2, Edit, Calendar, Building } from "lucide-react";
+import { Trash2, Calendar, Building } from "lucide-react";
 
 interface JobWithEmployer extends Job {
   employer: Employer;
