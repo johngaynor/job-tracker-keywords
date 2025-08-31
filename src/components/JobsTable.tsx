@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import {
   Table,
@@ -34,7 +34,7 @@ export function JobsTable({ showArchived }: JobsTableProps) {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadJobs = async () => {
+  const loadJobs = useCallback(async () => {
     try {
       const jobsWithEmployers = showArchived
         ? await jobService.getAllIncludingArchived().then(async (allJobs) => {
@@ -62,11 +62,11 @@ export function JobsTable({ showArchived }: JobsTableProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showArchived]);
 
   useEffect(() => {
     loadJobs();
-  }, [showArchived]);
+  }, [loadJobs]);
 
   const handleDeleteJob = async (jobId: number) => {
     if (confirm("Are you sure you want to delete this job application?")) {

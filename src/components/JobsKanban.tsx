@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -79,7 +79,7 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadJobs = async () => {
+  const loadJobs = useCallback(async () => {
     try {
       const jobsWithEmployers = showArchived
         ? await jobService.getAllIncludingArchived().then(async (allJobs) => {
@@ -107,7 +107,7 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showArchived]);
 
   useEffect(() => {
     loadJobs();
