@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Employer Keywords Tracker",
+  title: "Job Application Tracker",
   description: "Track your job applications and analyze keywords.",
 };
 

@@ -39,11 +39,12 @@ export default function Home() {
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-              Employer Keywords Tracker
+              Job Application Tracker
             </h1>
             <p className="text-lg text-zinc-600 dark:text-zinc-400">
-              Track and analyze keywords from your job applications to optimize
-              your search strategy.
+              Track your job applications and identify popular skills and
+              keywords to optimize your resume and skill acquisition. All data
+              is stored locally. Happy searching :)
             </p>
           </div>
           <ThemeToggle />
