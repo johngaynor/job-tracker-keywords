@@ -44,15 +44,9 @@ export const employerService = {
   },
 
   async deleteAll(): Promise<void> {
-    // First delete all related data
-    const jobs = await db.jobs.toArray();
-    for (const job of jobs) {
-      if (job.id) {
-        await keywordService.deleteByJobId(job.id);
-      }
-    }
-    await db.jobs.clear();
+    console.log("employerService.deleteAll: Starting...");
     await db.employers.clear();
+    console.log("employerService.deleteAll: Completed ✓");
   },
 };
 
@@ -166,14 +160,9 @@ export const jobService = {
   },
 
   async deleteAll(): Promise<void> {
-    // First delete all related keywords
-    const jobs = await db.jobs.toArray();
-    for (const job of jobs) {
-      if (job.id) {
-        await keywordService.deleteByJobId(job.id);
-      }
-    }
+    console.log("jobService.deleteAll: Starting...");
     await db.jobs.clear();
+    console.log("jobService.deleteAll: Completed ✓");
   },
 };
 
@@ -252,6 +241,50 @@ export const keywordService = {
       .sort((a, b) => b.totalCount - a.totalCount);
   },
 
+  async getWeightedKeywordStats(): Promise<
+    {
+      keyword: string;
+      totalCount: number;
+      weightedScore: number;
+      jobCount: number;
+    }[]
+  > {
+    const keywords = await db.keywords.toArray();
+    const jobs = await db.jobs.toArray();
+
+    // Create a map for quick job lookup
+    const jobMap = new Map(jobs.map((job) => [job.id!, job]));
+
+    const stats = new Map<
+      string,
+      { totalCount: number; weightedScore: number; jobIds: Set<number> }
+    >();
+
+    for (const kw of keywords) {
+      const job = jobMap.get(kw.jobId);
+      const interestWeight = job?.interestLevel || 1; // Default to 1 if no interest level
+
+      const existing = stats.get(kw.keyword) || {
+        totalCount: 0,
+        weightedScore: 0,
+        jobIds: new Set(),
+      };
+      existing.totalCount += 1;
+      existing.weightedScore += interestWeight; // Add weighted score based on interest level
+      existing.jobIds.add(kw.jobId);
+      stats.set(kw.keyword, existing);
+    }
+
+    return Array.from(stats.entries())
+      .map(([keyword, data]) => ({
+        keyword,
+        totalCount: data.totalCount,
+        weightedScore: data.weightedScore,
+        jobCount: data.jobIds.size,
+      }))
+      .sort((a, b) => b.weightedScore - a.weightedScore);
+  },
+
   async findByJobAndKeyword(
     jobId: number,
     keyword: string
@@ -263,7 +296,9 @@ export const keywordService = {
   },
 
   async deleteAll(): Promise<void> {
+    console.log("keywordService.deleteAll: Starting...");
     await db.keywords.clear();
+    console.log("keywordService.deleteAll: Completed ✓");
   },
 };
 
@@ -320,7 +355,9 @@ export const activityService = {
   },
 
   async deleteAll(): Promise<void> {
+    console.log("activityService.deleteAll: Starting...");
     await db.activities.clear();
+    console.log("activityService.deleteAll: Completed ✓");
   },
 };
 
@@ -384,6 +421,8 @@ export const goalService = {
   },
 
   async deleteAll(): Promise<void> {
+    console.log("goalService.deleteAll: Starting...");
     await db.goals.clear();
+    console.log("goalService.deleteAll: Completed ✓");
   },
 };

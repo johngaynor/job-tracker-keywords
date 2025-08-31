@@ -153,39 +153,39 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
         {/* Skeleton for each status column */}
         {[
           "Not Applied",
-          "Applied", 
+          "Applied",
           "Interview",
           "Offer",
           "Rejected",
-          "Withdrawn"
+          "Withdrawn",
         ].map((status) => (
           <div key={status} className="space-y-3">
             {/* Column header skeleton */}
             <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
-            
+
             {/* Job card skeletons */}
             {[1, 2, 3].map((i) => (
               <Card key={i} className="animate-pulse">
                 <CardContent className="p-4 space-y-3">
                   {/* Job title skeleton */}
                   <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                  
+
                   {/* Company name skeleton */}
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  
+
                   {/* Interest level skeleton */}
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-                  
+
                   {/* Keywords skeleton */}
                   <div className="flex flex-wrap gap-1">
                     {[1, 2, 3].map((j) => (
-                      <div 
-                        key={j} 
+                      <div
+                        key={j}
                         className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-16"
                       ></div>
                     ))}
                   </div>
-                  
+
                   {/* Actions skeleton */}
                   <div className="flex justify-between items-center pt-2">
                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>

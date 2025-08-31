@@ -64,28 +64,30 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
       setGoals(allGoals);
 
       // Update input states with existing goals
-      const newInputs = { ...goalInputs };
-      allGoals.forEach((goal) => {
-        if (goal.type in newInputs) {
-          newInputs[goal.type] = {
-            targetNumber: goal.targetNumber.toString(),
-            frequency:
-              goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
-                ? (goal.frequencyDays / 7).toString()
-                : goal.frequencyDays.toString(),
-            unit:
-              goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
-                ? "weeks"
-                : "days",
-          };
-        }
+      setGoalInputs((prevInputs) => {
+        const newInputs = { ...prevInputs };
+        allGoals.forEach((goal) => {
+          if (goal.type in newInputs) {
+            newInputs[goal.type] = {
+              targetNumber: goal.targetNumber.toString(),
+              frequency:
+                goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
+                  ? (goal.frequencyDays / 7).toString()
+                  : goal.frequencyDays.toString(),
+              unit:
+                goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
+                  ? "weeks"
+                  : "days",
+            };
+          }
+        });
+        return newInputs;
       });
-      setGoalInputs(newInputs);
     } catch (error) {
       console.error("Error loading goals:", error);
       toast.error("Failed to load goals");
     }
-  }, [goalInputs]);
+  }, []); // Remove goalInputs from dependencies
 
   // Load goals on component mount
   useEffect(() => {
@@ -221,9 +223,12 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
   };
 
   const handleFullWipe = async () => {
+    console.log("handleFullWipe: Starting...");
     setIsWiping(true);
 
     try {
+      console.log("handleFullWipe: About to call ImportExportService.importData");
+      
       // Import an empty dataset with clearExisting=true to wipe everything
       await ImportExportService.importData(
         {
@@ -233,12 +238,74 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
           jobs: [],
           keywords: [],
           activities: [],
+          goals: [],
         },
         { clearExisting: true }
       );
 
+      console.log("handleFullWipe: ImportExportService.importData completed successfully");
+      
       setWipeComplete(true);
       toast.success("All data deleted successfully!", {
+        description: "Your database has been completely wiped.",
+      });
+      onDataChanged();
+
+      console.log("handleFullWipe: All cleanup completed");
+
+      // Hide the success message after 3 seconds
+      setTimeout(() => {
+        setWipeComplete(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Error wiping data:", error);
+      toast.error("Failed to delete data", {
+        description: "Please try again.",
+      });
+    } finally {
+      setIsWiping(false);
+      setShowWipeConfirm(false);
+    }
+  };
+
+  // Alternative simpler method for testing
+  const handleDirectWipe = async () => {
+    console.log("handleDirectWipe: Starting direct database clear...");
+    setIsWiping(true);
+
+    try {
+      // Import the database and clear tables directly
+      const { db } = await import("@/lib/database");
+      
+      console.log("Direct clear: Using efficient bulk deletion...");
+      
+      // Use Dexie's transaction for atomic operations
+      await db.transaction('rw', [db.activities, db.keywords, db.jobs, db.employers, db.goals], async () => {
+        console.log("Direct clear: Clearing activities...");
+        await db.activities.clear();
+        console.log("Direct clear: Activities cleared ✓");
+        
+        console.log("Direct clear: Clearing keywords...");
+        await db.keywords.clear();
+        console.log("Direct clear: Keywords cleared ✓");
+        
+        console.log("Direct clear: Clearing jobs...");
+        await db.jobs.clear();
+        console.log("Direct clear: Jobs cleared ✓");
+        
+        console.log("Direct clear: Clearing employers...");
+        await db.employers.clear();
+        console.log("Direct clear: Employers cleared ✓");
+        
+        console.log("Direct clear: Clearing goals...");
+        await db.goals.clear();
+        console.log("Direct clear: Goals cleared ✓");
+      });
+
+      console.log("Direct clear: Transaction completed successfully!");
+
+      setWipeComplete(true);
+      toast.success("All data deleted successfully (direct method)!", {
         description: "Your database has been completely wiped.",
       });
       onDataChanged();
@@ -248,8 +315,8 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
         setWipeComplete(false);
       }, 3000);
     } catch (error) {
-      console.error("Error wiping data:", error);
-      toast.error("Failed to delete data", {
+      console.error("Error in direct wipe:", error);
+      toast.error("Failed to delete data (direct method)", {
         description: "Please try again.",
       });
     } finally {

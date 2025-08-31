@@ -5,7 +5,7 @@ import {
   activityService,
   goalService,
 } from "./db-services";
-import { Employer, Job, Keyword, Activity, Goal } from "./database";
+import { Employer, Job, Keyword, Activity, Goal, db } from "./database";
 
 export interface ExportData {
   version: string;
@@ -25,13 +25,21 @@ export class ImportExportService {
    */
   static async exportData(): Promise<ExportData> {
     try {
+      console.log("Starting data export...");
+      const startTime = performance.now();
+
+      // Use direct database access for better performance
       const [employers, jobs, keywords, activities, goals] = await Promise.all([
-        employerService.getAll(),
-        jobService.getAll(),
-        keywordService.getAll(),
-        activityService.getAll(),
-        goalService.getAll(),
+        db.employers.toArray(),
+        db.jobs.toArray(),
+        db.keywords.toArray(),
+        db.activities.toArray(),
+        db.goals.toArray(),
       ]);
+
+      const endTime = performance.now();
+      console.log(`Export data retrieval completed in ${(endTime - startTime).toFixed(2)}ms`);
+      console.log(`Exported: ${employers.length} employers, ${jobs.length} jobs, ${keywords.length} keywords, ${activities.length} activities, ${goals.length} goals`);
 
       return {
         version: this.CURRENT_VERSION,
@@ -53,8 +61,22 @@ export class ImportExportService {
    */
   static async downloadExport(): Promise<void> {
     try {
+      console.log("Starting export download...");
+      const exportStartTime = performance.now();
+
       const data = await this.exportData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], {
+      
+      const jsonStartTime = performance.now();
+      console.log("Serializing data to JSON...");
+      
+      // Keep pretty printing for readability
+      const jsonString = JSON.stringify(data, null, 2);
+      
+      const jsonEndTime = performance.now();
+      console.log(`JSON serialization completed in ${(jsonEndTime - jsonStartTime).toFixed(2)}ms`);
+      console.log(`JSON size: ${(jsonString.length / 1024 / 1024).toFixed(2)} MB`);
+
+      const blob = new Blob([jsonString], {
         type: "application/json",
       });
 
@@ -72,6 +94,9 @@ export class ImportExportService {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      const totalTime = performance.now() - exportStartTime;
+      console.log(`Export download completed in ${totalTime.toFixed(2)}ms total`);
     } catch (error) {
       console.error("Error downloading export:", error);
       throw new Error("Failed to download export file");
@@ -110,7 +135,9 @@ export class ImportExportService {
 
       // Clear existing data if requested
       if (clearExisting) {
+        console.log("importData: clearExisting=true, calling clearAllData...");
         await this.clearAllData();
+        console.log("importData: clearAllData completed, continuing with import...");
       }
 
       // Import employers
@@ -362,12 +389,32 @@ export class ImportExportService {
    * Clear all data from the database
    */
   private static async clearAllData(): Promise<void> {
-    // Clear in reverse dependency order
-    await activityService.deleteAll();
-    await keywordService.deleteAll();
-    await jobService.deleteAll();
-    await employerService.deleteAll();
-    await goalService.deleteAll();
+    console.log("Starting clearAllData...");
+    
+    // Use Dexie transaction for efficient bulk deletion
+    await db.transaction('rw', [db.activities, db.keywords, db.jobs, db.employers, db.goals], async () => {
+      console.log("Clearing activities...");
+      await db.activities.clear();
+      console.log("Activities cleared ✓");
+      
+      console.log("Clearing keywords...");
+      await db.keywords.clear();
+      console.log("Keywords cleared ✓");
+      
+      console.log("Clearing jobs...");
+      await db.jobs.clear();
+      console.log("Jobs cleared ✓");
+      
+      console.log("Clearing employers...");
+      await db.employers.clear();
+      console.log("Employers cleared ✓");
+      
+      console.log("Clearing goals...");
+      await db.goals.clear();
+      console.log("Goals cleared ✓");
+    });
+    
+    console.log("clearAllData completed successfully!");
   }
 
   /**

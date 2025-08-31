@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -23,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { employerService, jobService, keywordService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
-import { Plus, X, RotateCcw } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 // Default keywords organized by category
 const TECHNICAL_SKILLS = [
@@ -154,22 +148,6 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       !keywords.includes(keyword.toLowerCase())
   ).slice(0, 8); // Limit to 8 suggestions per category
 
-  const resetForm = () => {
-    setSelectedEmployer("");
-    setNewEmployerName("");
-    setNewEmployerNotes("");
-    setJobTitle("");
-    setJobNotes("");
-    setJobLink("");
-    setJobReferenceNumber("");
-    setJobSalaryEstimate("");
-    setJobInterestLevel("");
-    setKeywords([]);
-    setNewKeyword("");
-
-    toast.success("Form reset successfully!");
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!jobTitle.trim() || (!selectedEmployer && !newEmployerName.trim()))
@@ -240,26 +218,6 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle>Add New Job Application</CardTitle>
-            <CardDescription>
-              Fill out relevant information related to the job.
-            </CardDescription>
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={resetForm}
-            className="flex items-center gap-2"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Reset Form
-          </Button>
-        </div>
-      </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
