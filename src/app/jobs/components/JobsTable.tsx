@@ -103,7 +103,65 @@ export function JobsTable({ showArchived }: JobsTableProps) {
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading jobs...</div>;
+    return (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px]">Position</TableHead>
+              <TableHead>Company</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Interest</TableHead>
+              <TableHead>Keywords</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {/* Generate skeleton rows */}
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <TableRow key={i} className="animate-pulse">
+                <TableCell>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+                </TableCell>
+                <TableCell>
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-20"></div>
+                </TableCell>
+                <TableCell>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {[1, 2, 3, 4].map((j) => (
+                      <div 
+                        key={j} 
+                        className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-12"
+                      ></div>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
   }
 
   if (jobs.length === 0) {

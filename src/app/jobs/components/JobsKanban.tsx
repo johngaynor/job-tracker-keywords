@@ -148,7 +148,56 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading jobs...</div>;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* Skeleton for each status column */}
+        {[
+          "Not Applied",
+          "Applied", 
+          "Interview",
+          "Offer",
+          "Rejected",
+          "Withdrawn"
+        ].map((status) => (
+          <div key={status} className="space-y-3">
+            {/* Column header skeleton */}
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
+            
+            {/* Job card skeletons */}
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-4 space-y-3">
+                  {/* Job title skeleton */}
+                  <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  
+                  {/* Company name skeleton */}
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  
+                  {/* Interest level skeleton */}
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                  
+                  {/* Keywords skeleton */}
+                  <div className="flex flex-wrap gap-1">
+                    {[1, 2, 3].map((j) => (
+                      <div 
+                        key={j} 
+                        className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-16"
+                      ></div>
+                    ))}
+                  </div>
+                  
+                  {/* Actions skeleton */}
+                  <div className="flex justify-between items-center pt-2">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                    <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (jobs.length === 0) {
