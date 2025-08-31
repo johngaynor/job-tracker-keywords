@@ -172,20 +172,20 @@ export class ImportExportService {
             continue;
           }
 
-          const newId = await jobService.create(
-            newEmployerId,
-            job.title,
-            job.notes,
-            job.link,
-            job.referenceNumber,
-            job.salaryEstimate,
-            job.interestLevel
-          );
-
-          // Update status if different from default
-          if (job.status !== "not applied") {
-            await jobService.updateStatus(newId, job.status);
-          }
+          // Insert directly to preserve original timestamps
+          const newId = await db.jobs.add({
+            employerId: newEmployerId,
+            title: job.title,
+            notes: job.notes,
+            link: job.link,
+            referenceNumber: job.referenceNumber,
+            salaryEstimate: job.salaryEstimate,
+            interestLevel: job.interestLevel,
+            archived: job.archived || false,
+            status: job.status,
+            createdAt: new Date(job.createdAt), // Preserve original timestamp
+            updatedAt: new Date(job.updatedAt), // Preserve original timestamp
+          });
 
           jobIdMap.set(job.id!, newId);
           jobsImported++;
@@ -225,14 +225,17 @@ export class ImportExportService {
             continue;
           }
 
-          await activityService.create(
-            newJobId,
-            activity.type,
-            activity.category,
-            activity.notes,
-            activity.previousStatus,
-            activity.newStatus
-          );
+          // Insert directly to preserve original timestamps
+          await db.activities.add({
+            jobId: newJobId,
+            type: activity.type,
+            category: activity.category,
+            notes: activity.notes,
+            previousStatus: activity.previousStatus,
+            newStatus: activity.newStatus,
+            createdAt: new Date(activity.createdAt), // Preserve original timestamp
+            updatedAt: new Date(activity.updatedAt), // Preserve original timestamp
+          });
           activitiesImported++;
         } catch (error) {
           console.warn(

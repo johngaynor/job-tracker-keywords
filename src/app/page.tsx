@@ -243,7 +243,7 @@ export default function Dashboard() {
     }
   }, [timeRange, getDateRange]);
 
-  // Helper function to create day-by-day status distribution
+  // Helper function to create cumulative day-by-day data for applications
   const createDayByDayData = (
     jobs: Job[],
     activities: Activity[],
@@ -251,114 +251,188 @@ export default function Dashboard() {
     end: Date,
     timeRange: TimeRange
   ) => {
-    const dayData: Record<string, Record<string, number>> = {};
-
-    // Initialize all days in range using Luxon
+    // Initialize all days in range
     const startDate = DateTime.fromJSDate(start).startOf("day");
     const endDate = DateTime.fromJSDate(end).startOf("day");
+
+    const dailyData: Array<{
+      date: string;
+      formattedDate: string;
+      applicationsCreated: number;
+      applicationsApplied: number;
+      interviews: number;
+      offers: number;
+      rejections: number;
+    }> = [];
 
     let currentDate = startDate;
     while (currentDate <= endDate) {
       const dateKey =
         currentDate.toISODate() || currentDate.toFormat("yyyy-MM-dd");
-      dayData[dateKey] = {
-        "Not Applied": 0,
-        Applied: 0,
-        Interview: 0,
-        Offer: 0,
-        Rejected: 0,
-        Withdrawn: 0,
-      };
+
+      let formattedDate: string;
+      switch (timeRange) {
+        case "today":
+          formattedDate = currentDate.toFormat("HH:mm");
+          break;
+        case "week":
+          formattedDate = currentDate.toFormat("ccc MMM d");
+          break;
+        case "month":
+          formattedDate = currentDate.toFormat("MMM d");
+          break;
+        case "all":
+        default:
+          formattedDate = currentDate.toFormat("yy MMM d");
+          break;
+      }
+
+      dailyData.push({
+        date: dateKey,
+        formattedDate,
+        applicationsCreated: 0,
+        applicationsApplied: 0,
+        interviews: 0,
+        offers: 0,
+        rejections: 0,
+      });
+
       currentDate = currentDate.plus({ days: 1 });
     }
 
-    // Track status of each job over time
-    const jobStatuses: Record<number, string> = {};
-
-    // Initialize with job creation dates and initial statuses
+    // Count jobs created each day
     jobs.forEach((job) => {
-      if (job.id && job.createdAt >= start && job.createdAt <= end) {
-        jobStatuses[job.id] = job.status;
-        const dateKey =
-          DateTime.fromJSDate(job.createdAt).toISODate() ||
-          DateTime.fromJSDate(job.createdAt).toFormat("yyyy-MM-dd");
-        if (dayData[dateKey]) {
-          const statusLabel = formatStatusLabel(job.status);
-          dayData[dateKey][statusLabel]++;
+      // Use date comparison at the day level rather than exact timestamp
+      const jobDate = DateTime.fromJSDate(job.createdAt).startOf("day");
+      const startDate = DateTime.fromJSDate(start).startOf("day");
+      const endDate = DateTime.fromJSDate(end).startOf("day");
+
+      // Check if job date is within range (inclusive)
+      if (jobDate >= startDate && jobDate <= endDate) {
+        const dateKey = jobDate.toISODate() || jobDate.toFormat("yyyy-MM-dd");
+        const dayIndex = dailyData.findIndex((d) => d.date === dateKey);
+        if (dayIndex >= 0) {
+          dailyData[dayIndex].applicationsCreated++;
         }
       }
     });
 
-    // Apply status changes chronologically
-    const sortedActivities = activities
+    // Count applications applied each day (status changes to "applied")
+    activities
+      .filter(
+        (activity) =>
+          activity.type === "status_change" && activity.newStatus === "applied"
+      )
+      .forEach((activity) => {
+        const activityDate = DateTime.fromJSDate(activity.createdAt).startOf(
+          "day"
+        );
+        const startDate = DateTime.fromJSDate(start).startOf("day");
+        const endDate = DateTime.fromJSDate(end).startOf("day");
+
+        if (activityDate >= startDate && activityDate <= endDate) {
+          const dateKey =
+            activityDate.toISODate() || activityDate.toFormat("yyyy-MM-dd");
+          const dayIndex = dailyData.findIndex((d) => d.date === dateKey);
+          if (dayIndex >= 0) {
+            dailyData[dayIndex].applicationsApplied++;
+          }
+        }
+      });
+
+    // Count interviews each day (status changes to "interview")
+    activities
       .filter(
         (activity) =>
           activity.type === "status_change" &&
-          activity.createdAt >= start &&
-          activity.createdAt <= end &&
-          activity.newStatus
+          activity.newStatus === "interview"
       )
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+      .forEach((activity) => {
+        const activityDate = DateTime.fromJSDate(activity.createdAt).startOf(
+          "day"
+        );
+        const startDate = DateTime.fromJSDate(start).startOf("day");
+        const endDate = DateTime.fromJSDate(end).startOf("day");
 
-    sortedActivities.forEach((activity) => {
-      const dateKey =
-        DateTime.fromJSDate(activity.createdAt).toISODate() ||
-        DateTime.fromJSDate(activity.createdAt).toFormat("yyyy-MM-dd");
-      if (
-        dayData[dateKey] &&
-        activity.jobId &&
-        activity.newStatus &&
-        activity.previousStatus
-      ) {
-        // Remove from previous status
-        const prevStatusLabel = formatStatusLabel(activity.previousStatus);
-        if (dayData[dateKey][prevStatusLabel] > 0) {
-          dayData[dateKey][prevStatusLabel]--;
+        if (activityDate >= startDate && activityDate <= endDate) {
+          const dateKey =
+            activityDate.toISODate() || activityDate.toFormat("yyyy-MM-dd");
+          const dayIndex = dailyData.findIndex((d) => d.date === dateKey);
+          if (dayIndex >= 0) {
+            dailyData[dayIndex].interviews++;
+          }
         }
-
-        // Add to new status
-        const newStatusLabel = formatStatusLabel(activity.newStatus);
-        dayData[dateKey][newStatusLabel]++;
-
-        // Update job status tracking
-        jobStatuses[activity.jobId] = activity.newStatus;
-      }
-    });
-
-    // Convert to array format for recharts
-    return Object.entries(dayData)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, statuses]) => {
-        const dateObj = DateTime.fromISO(date);
-        let formattedDate: string;
-
-        switch (timeRange) {
-          case "today":
-            formattedDate = dateObj.toFormat("HH:mm");
-            break;
-          case "week":
-            formattedDate = dateObj.toFormat("ccc MMM d");
-            break;
-          case "month":
-            formattedDate = dateObj.toFormat("MMM d");
-            break;
-          case "all":
-          default:
-            formattedDate = dateObj.toFormat("yy MMM d");
-            break;
-        }
-
-        return {
-          date: formattedDate,
-          // Ensure all status values are numbers
-          "Not Applied": Number(statuses["Not Applied"]) || 0,
-          Applied: Number(statuses["Applied"]) || 0,
-          Interview: Number(statuses["Interview"]) || 0,
-          Offer: Number(statuses["Offer"]) || 0,
-          Rejected: Number(statuses["Rejected"]) || 0,
-          Withdrawn: Number(statuses["Withdrawn"]) || 0,
-        };
       });
+
+    // Count offers each day (status changes to "offer")
+    activities
+      .filter(
+        (activity) =>
+          activity.type === "status_change" && activity.newStatus === "offer"
+      )
+      .forEach((activity) => {
+        const activityDate = DateTime.fromJSDate(activity.createdAt).startOf(
+          "day"
+        );
+        const startDate = DateTime.fromJSDate(start).startOf("day");
+        const endDate = DateTime.fromJSDate(end).startOf("day");
+
+        if (activityDate >= startDate && activityDate <= endDate) {
+          const dateKey =
+            activityDate.toISODate() || activityDate.toFormat("yyyy-MM-dd");
+          const dayIndex = dailyData.findIndex((d) => d.date === dateKey);
+          if (dayIndex >= 0) {
+            dailyData[dayIndex].offers++;
+          }
+        }
+      });
+
+    // Count rejections each day (status changes to "rejected")
+    activities
+      .filter(
+        (activity) =>
+          activity.type === "status_change" && activity.newStatus === "rejected"
+      )
+      .forEach((activity) => {
+        const activityDate = DateTime.fromJSDate(activity.createdAt).startOf(
+          "day"
+        );
+        const startDate = DateTime.fromJSDate(start).startOf("day");
+        const endDate = DateTime.fromJSDate(end).startOf("day");
+
+        if (activityDate >= startDate && activityDate <= endDate) {
+          const dateKey =
+            activityDate.toISODate() || activityDate.toFormat("yyyy-MM-dd");
+          const dayIndex = dailyData.findIndex((d) => d.date === dateKey);
+          if (dayIndex >= 0) {
+            dailyData[dayIndex].rejections++;
+          }
+        }
+      });
+
+    // Convert to cumulative data
+    let cumulativeCreated = 0;
+    let cumulativeApplied = 0;
+    let cumulativeInterviews = 0;
+    let cumulativeOffers = 0;
+    let cumulativeRejections = 0;
+
+    return dailyData.map((day) => {
+      cumulativeCreated += day.applicationsCreated;
+      cumulativeApplied += day.applicationsApplied;
+      cumulativeInterviews += day.interviews;
+      cumulativeOffers += day.offers;
+      cumulativeRejections += day.rejections;
+
+      return {
+        date: day.formattedDate,
+        "Applications Created": cumulativeCreated,
+        "Applications Applied": cumulativeApplied,
+        Interviews: cumulativeInterviews,
+        Offers: cumulativeOffers,
+        Rejections: cumulativeRejections,
+      };
+    });
   };
 
   useEffect(() => {
@@ -433,15 +507,31 @@ export default function Dashboard() {
     return statusMap[statusLabel] || "#6B7280";
   };
 
-  // Get all status keys for the areas
-  const statusKeys = [
-    "Not Applied",
-    "Applied",
-    "Interview",
-    "Offer",
-    "Rejected",
-    "Withdrawn",
+  // Chart keys for the new cumulative chart
+  const chartKeys = [
+    "Applications Created",
+    "Applications Applied",
+    "Interviews",
+    "Offers",
+    "Rejections",
   ];
+
+  const getChartColor = (key: string) => {
+    switch (key) {
+      case "Applications Created":
+        return "#6B7280"; // Gray for created
+      case "Applications Applied":
+        return "#3B82F6"; // Blue for applied
+      case "Interviews":
+        return "#F59E0B"; // Amber for interviews
+      case "Offers":
+        return "#10B981"; // Emerald for offers
+      case "Rejections":
+        return "#EF4444"; // Red for rejections
+      default:
+        return "#6B7280";
+    }
+  };
 
   if (loading) {
     return (
@@ -578,17 +668,16 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Right side - Status Distribution Chart (50% of total width) */}
+        {/* Right side - Cumulative Applications Chart (50% of total width) */}
         <Card className="h-full">
           <CardHeader>
-            <CardTitle>Status Distribution</CardTitle>
+            <CardTitle>Cumulative Applications</CardTitle>
           </CardHeader>
           <CardContent>
-            {stats.chartData.length > 0 && statusKeys.length > 0 ? (
+            {stats.chartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={400}>
                 <AreaChart
                   data={stats.chartData}
-                  stackOffset="expand"
                   margin={{
                     top: 20,
                     right: 30,
@@ -598,9 +687,7 @@ export default function Dashboard() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
-                  <YAxis
-                    tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
-                  />
+                  <YAxis />
                   <RechartsTooltip
                     formatter={(value: any, name: any) => [
                       `${value} applications`,
@@ -609,23 +696,15 @@ export default function Dashboard() {
                     labelFormatter={(label) => `${label}`}
                   />
                   <Legend />
-                  {statusKeys
-                    .filter((status) =>
-                      stats.chartData.some(
-                        (dataPoint) =>
-                          dataPoint[status] !== undefined &&
-                          typeof dataPoint[status] === "number" &&
-                          !isNaN(Number(dataPoint[status]))
-                      )
-                    )
-                    .map((status) => (
-                      <Area
-                        key={status}
-                        type="monotone"
-                        dataKey={status}
-                        fill={getChartColorByLabel(status)}
-                      />
-                    ))}
+                  {chartKeys.map((key) => (
+                    <Area
+                      key={key}
+                      type="monotone"
+                      dataKey={key}
+                      fill={getChartColor(key)}
+                      stackId="1"
+                    />
+                  ))}
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
