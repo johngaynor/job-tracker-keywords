@@ -119,14 +119,9 @@ export class ImportExportService {
 
   /**
    * Import data from a JSON structure
+   * Note: This will clear all existing data before importing
    */
-  static async importData(
-    data: ExportData,
-    options: {
-      clearExisting?: boolean;
-      skipDuplicates?: boolean;
-    } = {}
-  ): Promise<{
+  static async importData(data: ExportData): Promise<{
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
@@ -134,8 +129,6 @@ export class ImportExportService {
     goalsImported: number;
     skipped: number;
   }> {
-    const { clearExisting = false, skipDuplicates = true } = options;
-
     try {
       // Validate data structure
       this.validateImportData(data);
@@ -147,28 +140,15 @@ export class ImportExportService {
       let goalsImported = 0;
       let skipped = 0;
 
-      // Clear existing data if requested
-      if (clearExisting) {
-        console.log("importData: clearExisting=true, calling clearAllData...");
-        await this.clearAllData();
-        console.log(
-          "importData: clearAllData completed, continuing with import..."
-        );
-      }
+      // Always clear existing data before importing
+      console.log("importData: Clearing existing data...");
+      await this.clearAllData();
+      console.log("importData: Clear completed, continuing with import...");
 
       // Import employers
       const employerIdMap = new Map<number, number>(); // old ID -> new ID
       for (const employer of data.employers) {
         try {
-          if (skipDuplicates) {
-            const existing = await employerService.findByName(employer.name);
-            if (existing) {
-              employerIdMap.set(employer.id!, existing.id!);
-              skipped++;
-              continue;
-            }
-          }
-
           const newId = await employerService.create(
             employer.name,
             employer.notes
@@ -190,18 +170,6 @@ export class ImportExportService {
             console.warn(`Skipping job ${job.title} - employer not found`);
             skipped++;
             continue;
-          }
-
-          if (skipDuplicates) {
-            const existing = await jobService.findByTitleAndEmployer(
-              job.title,
-              newEmployerId
-            );
-            if (existing) {
-              jobIdMap.set(job.id!, existing.id!);
-              skipped++;
-              continue;
-            }
           }
 
           const newId = await jobService.create(
@@ -235,17 +203,6 @@ export class ImportExportService {
             console.warn(`Skipping keyword ${keyword.keyword} - job not found`);
             skipped++;
             continue;
-          }
-
-          if (skipDuplicates) {
-            const existing = await keywordService.findByJobAndKeyword(
-              newJobId,
-              keyword.keyword
-            );
-            if (existing) {
-              skipped++;
-              continue;
-            }
           }
 
           await keywordService.create(newJobId, keyword.keyword);
@@ -318,13 +275,7 @@ export class ImportExportService {
   /**
    * Import data from uploaded file
    */
-  static async importFromFile(
-    file: File,
-    options?: {
-      clearExisting?: boolean;
-      skipDuplicates?: boolean;
-    }
-  ): Promise<{
+  static async importFromFile(file: File): Promise<{
     employersImported: number;
     jobsImported: number;
     keywordsImported: number;
@@ -339,7 +290,7 @@ export class ImportExportService {
         try {
           const content = e.target?.result as string;
           const data = JSON.parse(content) as ExportData;
-          const result = await this.importData(data, options);
+          const result = await this.importData(data);
           resolve(result);
         } catch (error) {
           console.log(error);

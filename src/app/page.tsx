@@ -177,16 +177,10 @@ export default function Dashboard() {
       const applicationsCreated = jobsInRange.length;
 
       // Count applications that were applied to (status changed to "applied" in time range)
-      const appliedInTimeRange = statusChangeActivities.filter(
+      // Only count the specific status change activity where newStatus = "applied"
+      const applicationsApplied = statusChangeActivities.filter(
         (activity) => activity.newStatus === "applied"
       ).length;
-
-      // Also count jobs created directly with "applied" status in the time range
-      const createdAsApplied = jobsInRange.filter(
-        (job) => job.status === "applied"
-      ).length;
-
-      const applicationsApplied = appliedInTimeRange + createdAsApplied;
 
       // Count interviews (status changed to "interview")
       const interviewCount = statusChangeActivities.filter(

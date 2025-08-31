@@ -33,8 +33,6 @@ interface ImportExportProps {
 export function ImportExport({ onDataChanged }: ImportExportProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
-  const [clearExisting, setClearExisting] = useState(false);
-  const [skipDuplicates, setSkipDuplicates] = useState(true);
   const [importResult, setImportResult] = useState<{
     employersImported: number;
     jobsImported: number;
@@ -91,10 +89,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     setImportResult(null);
 
     try {
-      const result = await ImportExportService.importFromFile(file, {
-        clearExisting,
-        skipDuplicates,
-      });
+      const result = await ImportExportService.importFromFile(file);
 
       setImportResult(result);
       toast.success("Data imported successfully!", {
@@ -225,48 +220,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Import Options */}
-          <div className="space-y-3 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
-            <Label className="text-sm font-medium">Import Options</Label>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="clearExisting"
-                checked={clearExisting}
-                onCheckedChange={(checked: boolean) =>
-                  setClearExisting(checked)
-                }
-              />
-              <Label htmlFor="clearExisting" className="text-sm cursor-pointer">
-                Clear existing data before import
-              </Label>
+          {/* Warning about clearing data */}
+          <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded">
+            <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-red-700 dark:text-red-300">
+              <strong>Warning:</strong> Importing will permanently delete all
+              existing data and replace it with the imported data. Make sure you
+              have a backup!
             </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="skipDuplicates"
-                checked={skipDuplicates}
-                onCheckedChange={(checked: boolean) =>
-                  setSkipDuplicates(checked)
-                }
-              />
-              <Label
-                htmlFor="skipDuplicates"
-                className="text-sm cursor-pointer"
-              >
-                Skip duplicate entries (recommended)
-              </Label>
-            </div>
-
-            {clearExisting && (
-              <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded">
-                <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-red-700 dark:text-red-300">
-                  <strong>Warning:</strong> This will permanently delete all
-                  existing data before importing. Make sure you have a backup!
-                </div>
-              </div>
-            )}
           </div>
 
           {/* File Input */}
@@ -337,7 +298,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   </div>
                 </div>
               </div>
-              
+
               {importResult.skipped > 0 && (
                 <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
                   <div className="text-green-600 dark:text-green-400 text-sm">

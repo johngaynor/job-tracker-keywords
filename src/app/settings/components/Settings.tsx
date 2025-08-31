@@ -231,19 +231,16 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
         "handleFullWipe: About to call ImportExportService.importData"
       );
 
-      // Import an empty dataset with clearExisting=true to wipe everything
-      await ImportExportService.importData(
-        {
-          version: "1.0",
-          exportDate: new Date().toISOString(),
-          employers: [],
-          jobs: [],
-          keywords: [],
-          activities: [],
-          goals: [],
-        },
-        { clearExisting: true }
-      );
+      // Import an empty dataset to wipe everything (importData always clears existing data)
+      await ImportExportService.importData({
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        employers: [],
+        jobs: [],
+        keywords: [],
+        activities: [],
+        goals: [],
+      });
 
       console.log(
         "handleFullWipe: ImportExportService.importData completed successfully"
