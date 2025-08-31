@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,60 +20,49 @@ interface JobActionsDropdownProps {
   onDeleteJob: (jobId: number) => void;
 }
 
-export function JobActionsDropdown({ job, onJobUpdated, onDeleteJob }: JobActionsDropdownProps) {
-  const [viewDialogOpen, setViewDialogOpen] = useState(false);
-  const [activityDialogOpen, setActivityDialogOpen] = useState(false);
-  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-
+export function JobActionsDropdown({
+  job,
+  onJobUpdated,
+  onDeleteJob,
+}: JobActionsDropdownProps) {
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem onSelect={() => setViewDialogOpen(true)}>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+          <MoreVertical className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <JobViewDialog job={job}>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <Eye className="h-4 w-4 mr-2" />
             View Details
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setActivityDialogOpen(true)}>
+        </JobViewDialog>
+
+        <ActivityLogDialog job={job}>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <FileText className="h-4 w-4 mr-2" />
             Activity Log
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setUpdateDialogOpen(true)}>
+        </ActivityLogDialog>
+
+        <JobUpdateDialog job={job} onJobUpdated={onJobUpdated}>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <Edit className="h-4 w-4 mr-2" />
             Update Status
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={() => onDeleteJob(job.id!)}
-            className="text-red-600 dark:text-red-400"
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </JobUpdateDialog>
 
-      {/* Controlled Dialogs */}
-      <JobViewDialog 
-        job={job} 
-        open={viewDialogOpen} 
-        onOpenChange={setViewDialogOpen} 
-      />
-      <ActivityLogDialog 
-        job={job} 
-        open={activityDialogOpen} 
-        onOpenChange={setActivityDialogOpen} 
-      />
-      <JobUpdateDialog 
-        job={job} 
-        onJobUpdated={onJobUpdated}
-        open={updateDialogOpen} 
-        onOpenChange={setUpdateDialogOpen} 
-      />
-    </>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => onDeleteJob(job.id!)}
+          className="text-red-600 dark:text-red-400"
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
