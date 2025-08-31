@@ -40,18 +40,16 @@ const STATUS_OPTIONS = [
 ];
 
 const ACTIVITY_TYPES = [
-  { value: "application_submitted", label: "Application Submitted" },
   { value: "linkedin_outreach", label: "LinkedIn Outreach" },
   { value: "email_sent", label: "Email Sent" },
   { value: "phone_call_scheduled", label: "Phone Call Scheduled" },
   { value: "phone_call_completed", label: "Phone Call Completed" },
-  { value: "interview_scheduled", label: "Interview Scheduled" },
-  { value: "interview_completed", label: "Interview Completed" },
   { value: "follow_up_sent", label: "Follow Up Sent" },
   { value: "reference_check", label: "Reference Check" },
-  { value: "offer_received", label: "Offer Received" },
-  { value: "offer_negotiation", label: "Offer Negotiation" },
-  { value: "rejection_received", label: "Rejection Received" },
+  { value: "networking_event", label: "Networking Event" },
+  { value: "informational_interview", label: "Informational Interview" },
+  { value: "research_completed", label: "Company Research" },
+  { value: "contact_made", label: "Contact Made" },
   { value: "other", label: "Other" },
 ];
 

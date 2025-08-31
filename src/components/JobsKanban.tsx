@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JobUpdateDialog } from "@/components/JobUpdateDialog";
 import { ActivityLogDialog } from "@/components/ActivityLogDialog";
+import { JobViewDialog } from "@/components/JobViewDialog";
 import { jobService, keywordService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
 import { Trash2, Calendar, Building } from "lucide-react";
@@ -190,6 +191,7 @@ export function JobsKanban() {
                           </div>
                         </div>
                         <div className="flex flex-col gap-1 ml-2">
+                          <JobViewDialog job={job} />
                           <ActivityLogDialog
                             job={job}
                           />
