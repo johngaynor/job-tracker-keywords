@@ -8,9 +8,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { JobViewDialog } from "@/components/JobViewDialog";
-import { ActivityLogDialog } from "@/components/ActivityLogDialog";
-import { JobUpdateDialog } from "@/components/JobUpdateDialog";
+import { JobViewDialog } from "./JobViewDialog";
+import { ActivityLogDialog } from "./ActivityLogDialog";
+import { JobUpdateDialog } from "./JobUpdateDialog";
 import { Job, Keyword, Employer } from "@/lib/database";
 import { MoreVertical, Eye, FileText, Edit, Trash2 } from "lucide-react";
 

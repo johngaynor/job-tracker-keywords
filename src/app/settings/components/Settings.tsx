@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,19 +58,7 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
     offers: { targetNumber: "", frequency: "", unit: "days" },
   });
 
-  // Load goals on component mount
-  useEffect(() => {
-    loadGoals();
-  }, []);
-
-  // Reload goals when refreshTrigger changes
-  useEffect(() => {
-    if (refreshTrigger !== undefined) {
-      loadGoals();
-    }
-  }, [refreshTrigger]);
-
-  const loadGoals = async () => {
+  const loadGoals = useCallback(async () => {
     try {
       const allGoals = await goalService.getAll();
       setGoals(allGoals);
@@ -97,7 +85,19 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
       console.error("Error loading goals:", error);
       toast.error("Failed to load goals");
     }
-  };
+  }, [goalInputs]);
+
+  // Load goals on component mount
+  useEffect(() => {
+    loadGoals();
+  }, [loadGoals]);
+
+  // Reload goals when refreshTrigger changes
+  useEffect(() => {
+    if (refreshTrigger !== undefined) {
+      loadGoals();
+    }
+  }, [refreshTrigger, loadGoals]);
 
   const handleGoalInputChange = (
     goalType: string,
