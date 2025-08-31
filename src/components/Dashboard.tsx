@@ -10,19 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/StatCard";
-import { jobService, activityService } from "@/lib/db-services";
-import { Job, Activity } from "@/lib/database";
+import { jobService, activityService, goalService } from "@/lib/db-services";
+import { Job, Activity, Goal } from "@/lib/database";
 import {
-  Calendar,
   TrendingUp,
   Users,
   FileText,
   CheckCircle,
   XCircle,
   Clock,
-  Target,
 } from "lucide-react";
 import {
   AreaChart,
@@ -54,6 +51,7 @@ interface DashboardStats {
 
 export function Dashboard() {
   const [timeRange, setTimeRange] = useState<TimeRange>("week");
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
     applicationsCreated: 0,
     applicationsApplied: 0,
@@ -95,6 +93,36 @@ export function Dashboard() {
           start: DateTime.fromMillis(0).toJSDate(),
           end: now.toJSDate(),
         };
+    }
+  }, []);
+
+  // Calculate the target goal for the current time period
+  const calculateGoalForTimePeriod = useCallback(
+    (goal: Goal, timeRange: TimeRange, start: Date, end: Date) => {
+      if (!goal) return undefined;
+
+      const { targetNumber, frequencyDays } = goal;
+
+      // Calculate the number of days in the current time period
+      const timePeriodDays = Math.ceil(
+        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      // Calculate how many complete frequency periods fit into the time period
+      const frequencyPeriods = timePeriodDays / frequencyDays;
+
+      // Calculate the target, rounded up
+      return Math.ceil(targetNumber * frequencyPeriods);
+    },
+    []
+  );
+
+  const loadGoals = useCallback(async () => {
+    try {
+      const allGoals = await goalService.getAll();
+      setGoals(allGoals);
+    } catch (error) {
+      console.error("Error loading goals:", error);
     }
   }, []);
 
@@ -339,8 +367,14 @@ export function Dashboard() {
   };
 
   useEffect(() => {
+    loadGoals();
     loadStats();
-  }, [loadStats]);
+  }, [loadGoals, loadStats]);
+
+  // Reload when timeRange changes
+  useEffect(() => {
+    loadStats();
+  }, [timeRange, loadStats]);
 
   const formatTimeRangeLabel = (range: TimeRange) => {
     switch (range) {
@@ -448,6 +482,18 @@ export function Dashboard() {
     );
   }
 
+  // Helper function to get goal target for a specific metric
+  const getGoalTarget = (goalType: string) => {
+    // For "all time" timeframe, return undefined so StatCard uses current value as goal
+    if (timeRange === "all") return undefined;
+
+    const goal = goals.find((g) => g.type === goalType);
+    if (!goal) return undefined;
+
+    const { start, end } = getDateRange(timeRange);
+    return calculateGoalForTimePeriod(goal, timeRange, start, end);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -476,6 +522,7 @@ export function Dashboard() {
             title="Productive Activities"
             subtitle="All application statuses and activities"
             value={stats.productiveActivities}
+            goal={getGoalTarget("productive_activities")}
             timeRangeLabel={formatTimeRangeLabel(timeRange).toLowerCase()}
             icon={Clock}
             variant="indigo"
@@ -486,6 +533,7 @@ export function Dashboard() {
             title="Applications Created"
             subtitle="Entered information but haven't applied"
             value={stats.applicationsCreated}
+            goal={getGoalTarget("applications_created")}
             timeRangeLabel={formatTimeRangeLabel(timeRange).toLowerCase()}
             icon={FileText}
             variant="default"
@@ -496,6 +544,7 @@ export function Dashboard() {
             title="Applications Applied"
             subtitle="Applications submitted to employer"
             value={stats.applicationsApplied}
+            goal={getGoalTarget("applications_applied")}
             timeRangeLabel={formatTimeRangeLabel(timeRange).toLowerCase()}
             icon={TrendingUp}
             variant="blue"
@@ -506,6 +555,7 @@ export function Dashboard() {
             title="Interviews"
             subtitle="Applications actively interviewing"
             value={stats.interviews}
+            goal={getGoalTarget("interviews")}
             timeRangeLabel={formatTimeRangeLabel(timeRange).toLowerCase()}
             icon={Users}
             variant="yellow"
@@ -516,6 +566,7 @@ export function Dashboard() {
             title="Offers"
             subtitle="Received offer from employer"
             value={stats.offers}
+            goal={getGoalTarget("offers")}
             timeRangeLabel={formatTimeRangeLabel(timeRange).toLowerCase()}
             icon={CheckCircle}
             variant="green"

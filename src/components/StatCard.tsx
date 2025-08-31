@@ -1,11 +1,13 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { LucideIcon } from "lucide-react";
 
 interface StatCardProps {
   title: string;
   subtitle: string;
   value: number;
+  goal?: number; // Optional goal target for the time period
   timeRangeLabel: string;
   icon: LucideIcon;
   variant?: "default" | "blue" | "yellow" | "green" | "red" | "indigo";
@@ -21,6 +23,7 @@ const getVariantStyles = (variant: StatCardProps["variant"]) => {
         value: "text-blue-900 dark:text-blue-100",
         timeRange: "text-blue-600 dark:text-blue-400",
         icon: "text-blue-500",
+        progress: "[&>div]:bg-blue-500 dark:[&>div]:bg-blue-400",
       };
     case "yellow":
       return {
@@ -30,6 +33,7 @@ const getVariantStyles = (variant: StatCardProps["variant"]) => {
         value: "text-yellow-900 dark:text-yellow-100",
         timeRange: "text-yellow-600 dark:text-yellow-400",
         icon: "text-yellow-500",
+        progress: "[&>div]:bg-yellow-500 dark:[&>div]:bg-yellow-400",
       };
     case "green":
       return {
@@ -39,6 +43,7 @@ const getVariantStyles = (variant: StatCardProps["variant"]) => {
         value: "text-green-900 dark:text-green-100",
         timeRange: "text-green-600 dark:text-green-400",
         icon: "text-green-500",
+        progress: "[&>div]:bg-green-500 dark:[&>div]:bg-green-400",
       };
     case "red":
       return {
@@ -48,6 +53,7 @@ const getVariantStyles = (variant: StatCardProps["variant"]) => {
         value: "text-red-900 dark:text-red-100",
         timeRange: "text-red-600 dark:text-red-400",
         icon: "text-red-500",
+        progress: "[&>div]:bg-red-500 dark:[&>div]:bg-red-400",
       };
     case "indigo":
       return {
@@ -57,15 +63,17 @@ const getVariantStyles = (variant: StatCardProps["variant"]) => {
         value: "text-indigo-900 dark:text-indigo-100",
         timeRange: "text-indigo-600 dark:text-indigo-400",
         icon: "text-indigo-500",
+        progress: "[&>div]:bg-indigo-500 dark:[&>div]:bg-indigo-400",
       };
     default:
       return {
         card: "",
-        title: "text-sm font-medium",
+        title: "text-sm font-medium text-gray-700 dark:text-gray-300",
         subtitle: "text-muted-foreground",
-        value: "",
+        value: "text-gray-900 dark:text-gray-100",
         timeRange: "text-muted-foreground",
         icon: "text-muted-foreground",
+        progress: "[&>div]:bg-gray-500 dark:[&>div]:bg-gray-400",
       };
   }
 };
@@ -74,11 +82,14 @@ export function StatCard({
   title,
   subtitle,
   value,
+  goal,
   timeRangeLabel,
   icon: Icon,
   variant = "default",
 }: StatCardProps) {
   const styles = getVariantStyles(variant);
+  const displayGoal = goal ?? value; // Use value as goal if no goal is provided
+  const progressPercentage = displayGoal > 0 ? Math.min((value / displayGoal) * 100, 100) : 0;
 
   return (
     <Card className={styles.card}>
@@ -92,8 +103,19 @@ export function StatCard({
         <Icon className={`h-4 w-4 ${styles.icon}`} />
       </CardHeader>
       <CardContent>
-        <div className={`text-4xl font-bold ${styles.value}`}>{value}</div>
+        <div className={`flex items-baseline gap-2 ${styles.value}`}>
+          <span className="text-4xl font-bold">{value}</span>
+          <span className="text-2xl font-medium opacity-70">
+            / {displayGoal}
+          </span>
+        </div>
         <p className={`text-xs pt-2 ${styles.timeRange}`}>{timeRangeLabel}</p>
+        <div className="mt-2">
+          <Progress 
+            value={progressPercentage} 
+            className={`h-1 ${styles.progress}`}
+          />
+        </div>
       </CardContent>
     </Card>
   );
