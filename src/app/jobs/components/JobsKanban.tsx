@@ -27,6 +27,7 @@ import {
   Edit,
   Archive,
   ArchiveRestore,
+  Star,
 } from "lucide-react";
 
 interface JobWithEmployer extends Job {
@@ -143,8 +144,30 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
     }
   };
 
+  const handleToggleFavorite = async (jobId: number) => {
+    try {
+      await jobService.toggleFavorite(jobId);
+      toast.success("Favorite updated");
+      await loadJobs();
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      toast.error("Failed to update favorite", {
+        description: "Please try again.",
+      });
+    }
+  };
+
   const getJobsByStatus = (status: string) => {
-    return jobs.filter((job) => job.status === status);
+    return jobs
+      .filter((job) => job.status === status)
+      .sort((a, b) => {
+        // Sort favorites first, then by creation date (newest first)
+        if (a.favorited && !b.favorited) return -1;
+        if (!a.favorited && b.favorited) return 1;
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
   };
 
   if (loading) {
@@ -304,7 +327,21 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
                             {new Date(job.createdAt).toLocaleDateString()}
                           </div>
                         </div>
-                        <div className="ml-2">
+                        <div className="ml-2 flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleToggleFavorite(job.id!)}
+                            className="h-8 w-8 p-0 hover:bg-transparent"
+                          >
+                            <Star
+                              className={`h-4 w-4 ${
+                                job.favorited
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-gray-400 hover:text-yellow-400"
+                              }`}
+                            />
+                          </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button

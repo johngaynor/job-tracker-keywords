@@ -23,6 +23,7 @@ import {
   Settings,
   Info,
   LayoutDashboard,
+  Building2,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -38,6 +39,7 @@ export default function AppLayout({ children }: LayoutProps) {
     { value: "/", label: "Dashboard", icon: LayoutDashboard },
     { value: "/add", label: "Add Application", icon: Plus },
     { value: "/jobs", label: "Applications", icon: Briefcase },
+    { value: "/employers", label: "Employers", icon: Building2 },
     { value: "/stats", label: "Statistics", icon: BarChart3 },
     { value: "/settings", label: "Settings", icon: Settings },
   ];

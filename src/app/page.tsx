@@ -537,18 +537,16 @@ export default function Dashboard() {
   // Custom legend renderer to ensure colors match
   const renderCustomLegend = (props: any) => {
     const { payload } = props;
-    
+
     return (
       <div className="flex flex-wrap justify-center gap-4 mt-4">
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2">
-            <div 
+            <div
               className="w-3 h-3 rounded-sm"
               style={{ backgroundColor: getChartColor(entry.value) }}
             />
-            <span className="text-sm text-muted-foreground">
-              {entry.value}
-            </span>
+            <span className="text-sm text-muted-foreground">{entry.value}</span>
           </div>
         ))}
       </div>
@@ -717,10 +715,10 @@ export default function Dashboard() {
                     ]}
                     labelFormatter={(label: any) => `${label}`}
                   />
-                  <Legend 
+                  <Legend
                     content={renderCustomLegend}
                     wrapperStyle={{
-                      paddingTop: "20px"
+                      paddingTop: "20px",
                     }}
                   />
                   {chartKeys.map((key) => (
@@ -743,7 +741,7 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            
+
             {/* Final count badges */}
             {stats.chartData.length > 0 && (
               <div className="mt-6 pt-4 border-t">
@@ -752,7 +750,8 @@ export default function Dashboard() {
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   {chartKeys.map((key) => {
-                    const lastDataPoint = stats.chartData[stats.chartData.length - 1];
+                    const lastDataPoint =
+                      stats.chartData[stats.chartData.length - 1];
                     const count = lastDataPoint[key] || 0;
                     return (
                       <Badge
@@ -765,7 +764,7 @@ export default function Dashboard() {
                           backgroundColor: `${getChartColor(key)}10`, // 10% opacity background
                         }}
                       >
-                        <div 
+                        <div
                           className="w-2 h-2 rounded-full mr-2"
                           style={{ backgroundColor: getChartColor(key) }}
                         />

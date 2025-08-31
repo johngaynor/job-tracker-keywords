@@ -182,6 +182,7 @@ export class ImportExportService {
             salaryEstimate: job.salaryEstimate,
             interestLevel: job.interestLevel,
             archived: job.archived || false,
+            favorited: job.favorited || false,
             status: job.status,
             createdAt: new Date(job.createdAt), // Preserve original timestamp
             updatedAt: new Date(job.updatedAt), // Preserve original timestamp

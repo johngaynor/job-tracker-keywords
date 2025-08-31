@@ -16,7 +16,7 @@ import { JobUpdateDialog } from "./JobUpdateDialog";
 import { ActivityLogDialog } from "./ActivityLogDialog";
 import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
-import { Trash2, Calendar, Building, ExternalLink } from "lucide-react";
+import { Trash2, Calendar, Building, ExternalLink, Star } from "lucide-react";
 
 interface JobWithEmployer extends Job {
   employer: Employer;
@@ -56,6 +56,15 @@ export function JobsTable({ showArchived }: JobsTableProps) {
         jobsWithKeywords.push({ ...job, keywords });
       }
 
+      // Sort jobs: favorites first, then by creation date (newest first)
+      jobsWithKeywords.sort((a, b) => {
+        if (a.favorited && !b.favorited) return -1;
+        if (!a.favorited && b.favorited) return 1;
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
+
       setJobs(jobsWithKeywords);
     } catch (error) {
       console.error("Error loading jobs:", error);
@@ -80,6 +89,19 @@ export function JobsTable({ showArchived }: JobsTableProps) {
           description: "Please try again.",
         });
       }
+    }
+  };
+
+  const handleToggleFavorite = async (jobId: number) => {
+    try {
+      await jobService.toggleFavorite(jobId);
+      toast.success("Favorite updated");
+      await loadJobs();
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      toast.error("Failed to update favorite", {
+        description: "Please try again.",
+      });
     }
   };
 
@@ -108,6 +130,7 @@ export function JobsTable({ showArchived }: JobsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[50px]">⭐</TableHead>
               <TableHead className="w-[250px]">Position</TableHead>
               <TableHead>Company</TableHead>
               <TableHead>Status</TableHead>
@@ -121,6 +144,9 @@ export function JobsTable({ showArchived }: JobsTableProps) {
             {/* Generate skeleton rows */}
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <TableRow key={i} className="animate-pulse">
+                <TableCell>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4"></div>
+                </TableCell>
                 <TableCell>
                   <div className="space-y-2">
                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
@@ -139,8 +165,8 @@ export function JobsTable({ showArchived }: JobsTableProps) {
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
                     {[1, 2, 3, 4].map((j) => (
-                      <div 
-                        key={j} 
+                      <div
+                        key={j}
                         className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-12"
                       ></div>
                     ))}
@@ -177,6 +203,7 @@ export function JobsTable({ showArchived }: JobsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[50px]">⭐</TableHead>
             <TableHead>Company</TableHead>
             <TableHead>Position</TableHead>
             <TableHead>Salary</TableHead>
@@ -192,6 +219,22 @@ export function JobsTable({ showArchived }: JobsTableProps) {
         <TableBody>
           {jobs.map((job) => (
             <TableRow key={job.id}>
+              <TableCell>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleToggleFavorite(job.id!)}
+                  className="h-8 w-8 p-0 hover:bg-transparent"
+                >
+                  <Star
+                    className={`h-4 w-4 ${
+                      job.favorited
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-400 hover:text-yellow-400"
+                    }`}
+                  />
+                </Button>
+              </TableCell>
               <TableCell>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">

@@ -18,6 +18,7 @@ export interface Job {
   salaryEstimate?: string;
   interestLevel?: number;
   archived?: boolean;
+  favorited?: boolean;
   status:
     | "not applied"
     | "applied"

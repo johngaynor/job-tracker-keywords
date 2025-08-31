@@ -71,6 +71,7 @@ export const jobService = {
       salaryEstimate,
       interestLevel,
       archived: false,
+      favorited: false,
       status: "not applied",
       createdAt: now,
       updatedAt: now,
@@ -114,6 +115,12 @@ export const jobService = {
     const job = await db.jobs.get(id);
     if (!job) throw new Error("Job not found");
     return await this.update(id, { archived: !job.archived });
+  },
+
+  async toggleFavorite(id: number): Promise<number> {
+    const job = await db.jobs.get(id);
+    if (!job) throw new Error("Job not found");
+    return await this.update(id, { favorited: !job.favorited });
   },
 
   async delete(id: number): Promise<void> {
