@@ -12,9 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { JobUpdateDialog } from "@/components/JobUpdateDialog";
-import { ActivityLogDialog } from "@/components/ActivityLogDialog";
-import { JobViewDialog } from "@/components/JobViewDialog";
+import { JobUpdateDialog } from "./JobUpdateDialog";
+import { ActivityLogDialog } from "./ActivityLogDialog";
+import { JobViewDialog } from "./JobViewDialog";
 import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
 import {

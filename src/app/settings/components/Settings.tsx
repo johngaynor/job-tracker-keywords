@@ -21,11 +21,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ImportExport } from "@/components/ImportExport";
+import { ImportExport } from "./ImportExport";
 import { ImportExportService } from "@/lib/import-export";
 import { goalService } from "@/lib/db-services";
 import { Goal } from "@/lib/database";
-import { Trash2, AlertTriangle, Settings as SettingsIcon, Target } from "lucide-react";
+import {
+  Trash2,
+  AlertTriangle,
+  Settings as SettingsIcon,
+  Target,
+} from "lucide-react";
 
 interface SettingsProps {
   onDataChanged: () => void;
@@ -35,11 +40,15 @@ export function Settings({ onDataChanged }: SettingsProps) {
   const [isWiping, setIsWiping] = useState(false);
   const [showWipeConfirm, setShowWipeConfirm] = useState(false);
   const [wipeComplete, setWipeComplete] = useState(false);
-  
+
   // Goals state
   const [goals, setGoals] = useState<Goal[]>([]);
   const [goalInputs, setGoalInputs] = useState<{
-    [key: string]: { targetNumber: string; frequency: string; unit: "days" | "weeks" };
+    [key: string]: {
+      targetNumber: string;
+      frequency: string;
+      unit: "days" | "weeks";
+    };
   }>({
     productive_activities: { targetNumber: "", frequency: "", unit: "days" },
     applications_created: { targetNumber: "", frequency: "", unit: "days" },
@@ -57,17 +66,21 @@ export function Settings({ onDataChanged }: SettingsProps) {
     try {
       const allGoals = await goalService.getAll();
       setGoals(allGoals);
-      
+
       // Update input states with existing goals
       const newInputs = { ...goalInputs };
       allGoals.forEach((goal) => {
         if (goal.type in newInputs) {
           newInputs[goal.type] = {
             targetNumber: goal.targetNumber.toString(),
-            frequency: goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0 
-              ? (goal.frequencyDays / 7).toString() 
-              : goal.frequencyDays.toString(),
-            unit: goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0 ? "weeks" : "days",
+            frequency:
+              goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
+                ? (goal.frequencyDays / 7).toString()
+                : goal.frequencyDays.toString(),
+            unit:
+              goal.frequencyDays >= 7 && goal.frequencyDays % 7 === 0
+                ? "weeks"
+                : "days",
           };
         }
       });
@@ -111,7 +124,12 @@ export function Settings({ onDataChanged }: SettingsProps) {
 
     try {
       await goalService.upsert(
-        goalType as "applications_created" | "applications_applied" | "interviews" | "offers" | "productive_activities",
+        goalType as
+          | "applications_created"
+          | "applications_applied"
+          | "interviews"
+          | "offers"
+          | "productive_activities",
         targetNumber,
         frequencyDays
       );
@@ -130,7 +148,7 @@ export function Settings({ onDataChanged }: SettingsProps) {
         await goalService.delete(existingGoal.id);
         toast.success("Goal deleted successfully");
         loadGoals(); // Reload to update the display
-        
+
         // Reset the input for this goal type
         setGoalInputs((prev) => ({
           ...prev,
@@ -256,7 +274,8 @@ export function Settings({ onDataChanged }: SettingsProps) {
             Application Goals
           </CardTitle>
           <CardDescription>
-            Set targets for your job application activities to stay motivated and track progress.
+            Set targets for your job application activities to stay motivated
+            and track progress.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -264,13 +283,15 @@ export function Settings({ onDataChanged }: SettingsProps) {
             {Object.keys(goalInputs).map((goalType) => {
               const existingGoal = goals.find((g) => g.type === goalType);
               const input = goalInputs[goalType];
-              
+
               return (
                 <div key={goalType} className="space-y-3">
                   <div>
-                    <Badge 
+                    <Badge
                       variant="secondary"
-                      className={`${getGoalTypeColors(goalType)} font-medium px-3 py-1`}
+                      className={`${getGoalTypeColors(
+                        goalType
+                      )} font-medium px-3 py-1`}
                     >
                       {getGoalTypeLabel(goalType)}
                     </Badge>
@@ -278,10 +299,13 @@ export function Settings({ onDataChanged }: SettingsProps) {
                       {getGoalTypeDescription(goalType)}
                     </p>
                   </div>
-                  
+
                   <div className="flex gap-3 items-end">
                     <div className="flex-1">
-                      <Label htmlFor={`target-${goalType}`} className="text-xs text-muted-foreground">
+                      <Label
+                        htmlFor={`target-${goalType}`}
+                        className="text-xs text-muted-foreground"
+                      >
                         Target Number
                       </Label>
                       <Input
@@ -292,13 +316,20 @@ export function Settings({ onDataChanged }: SettingsProps) {
                         placeholder="e.g., 5"
                         value={input.targetNumber}
                         onChange={(e) =>
-                          handleGoalInputChange(goalType, "targetNumber", e.target.value)
+                          handleGoalInputChange(
+                            goalType,
+                            "targetNumber",
+                            e.target.value
+                          )
                         }
                       />
                     </div>
-                    
+
                     <div className="flex-1">
-                      <Label htmlFor={`frequency-${goalType}`} className="text-xs text-muted-foreground">
+                      <Label
+                        htmlFor={`frequency-${goalType}`}
+                        className="text-xs text-muted-foreground"
+                      >
                         Every
                       </Label>
                       <Input
@@ -309,13 +340,20 @@ export function Settings({ onDataChanged }: SettingsProps) {
                         placeholder="e.g., 1"
                         value={input.frequency}
                         onChange={(e) =>
-                          handleGoalInputChange(goalType, "frequency", e.target.value)
+                          handleGoalInputChange(
+                            goalType,
+                            "frequency",
+                            e.target.value
+                          )
                         }
                       />
                     </div>
-                    
+
                     <div className="flex-1">
-                      <Label htmlFor={`unit-${goalType}`} className="text-xs text-muted-foreground">
+                      <Label
+                        htmlFor={`unit-${goalType}`}
+                        className="text-xs text-muted-foreground"
+                      >
                         Period
                       </Label>
                       <Select
@@ -333,7 +371,7 @@ export function Settings({ onDataChanged }: SettingsProps) {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <Button
                         onClick={() => saveGoal(goalType)}
@@ -342,7 +380,7 @@ export function Settings({ onDataChanged }: SettingsProps) {
                       >
                         Save
                       </Button>
-                      
+
                       {existingGoal && (
                         <Button
                           onClick={() => deleteGoal(goalType)}
@@ -354,13 +392,19 @@ export function Settings({ onDataChanged }: SettingsProps) {
                       )}
                     </div>
                   </div>
-                  
+
                   {existingGoal && (
                     <div className="text-xs text-muted-foreground">
-                      Current: {existingGoal.targetNumber} {getGoalTypeLabel(goalType).toLowerCase()} every{" "}
-                      {existingGoal.frequencyDays >= 7 && existingGoal.frequencyDays % 7 === 0
-                        ? `${existingGoal.frequencyDays / 7} week${existingGoal.frequencyDays / 7 > 1 ? 's' : ''}`
-                        : `${existingGoal.frequencyDays} day${existingGoal.frequencyDays > 1 ? 's' : ''}`}
+                      Current: {existingGoal.targetNumber}{" "}
+                      {getGoalTypeLabel(goalType).toLowerCase()} every{" "}
+                      {existingGoal.frequencyDays >= 7 &&
+                      existingGoal.frequencyDays % 7 === 0
+                        ? `${existingGoal.frequencyDays / 7} week${
+                            existingGoal.frequencyDays / 7 > 1 ? "s" : ""
+                          }`
+                        : `${existingGoal.frequencyDays} day${
+                            existingGoal.frequencyDays > 1 ? "s" : ""
+                          }`}
                     </div>
                   )}
                 </div>

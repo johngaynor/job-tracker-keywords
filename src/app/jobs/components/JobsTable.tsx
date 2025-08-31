@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { JobUpdateDialog } from "@/components/JobUpdateDialog";
-import { ActivityLogDialog } from "@/components/ActivityLogDialog";
+import { JobUpdateDialog } from "./JobUpdateDialog";
+import { ActivityLogDialog } from "./ActivityLogDialog";
 import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
 import { Trash2, Calendar, Building, ExternalLink } from "lucide-react";

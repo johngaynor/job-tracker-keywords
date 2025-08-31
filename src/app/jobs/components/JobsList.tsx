@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { JobsKanban } from "@/components/JobsKanban";
-import { JobsTable } from "@/components/JobsTable";
+import { JobsKanban } from "./JobsKanban";
+import { JobsTable } from "./JobsTable";
 import { Table, Columns } from "lucide-react";
 
 export function JobsList() {
