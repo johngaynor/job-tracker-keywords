@@ -129,7 +129,8 @@ export default function Dashboard() {
   const loadStats = useCallback(async () => {
     setLoading(true);
     try {
-      let { start, end } = getDateRange(timeRange);
+      let { start } = getDateRange(timeRange);
+      const { end } = getDateRange(timeRange);
 
       // Get all jobs and activities
       const allJobs = await jobService.getAllIncludingArchived();

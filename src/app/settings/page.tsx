@@ -8,8 +8,13 @@ export default function SettingsPage() {
 
   const handleDataChanged = () => {
     // Trigger a refresh of goals and other data
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
-  return <Settings onDataChanged={handleDataChanged} refreshTrigger={refreshTrigger} />;
+  return (
+    <Settings
+      onDataChanged={handleDataChanged}
+      refreshTrigger={refreshTrigger}
+    />
+  );
 }
