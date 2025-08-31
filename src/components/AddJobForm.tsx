@@ -245,7 +245,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
           <div>
             <CardTitle>Add New Job Application</CardTitle>
             <CardDescription>
-              Track keywords for a new job application
+              Fill out relevant information related to the job.
             </CardDescription>
           </div>
           <Button

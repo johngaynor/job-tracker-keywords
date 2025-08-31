@@ -18,7 +18,17 @@ import { ActivityLogDialog } from "@/components/ActivityLogDialog";
 import { JobViewDialog } from "@/components/JobViewDialog";
 import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
-import { Trash2, Calendar, Building, MoreVertical, Eye, FileText, Edit, Archive, ArchiveRestore } from "lucide-react";
+import {
+  Trash2,
+  Calendar,
+  Building,
+  MoreVertical,
+  Eye,
+  FileText,
+  Edit,
+  Archive,
+  ArchiveRestore,
+} from "lucide-react";
 
 interface JobWithEmployer extends Job {
   employer: Employer;
@@ -69,7 +79,7 @@ export function JobsKanban() {
 
   const loadJobs = async () => {
     try {
-      const jobsWithEmployers = showArchived 
+      const jobsWithEmployers = showArchived
         ? await jobService.getAllIncludingArchived().then(async (allJobs) => {
             const result: (Job & { employer: Employer })[] = [];
             for (const job of allJobs) {
@@ -81,7 +91,7 @@ export function JobsKanban() {
             return result;
           })
         : await jobService.getJobsWithEmployers();
-      
+
       const jobsWithKeywords: JobWithKeywords[] = [];
 
       for (const job of jobsWithEmployers) {
@@ -119,9 +129,11 @@ export function JobsKanban() {
   const handleToggleArchive = async (jobId: number) => {
     try {
       await jobService.toggleArchive(jobId);
-      const job = jobs.find(j => j.id === jobId);
+      const job = jobs.find((j) => j.id === jobId);
       const isArchiving = !job?.archived;
-      toast.success(`Job ${isArchiving ? 'archived' : 'unarchived'} successfully`);
+      toast.success(
+        `Job ${isArchiving ? "archived" : "unarchived"} successfully`
+      );
       await loadJobs();
     } catch (error) {
       console.error("Error toggling archive status:", error);
@@ -141,7 +153,7 @@ export function JobsKanban() {
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-2 mb-4">
-          <Checkbox 
+          <Checkbox
             id="show-archived"
             checked={showArchived}
             onCheckedChange={(checked) => setShowArchived(!!checked)}
@@ -156,10 +168,9 @@ export function JobsKanban() {
         <Card>
           <CardContent className="py-8">
             <div className="text-center text-zinc-500">
-              {showArchived 
+              {showArchived
                 ? "No job applications yet (including archived). Add your first job application above!"
-                : "No active job applications. Add your first job application above or check 'Show archived jobs' to see archived ones!"
-              }
+                : "No active job applications. Add your first job application above or check 'Show archived jobs' to see archived ones!"}
             </div>
           </CardContent>
         </Card>
@@ -170,7 +181,7 @@ export function JobsKanban() {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2 mb-4">
-        <Checkbox 
+        <Checkbox
           id="show-archived"
           checked={showArchived}
           onCheckedChange={(checked) => setShowArchived(!!checked)}
@@ -200,9 +211,13 @@ export function JobsKanban() {
               </div>
               <div className="space-y-3 min-h-[200px]">
                 {columnJobs.map((job) => (
-                  <Card 
-                    key={job.id} 
-                    className={`p-3 ${job.archived ? 'bg-zinc-50 dark:bg-zinc-900 border-dashed opacity-70' : ''}`}
+                  <Card
+                    key={job.id}
+                    className={`p-3 ${
+                      job.archived
+                        ? "bg-zinc-50 dark:bg-zinc-900 border-dashed opacity-70"
+                        : ""
+                    }`}
                   >
                     <div className="space-y-2">
                       <div className="flex items-start justify-between">
@@ -213,7 +228,10 @@ export function JobsKanban() {
                               {job.employer.name}
                             </span>
                             {job.archived && (
-                              <Badge variant="outline" className="text-xs px-1 py-0">
+                              <Badge
+                                variant="outline"
+                                className="text-xs px-1 py-0"
+                              >
                                 Archived
                               </Badge>
                             )}
@@ -266,32 +284,45 @@ export function JobsKanban() {
                         <div className="ml-2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
                               <JobViewDialog job={job}>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <DropdownMenuItem
+                                  onSelect={(e) => e.preventDefault()}
+                                >
                                   <Eye className="h-4 w-4 mr-2" />
                                   View Details
                                 </DropdownMenuItem>
                               </JobViewDialog>
-                              
+
                               <ActivityLogDialog job={job}>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <DropdownMenuItem
+                                  onSelect={(e) => e.preventDefault()}
+                                >
                                   <FileText className="h-4 w-4 mr-2" />
                                   Activity Log
                                 </DropdownMenuItem>
                               </ActivityLogDialog>
-                              
-                              <JobUpdateDialog job={job} onJobUpdated={loadJobs}>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+
+                              <JobUpdateDialog
+                                job={job}
+                                onJobUpdated={loadJobs}
+                              >
+                                <DropdownMenuItem
+                                  onSelect={(e) => e.preventDefault()}
+                                >
                                   <Edit className="h-4 w-4 mr-2" />
                                   Update Status
                                 </DropdownMenuItem>
                               </JobUpdateDialog>
-                              
+
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 onSelect={() => handleToggleArchive(job.id!)}

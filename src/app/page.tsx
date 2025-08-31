@@ -9,11 +9,19 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { employerService } from "@/lib/db-services";
 import { Employer } from "@/lib/database";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Briefcase, BarChart3, Plus, Settings } from "lucide-react";
 
 export default function Home() {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [activeTab, setActiveTab] = useState("add");
 
   const loadEmployers = async () => {
     try {
@@ -31,6 +39,13 @@ export default function Home() {
   const handleJobAdded = () => {
     setRefreshKey((prev) => prev + 1);
   };
+
+  const tabs = [
+    { value: "add", label: "Add Application", icon: Plus },
+    { value: "jobs", label: "Applications", icon: Briefcase },
+    { value: "stats", label: "Statistics", icon: BarChart3 },
+    { value: "data", label: "Settings", icon: Settings },
+  ];
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -51,42 +66,77 @@ export default function Home() {
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="add" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="add" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Add Application
-            </TabsTrigger>
-            <TabsTrigger value="jobs" className="flex items-center gap-2">
-              <Briefcase className="h-4 w-4" />
-              Applications
-            </TabsTrigger>
-            <TabsTrigger value="stats" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Statistics
-            </TabsTrigger>
-            <TabsTrigger value="data" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
+        <TooltipProvider>
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="space-y-6"
+          >
+            {/* Desktop Navigation - md and up */}
+            <TabsList className="hidden md:grid w-full grid-cols-4">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className="flex items-center gap-2"
+                  >
+                    <Icon className="h-4 w-4" />
+                    {tab.label}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
 
-          <TabsContent value="add" className="space-y-6">
-            <AddJobForm employers={employers} onJobAdded={handleJobAdded} />
-          </TabsContent>
+            {/* Mobile Navigation - below md */}
+            <div className="md:hidden">
+              <div className="flex bg-muted p-1 rounded-lg w-full">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.value;
+                  return (
+                    <Tooltip key={tab.value}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isActive ? "default" : "ghost"}
+                          size="icon"
+                          onClick={() => setActiveTab(tab.value)}
+                          className={`h-10 flex-1 ${
+                            isActive
+                              ? "bg-background text-foreground shadow-sm"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{tab.label}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </div>
 
-          <TabsContent value="jobs" className="space-y-6">
-            <JobsList key={refreshKey} />
-          </TabsContent>
+            <TabsContent value="add" className="space-y-6">
+              <AddJobForm employers={employers} onJobAdded={handleJobAdded} />
+            </TabsContent>
 
-          <TabsContent value="stats" className="space-y-6">
-            <KeywordStats key={refreshKey} />
-          </TabsContent>
+            <TabsContent value="jobs" className="space-y-6">
+              <JobsList key={refreshKey} />
+            </TabsContent>
 
-          <TabsContent value="data" className="space-y-6">
-            <SettingsComponent onDataChanged={handleJobAdded} />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="stats" className="space-y-6">
+              <KeywordStats key={refreshKey} />
+            </TabsContent>
+
+            <TabsContent value="data" className="space-y-6">
+              <SettingsComponent onDataChanged={handleJobAdded} />
+            </TabsContent>
+          </Tabs>
+        </TooltipProvider>
       </div>
     </div>
   );
