@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,10 +71,13 @@ const STATUS_COLUMNS = [
   },
 ];
 
-export function JobsKanban() {
+interface JobsKanbanProps {
+  showArchived: boolean;
+}
+
+export function JobsKanban({ showArchived }: JobsKanbanProps) {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showArchived, setShowArchived] = useState(false);
 
   const loadJobs = async () => {
     try {
@@ -109,7 +111,7 @@ export function JobsKanban() {
 
   useEffect(() => {
     loadJobs();
-  }, [showArchived]);
+  }, [showArchived, loadJobs]);
 
   const handleDeleteJob = async (jobId: number) => {
     if (confirm("Are you sure you want to delete this job application?")) {
@@ -151,48 +153,20 @@ export function JobsKanban() {
 
   if (jobs.length === 0) {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="show-archived"
-            checked={showArchived}
-            onCheckedChange={(checked) => setShowArchived(!!checked)}
-          />
-          <label
-            htmlFor="show-archived"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Show archived jobs
-          </label>
-        </div>
-        <Card>
-          <CardContent className="py-8">
-            <div className="text-center text-zinc-500">
-              {showArchived
-                ? "No job applications yet (including archived). Add your first job application above!"
-                : "No active job applications. Add your first job application above or check 'Show archived jobs' to see archived ones!"}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardContent className="py-8">
+          <div className="text-center text-zinc-500">
+            {showArchived
+              ? "No job applications yet (including archived). Add your first job application above!"
+              : "No active job applications. Add your first job application above or check 'Show archived jobs' to see archived ones!"}
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2 mb-4">
-        <Checkbox
-          id="show-archived"
-          checked={showArchived}
-          onCheckedChange={(checked) => setShowArchived(!!checked)}
-        />
-        <label
-          htmlFor="show-archived"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Show archived jobs
-        </label>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {STATUS_COLUMNS.map((column) => {
           const columnJobs = getJobsByStatus(column.id);

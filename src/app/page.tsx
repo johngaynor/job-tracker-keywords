@@ -11,12 +11,20 @@ import { Employer } from "@/lib/database";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Briefcase, BarChart3, Plus, Settings } from "lucide-react";
+import { Briefcase, BarChart3, Plus, Settings, Info } from "lucide-react";
 
 export default function Home() {
   const [employers, setEmployers] = useState<Employer[]>([]);
@@ -48,25 +56,49 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <div className="container mx-auto py-8 px-4">
-        {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-              Job Application Tracker
-            </h1>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400">
-              Track your job applications and identify popular skills and
-              keywords to optimize your resume and skill acquisition. All data
-              is stored locally. Happy searching :)
-            </p>
+    <TooltipProvider>
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+        <div className="container mx-auto py-8 px-4">
+          {/* Header */}
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                Job Application Tracker
+              </h1>
+              {/* Description - hidden on mobile */}
+              <p className="hidden md:block text-lg text-zinc-600 dark:text-zinc-400">
+                Track your job applications and identify popular skills and
+                keywords to optimize your resume and skill acquisition. All data
+                is stored locally. Happy searching :)
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <ThemeToggle />
+              {/* Info dialog - visible only on mobile */}
+              <div className="md:hidden flex justify-end">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <Info className="h-[1.2rem] w-[1.2rem]" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[90vw] sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>About Job Tracker</DialogTitle>
+                      <DialogDescription>
+                        Track your job applications and identify popular skills
+                        and keywords to optimize your resume and skill
+                        acquisition. All data is stored locally. Happy searching
+                        :)
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
           </div>
-          <ThemeToggle />
-        </div>
 
-        {/* Main Content */}
-        <TooltipProvider>
+          {/* Main Content */}
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
@@ -136,8 +168,8 @@ export default function Home() {
               <SettingsComponent onDataChanged={handleJobAdded} />
             </TabsContent>
           </Tabs>
-        </TooltipProvider>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JobUpdateDialog } from "@/components/JobUpdateDialog";
 import { ActivityLogDialog } from "@/components/ActivityLogDialog";
-import { jobService, keywordService } from "@/lib/db-services";
+import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
 import { Trash2, Calendar, Building, ExternalLink } from "lucide-react";
 
@@ -26,13 +26,29 @@ interface JobWithKeywords extends JobWithEmployer {
   keywords: Keyword[];
 }
 
-export function JobsTable() {
+interface JobsTableProps {
+  showArchived: boolean;
+}
+
+export function JobsTable({ showArchived }: JobsTableProps) {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadJobs = async () => {
     try {
-      const jobsWithEmployers = await jobService.getJobsWithEmployers();
+      const jobsWithEmployers = showArchived
+        ? await jobService.getAllIncludingArchived().then(async (allJobs) => {
+            const result: (Job & { employer: Employer })[] = [];
+            for (const job of allJobs) {
+              const employer = await employerService.getById(job.employerId);
+              if (employer) {
+                result.push({ ...job, employer });
+              }
+            }
+            return result;
+          })
+        : await jobService.getJobsWithEmployers();
+
       const jobsWithKeywords: JobWithKeywords[] = [];
 
       for (const job of jobsWithEmployers) {
@@ -50,7 +66,7 @@ export function JobsTable() {
 
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [showArchived]);
 
   const handleDeleteJob = async (jobId: number) => {
     if (confirm("Are you sure you want to delete this job application?")) {
