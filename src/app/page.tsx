@@ -452,7 +452,7 @@ export default function Dashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-4xl font-bold">Dashboard</h2>
+          <h2 className="text-2xl font-bold">Dashboard</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left side - Statistics (2 columns, 50% of total width) */}

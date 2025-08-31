@@ -40,6 +40,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    goalsImported: number;
     skipped: number;
   } | null>(null);
   const [exportStats, setExportStats] = useState<{
@@ -47,6 +48,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     totalJobs: number;
     totalKeywords: number;
     totalActivities: number;
+    totalGoals: number;
     lastModified?: Date;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +98,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
 
       setImportResult(result);
       toast.success("Data imported successfully!", {
-        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, and ${result.activitiesImported} activities.`,
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, and ${result.goalsImported} goals.`,
       });
       onDataChanged();
       await loadExportStats();
@@ -139,7 +141,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {exportStats && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <Building className="h-4 w-4" />
@@ -174,6 +176,15 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </div>
                 <div className="text-2xl font-bold">
                   {exportStats.totalActivities}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+                  <CheckCircle className="h-4 w-4" />
+                  Goals
+                </div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalGoals}
                 </div>
               </div>
             </div>
@@ -286,7 +297,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                 <div>
                   <div className="text-green-600 dark:text-green-400">
                     Employers
@@ -319,13 +330,21 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </div>
                 <div>
                   <div className="text-green-600 dark:text-green-400">
-                    Skipped
+                    Goals
                   </div>
                   <div className="font-medium">
-                    {importResult.skipped} items
+                    {importResult.goalsImported} imported
                   </div>
                 </div>
               </div>
+              
+              {importResult.skipped > 0 && (
+                <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
+                  <div className="text-green-600 dark:text-green-400 text-sm">
+                    Skipped: {importResult.skipped} items (duplicates or errors)
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

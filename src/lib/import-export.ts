@@ -378,18 +378,20 @@ export class ImportExportService {
     totalJobs: number;
     totalKeywords: number;
     totalActivities: number;
+    totalGoals: number;
     lastModified?: Date;
   }> {
     try {
-      const [employers, jobs, keywords, activities] = await Promise.all([
+      const [employers, jobs, keywords, activities, goals] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
         keywordService.getAll(),
         activityService.getAll(),
+        goalService.getAll(),
       ]);
 
       // Find the most recent update
-      const lastModified = [...employers, ...jobs, ...keywords, ...activities]
+      const lastModified = [...employers, ...jobs, ...keywords, ...activities, ...goals]
         .map((item) => new Date(item.updatedAt))
         .sort((a, b) => b.getTime() - a.getTime())[0];
 
@@ -398,6 +400,7 @@ export class ImportExportService {
         totalJobs: jobs.length,
         totalKeywords: keywords.length,
         totalActivities: activities.length,
+        totalGoals: goals.length,
         lastModified,
       };
     } catch (error) {

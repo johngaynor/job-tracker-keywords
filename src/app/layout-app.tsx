@@ -52,12 +52,6 @@ export default function AppLayout({ children }: LayoutProps) {
               <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
                 Job Application Tracker
               </h1>
-              {/* Description - hidden on mobile */}
-              <p className="hidden md:block text-lg text-zinc-600 dark:text-zinc-400">
-                Track your job applications and identify popular skills and
-                keywords to optimize your resume and skill acquisition. All data
-                is stored locally.
-              </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
@@ -87,7 +81,7 @@ export default function AppLayout({ children }: LayoutProps) {
           {/* Navigation */}
           <div className="mb-6">
             {/* Desktop Navigation - md and up */}
-            <div className="hidden md:flex bg-muted p-1 rounded-lg w-full">
+            <div className="hidden md:flex bg-muted p-0.5 rounded-lg w-full">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = pathname === tab.value;
@@ -95,13 +89,13 @@ export default function AppLayout({ children }: LayoutProps) {
                   <Link
                     key={tab.value}
                     href={tab.value}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors flex-1 justify-center ${
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors flex-1 justify-center text-sm ${
                       isActive
                         ? "bg-background text-foreground shadow-sm"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted-foreground/10"
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-3.5 w-3.5" />
                     {tab.label}
                   </Link>
                 );
@@ -110,7 +104,7 @@ export default function AppLayout({ children }: LayoutProps) {
 
             {/* Mobile Navigation - below md */}
             <div className="md:hidden">
-              <div className="flex bg-muted p-1 rounded-lg w-full">
+              <div className="flex bg-muted p-0.5 rounded-lg w-full">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   const isActive = pathname === tab.value;
@@ -119,13 +113,13 @@ export default function AppLayout({ children }: LayoutProps) {
                       <TooltipTrigger asChild>
                         <Link
                           href={tab.value}
-                          className={`h-10 flex-1 flex items-center justify-center rounded-md transition-colors ${
+                          className={`h-8 flex-1 flex items-center justify-center rounded-md transition-colors ${
                             isActive
                               ? "bg-background text-foreground shadow-sm"
                               : "text-muted-foreground hover:text-foreground"
                           }`}
                         >
-                          <Icon className="h-5 w-5" />
+                          <Icon className="h-4 w-4" />
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent>

@@ -34,9 +34,10 @@ import {
 
 interface SettingsProps {
   onDataChanged: () => void;
+  refreshTrigger?: number; // Add optional refresh trigger
 }
 
-export function Settings({ onDataChanged }: SettingsProps) {
+export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
   const [isWiping, setIsWiping] = useState(false);
   const [showWipeConfirm, setShowWipeConfirm] = useState(false);
   const [wipeComplete, setWipeComplete] = useState(false);
@@ -61,6 +62,13 @@ export function Settings({ onDataChanged }: SettingsProps) {
   useEffect(() => {
     loadGoals();
   }, []);
+
+  // Reload goals when refreshTrigger changes
+  useEffect(() => {
+    if (refreshTrigger !== undefined) {
+      loadGoals();
+    }
+  }, [refreshTrigger]);
 
   const loadGoals = async () => {
     try {
