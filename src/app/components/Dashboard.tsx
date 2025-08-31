@@ -129,8 +129,8 @@ export function Dashboard() {
   const loadStats = useCallback(async () => {
     setLoading(true);
     try {
-      let { start, end: endDate } = getDateRange(timeRange);
-      const end = endDate;
+      let { start } = getDateRange(timeRange);
+      const end = getDateRange(timeRange); // doing it like this to avoid the no reassignment error with end as a variable
 
       // Get all jobs and activities
       const allJobs = await jobService.getAllIncludingArchived();
@@ -179,22 +179,26 @@ export function Dashboard() {
       // Count applications that were applied to in the time range
       // This should only count jobs that reached "applied" status or beyond during the time period
       const appliedJobIds = new Set<number>();
-      
+
       // Get jobs that had status changed to "applied" or beyond in time range
       statusChangeActivities.forEach((activity) => {
-        if (activity.newStatus === "applied" || 
-            activity.newStatus === "interview" || 
-            activity.newStatus === "offer") {
+        if (
+          activity.newStatus === "applied" ||
+          activity.newStatus === "interview" ||
+          activity.newStatus === "offer"
+        ) {
           appliedJobIds.add(activity.jobId);
         }
       });
-      
+
       // Also include jobs created directly with "applied" status or beyond in the time range
       jobsInRange.forEach((job) => {
-        if (job.status === "applied" || 
-            job.status === "interview" || 
-            job.status === "offer" || 
-            job.status === "rejected") {
+        if (
+          job.status === "applied" ||
+          job.status === "interview" ||
+          job.status === "offer" ||
+          job.status === "rejected"
+        ) {
           appliedJobIds.add(job.id!);
         }
       });
