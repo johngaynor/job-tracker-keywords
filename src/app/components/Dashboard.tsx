@@ -130,7 +130,7 @@ export function Dashboard() {
     setLoading(true);
     try {
       let { start } = getDateRange(timeRange);
-      const end = getDateRange(timeRange); // doing it like this to avoid the no reassignment error with end as a variable
+      const { end } = getDateRange(timeRange);
 
       // Get all jobs and activities
       const allJobs = await jobService.getAllIncludingArchived();
