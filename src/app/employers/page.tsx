@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -14,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { employerService, jobService } from "@/lib/db-services";
 import { Employer, Job } from "@/lib/database";
-import { Search, Building2, Briefcase, Calendar } from "lucide-react";
+import { Search, Building2, Briefcase, Calendar, Star } from "lucide-react";
 import { DateTime } from "luxon";
 
 interface EmployerWithStats extends Employer {
@@ -93,15 +95,37 @@ export default function EmployersPage() {
     }
   };
 
-  const filteredEmployers = useMemo(() => {
-    if (!searchTerm) return employers;
+  const handleToggleFavorite = async (employerId: number) => {
+    try {
+      await employerService.toggleFavorite(employerId);
+      toast.success("Employer favorite updated");
+      await loadData();
+    } catch (error) {
+      console.error("Error toggling employer favorite:", error);
+      toast.error("Failed to update favorite", {
+        description: "Please try again.",
+      });
+    }
+  };
 
-    const term = searchTerm.toLowerCase();
-    return employers.filter(
-      (employer) =>
-        employer.name.toLowerCase().includes(term) ||
-        (employer.notes?.toLowerCase().includes(term) ?? false)
-    );
+  const filteredEmployers = useMemo(() => {
+    let result = employers;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = employers.filter(
+        (employer) =>
+          employer.name.toLowerCase().includes(term) ||
+          (employer.notes?.toLowerCase().includes(term) ?? false)
+      );
+    }
+
+    // Sort: favorites first, then by name
+    return result.sort((a, b) => {
+      if (a.favorited && !b.favorited) return -1;
+      if (!a.favorited && b.favorited) return 1;
+      return a.name.localeCompare(b.name);
+    });
   }, [employers, searchTerm]);
 
   const getStatusBadgeColor = (status: string) => {
@@ -151,6 +175,10 @@ export default function EmployersPage() {
             {employers.length} employers
           </div>
           <div className="flex items-center gap-2">
+            <Star className="h-4 w-4" />
+            {employers.filter((e) => e.favorited).length} favorites
+          </div>
+          <div className="flex items-center gap-2">
             <Briefcase className="h-4 w-4" />
             {jobs.length} total applications
           </div>
@@ -160,7 +188,7 @@ export default function EmployersPage() {
       <Card>
         <CardHeader>
           <CardTitle>Employer Directory</CardTitle>
-          <div className="relative">
+          <div className="relative mt-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search employers by name or notes..."
@@ -182,40 +210,35 @@ export default function EmployersPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[50px] text-center">⭐</TableHead>
                     <TableHead>Company</TableHead>
-                    <TableHead>Applications</TableHead>
                     <TableHead>Status Breakdown</TableHead>
                     <TableHead>Last Activity</TableHead>
-                    <TableHead>Notes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredEmployers.map((employer) => (
                     <TableRow key={employer.id}>
+                      <TableCell className="text-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleToggleFavorite(employer.id!)}
+                          className="h-8 w-8 p-0 hover:bg-transparent"
+                        >
+                          <Star
+                            className={`h-4 w-4 ${
+                              employer.favorited
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-400 hover:text-yellow-400"
+                            }`}
+                          />
+                        </Button>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Building2 className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium">{employer.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">
-                            {employer.jobCount}
-                          </span>
-                          {employer.appliedCount > 0 && (
-                            <Badge variant="secondary" className="text-xs">
-                              {employer.appliedCount} applied
-                            </Badge>
-                          )}
-                          {employer.favoritesCount > 0 && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs text-yellow-600 border-yellow-600"
-                            >
-                              ⭐ {employer.favoritesCount}
-                            </Badge>
-                          )}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -233,6 +256,14 @@ export default function EmployersPage() {
                               </Badge>
                             )
                           )}
+                          {employer.favoritesCount > 0 && (
+                            <Badge
+                              variant="outline"
+                              className="text-xs text-yellow-600 border-yellow-600"
+                            >
+                              ⭐ {employer.favoritesCount}
+                            </Badge>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -248,11 +279,6 @@ export default function EmployersPage() {
                             No activity
                           </span>
                         )}
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-muted-foreground">
-                          {employer.notes || "—"}
-                        </span>
                       </TableCell>
                     </TableRow>
                   ))}

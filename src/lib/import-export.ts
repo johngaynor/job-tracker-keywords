@@ -149,10 +149,14 @@ export class ImportExportService {
       const employerIdMap = new Map<number, number>(); // old ID -> new ID
       for (const employer of data.employers) {
         try {
-          const newId = await employerService.create(
-            employer.name,
-            employer.notes
-          );
+          // Insert directly to preserve original timestamps and favorited status
+          const newId = await db.employers.add({
+            name: employer.name,
+            notes: employer.notes,
+            favorited: employer.favorited || false,
+            createdAt: new Date(employer.createdAt), // Preserve original timestamp
+            updatedAt: new Date(employer.updatedAt), // Preserve original timestamp
+          });
           employerIdMap.set(employer.id!, newId);
           employersImported++;
         } catch (error) {

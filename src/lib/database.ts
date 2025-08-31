@@ -4,6 +4,7 @@ export interface Employer {
   id?: number;
   name: string;
   notes?: string;
+  favorited?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

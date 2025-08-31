@@ -7,6 +7,7 @@ export const employerService = {
     return await db.employers.add({
       name,
       notes,
+      favorited: false,
       createdAt: now,
       updatedAt: now,
     });
@@ -41,6 +42,12 @@ export const employerService = {
 
   async findByName(name: string): Promise<Employer | undefined> {
     return await db.employers.where("name").equalsIgnoreCase(name).first();
+  },
+
+  async toggleFavorite(id: number): Promise<number> {
+    const employer = await db.employers.get(id);
+    if (!employer) throw new Error("Employer not found");
+    return await this.update(id, { favorited: !employer.favorited });
   },
 
   async deleteAll(): Promise<void> {
