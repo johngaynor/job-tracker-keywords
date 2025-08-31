@@ -49,11 +49,26 @@ export interface Activity {
   updatedAt: Date;
 }
 
+export interface Goal {
+  id?: number;
+  type:
+    | "applications_created"
+    | "applications_applied"
+    | "interviews"
+    | "offers"
+    | "productive_activities";
+  targetNumber: number;
+  frequencyDays: number; // stored in days (weeks converted to days)
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export class EmployerKeywordsDB extends Dexie {
   employers!: Table<Employer>;
   jobs!: Table<Job>;
   keywords!: Table<Keyword>;
   activities!: Table<Activity>;
+  goals!: Table<Goal>;
 
   constructor() {
     super("EmployerKeywordsDB");
@@ -63,6 +78,16 @@ export class EmployerKeywordsDB extends Dexie {
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
       activities:
         "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
+    });
+
+    // Version 2: Add goals table
+    this.version(2).stores({
+      employers: "++id, name, notes, createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, archived, status, [employerId+title], createdAt, updatedAt",
+      keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
+      activities:
+        "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
+      goals: "++id, type, targetNumber, frequencyDays, createdAt, updatedAt",
     });
   }
 }

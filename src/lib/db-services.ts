@@ -1,4 +1,4 @@
-import { db, Employer, Job, Keyword, Activity } from "./database";
+import { db, Employer, Job, Keyword, Activity, Goal } from "./database";
 
 // Employer operations
 export const employerService = {
@@ -84,7 +84,10 @@ export const jobService = {
   },
 
   async getAll(): Promise<Job[]> {
-    return await db.jobs.filter(job => !job.archived).sortBy("createdAt").then(jobs => jobs.reverse());
+    return await db.jobs
+      .filter((job) => !job.archived)
+      .sortBy("createdAt")
+      .then((jobs) => jobs.reverse());
   },
 
   async getAllIncludingArchived(): Promise<Job[]> {
@@ -92,7 +95,10 @@ export const jobService = {
   },
 
   async getArchived(): Promise<Job[]> {
-    return await db.jobs.filter(job => job.archived === true).sortBy("createdAt").then(jobs => jobs.reverse());
+    return await db.jobs
+      .filter((job) => job.archived === true)
+      .sortBy("createdAt")
+      .then((jobs) => jobs.reverse());
   },
 
   async getByEmployerId(employerId: number): Promise<Job[]> {
@@ -315,5 +321,69 @@ export const activityService = {
 
   async deleteAll(): Promise<void> {
     await db.activities.clear();
+  },
+};
+
+// Goal operations
+export const goalService = {
+  async create(
+    type:
+      | "applications_created"
+      | "applications_applied"
+      | "interviews"
+      | "offers"
+      | "productive_activities",
+    targetNumber: number,
+    frequencyDays: number
+  ): Promise<number> {
+    const now = new Date();
+    return await db.goals.add({
+      type,
+      targetNumber,
+      frequencyDays,
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+
+  async getAll(): Promise<Goal[]> {
+    return await db.goals.orderBy("type").toArray();
+  },
+
+  async getByType(type: string): Promise<Goal | undefined> {
+    return await db.goals.where("type").equals(type).first();
+  },
+
+  async update(id: number, updates: Partial<Goal>): Promise<number> {
+    return await db.goals.update(id, {
+      ...updates,
+      updatedAt: new Date(),
+    });
+  },
+
+  async upsert(
+    type:
+      | "applications_created"
+      | "applications_applied"
+      | "interviews"
+      | "offers"
+      | "productive_activities",
+    targetNumber: number,
+    frequencyDays: number
+  ): Promise<number> {
+    const existing = await this.getByType(type);
+    if (existing && existing.id) {
+      return await this.update(existing.id, { targetNumber, frequencyDays });
+    } else {
+      return await this.create(type, targetNumber, frequencyDays);
+    }
+  },
+
+  async delete(id: number): Promise<void> {
+    await db.goals.delete(id);
+  },
+
+  async deleteAll(): Promise<void> {
+    await db.goals.clear();
   },
 };

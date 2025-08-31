@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AddJobForm } from "@/components/AddJobForm";
+import { Dashboard } from "@/components/Dashboard";
 import { JobsList } from "@/components/JobsList";
 import { KeywordStats } from "@/components/KeywordStats";
 import { Settings as SettingsComponent } from "@/components/Settings";
@@ -24,12 +25,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Briefcase, BarChart3, Plus, Settings, Info } from "lucide-react";
+import {
+  Briefcase,
+  BarChart3,
+  Plus,
+  Settings,
+  Info,
+  LayoutDashboard,
+} from "lucide-react";
 
 export default function Home() {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [activeTab, setActiveTab] = useState("add");
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const loadEmployers = async () => {
     try {
@@ -49,6 +57,7 @@ export default function Home() {
   };
 
   const tabs = [
+    { value: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { value: "add", label: "Add Application", icon: Plus },
     { value: "jobs", label: "Applications", icon: Briefcase },
     { value: "stats", label: "Statistics", icon: BarChart3 },
@@ -105,7 +114,7 @@ export default function Home() {
             className="space-y-6"
           >
             {/* Desktop Navigation - md and up */}
-            <TabsList className="hidden md:grid w-full grid-cols-4">
+            <TabsList className="hidden md:grid w-full grid-cols-5">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
@@ -151,6 +160,10 @@ export default function Home() {
                 })}
               </div>
             </div>
+
+            <TabsContent value="dashboard" className="space-y-6">
+              <Dashboard />
+            </TabsContent>
 
             <TabsContent value="add" className="space-y-6">
               <AddJobForm employers={employers} onJobAdded={handleJobAdded} />

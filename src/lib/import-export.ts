@@ -3,8 +3,9 @@ import {
   jobService,
   keywordService,
   activityService,
+  goalService,
 } from "./db-services";
-import { Employer, Job, Keyword, Activity } from "./database";
+import { Employer, Job, Keyword, Activity, Goal } from "./database";
 
 export interface ExportData {
   version: string;
@@ -13,6 +14,7 @@ export interface ExportData {
   jobs: Job[];
   keywords: Keyword[];
   activities: Activity[];
+  goals?: Goal[]; // Optional for backward compatibility
 }
 
 export class ImportExportService {
@@ -23,11 +25,12 @@ export class ImportExportService {
    */
   static async exportData(): Promise<ExportData> {
     try {
-      const [employers, jobs, keywords, activities] = await Promise.all([
+      const [employers, jobs, keywords, activities, goals] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
         keywordService.getAll(),
         activityService.getAll(),
+        goalService.getAll(),
       ]);
 
       return {
@@ -37,6 +40,7 @@ export class ImportExportService {
         jobs,
         keywords,
         activities,
+        goals: goals || [], // Ensure goals is always an array
       };
     } catch (error) {
       console.error("Error exporting data:", error);
@@ -88,6 +92,7 @@ export class ImportExportService {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    goalsImported: number;
     skipped: number;
   }> {
     const { clearExisting = false, skipDuplicates = true } = options;
@@ -100,6 +105,7 @@ export class ImportExportService {
       let jobsImported = 0;
       let keywordsImported = 0;
       let activitiesImported = 0;
+      let goalsImported = 0;
       let skipped = 0;
 
       // Clear existing data if requested
@@ -237,11 +243,27 @@ export class ImportExportService {
         }
       }
 
+      // Import goals
+      for (const goal of data.goals || []) {
+        try {
+          await goalService.upsert(
+            goal.type,
+            goal.targetNumber,
+            goal.frequencyDays
+          );
+          goalsImported++;
+        } catch (error) {
+          console.warn(`Failed to import goal: ${goal.type}`, error);
+          skipped++;
+        }
+      }
+
       return {
         employersImported,
         jobsImported,
         keywordsImported,
         activitiesImported,
+        goalsImported,
         skipped,
       };
     } catch (error) {
@@ -264,6 +286,7 @@ export class ImportExportService {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    goalsImported: number;
     skipped: number;
   }> {
     return new Promise((resolve, reject) => {
@@ -310,6 +333,11 @@ export class ImportExportService {
       throw new Error("Invalid data structure");
     }
 
+    // Ensure goals is an array (or empty array for backward compatibility)
+    if (!Array.isArray(data.goals || [])) {
+      throw new Error("Invalid goals data structure");
+    }
+
     // Basic validation of data arrays
     for (const employer of data.employers) {
       if (!employer.name || typeof employer.name !== "string") {
@@ -339,6 +367,7 @@ export class ImportExportService {
     await keywordService.deleteAll();
     await jobService.deleteAll();
     await employerService.deleteAll();
+    await goalService.deleteAll();
   }
 
   /**
