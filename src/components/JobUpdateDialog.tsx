@@ -28,6 +28,7 @@ import { Edit, Calendar, MessageSquare } from "lucide-react";
 interface JobUpdateDialogProps {
   job: Job;
   onJobUpdated: () => void;
+  children?: React.ReactNode;
 }
 
 const STATUS_OPTIONS = [
@@ -53,7 +54,7 @@ const ACTIVITY_TYPES = [
   { value: "other", label: "Other" },
 ];
 
-export function JobUpdateDialog({ job, onJobUpdated }: JobUpdateDialogProps) {
+export function JobUpdateDialog({ job, onJobUpdated, children }: JobUpdateDialogProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -149,9 +150,11 @@ export function JobUpdateDialog({ job, onJobUpdated }: JobUpdateDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-          <Edit className="h-4 w-4" />
-        </Button>
+        {children || (
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+            <Edit className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>

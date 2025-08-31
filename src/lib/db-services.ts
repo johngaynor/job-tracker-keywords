@@ -76,6 +76,7 @@ export const jobService = {
       referenceNumber,
       salaryEstimate,
       interestLevel,
+      archived: false,
       status: "not applied",
       createdAt: now,
       updatedAt: now,
@@ -83,7 +84,15 @@ export const jobService = {
   },
 
   async getAll(): Promise<Job[]> {
+    return await db.jobs.filter(job => !job.archived).sortBy("createdAt").then(jobs => jobs.reverse());
+  },
+
+  async getAllIncludingArchived(): Promise<Job[]> {
     return await db.jobs.orderBy("createdAt").reverse().toArray();
+  },
+
+  async getArchived(): Promise<Job[]> {
+    return await db.jobs.filter(job => job.archived === true).sortBy("createdAt").then(jobs => jobs.reverse());
   },
 
   async getByEmployerId(employerId: number): Promise<Job[]> {
@@ -101,6 +110,12 @@ export const jobService = {
     });
   },
 
+  async toggleArchive(id: number): Promise<number> {
+    const job = await db.jobs.get(id);
+    if (!job) throw new Error("Job not found");
+    return await this.update(id, { archived: !job.archived });
+  },
+
   async delete(id: number): Promise<void> {
     await keywordService.deleteByJobId(id);
     await activityService.deleteByJobId(id);
@@ -108,7 +123,7 @@ export const jobService = {
   },
 
   async getJobsWithEmployers(): Promise<(Job & { employer: Employer })[]> {
-    const jobs = await db.jobs.orderBy("createdAt").reverse().toArray();
+    const jobs = await this.getAll(); // This now excludes archived jobs by default
     const result: (Job & { employer: Employer })[] = [];
 
     for (const job of jobs) {

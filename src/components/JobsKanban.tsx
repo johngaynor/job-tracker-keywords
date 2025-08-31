@@ -5,12 +5,20 @@ import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { JobUpdateDialog } from "@/components/JobUpdateDialog";
 import { ActivityLogDialog } from "@/components/ActivityLogDialog";
 import { JobViewDialog } from "@/components/JobViewDialog";
-import { jobService, keywordService } from "@/lib/db-services";
+import { jobService, keywordService, employerService } from "@/lib/db-services";
 import { Job, Keyword, Employer } from "@/lib/database";
-import { Trash2, Calendar, Building } from "lucide-react";
+import { Trash2, Calendar, Building, MoreVertical, Eye, FileText, Edit, Archive, ArchiveRestore } from "lucide-react";
 
 interface JobWithEmployer extends Job {
   employer: Employer;
@@ -57,10 +65,23 @@ const STATUS_COLUMNS = [
 export function JobsKanban() {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
 
   const loadJobs = async () => {
     try {
-      const jobsWithEmployers = await jobService.getJobsWithEmployers();
+      const jobsWithEmployers = showArchived 
+        ? await jobService.getAllIncludingArchived().then(async (allJobs) => {
+            const result: (Job & { employer: Employer })[] = [];
+            for (const job of allJobs) {
+              const employer = await employerService.getById(job.employerId);
+              if (employer) {
+                result.push({ ...job, employer });
+              }
+            }
+            return result;
+          })
+        : await jobService.getJobsWithEmployers();
+      
       const jobsWithKeywords: JobWithKeywords[] = [];
 
       for (const job of jobsWithEmployers) {
@@ -78,7 +99,7 @@ export function JobsKanban() {
 
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [showArchived]);
 
   const handleDeleteJob = async (jobId: number) => {
     if (confirm("Are you sure you want to delete this job application?")) {
@@ -95,6 +116,19 @@ export function JobsKanban() {
     }
   };
 
+  const handleToggleArchive = async (jobId: number) => {
+    try {
+      await jobService.toggleArchive(jobId);
+      const job = jobs.find(j => j.id === jobId);
+      const isArchiving = !job?.archived;
+      toast.success(`Job ${isArchiving ? 'archived' : 'unarchived'} successfully`);
+      await loadJobs();
+    } catch (error) {
+      console.error("Error toggling archive status:", error);
+      toast.error("Failed to update archive status");
+    }
+  };
+
   const getJobsByStatus = (status: string) => {
     return jobs.filter((job) => job.status === status);
   };
@@ -105,18 +139,49 @@ export function JobsKanban() {
 
   if (jobs.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-8">
-          <div className="text-center text-zinc-500">
-            No job applications yet. Add your first job application above!
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2 mb-4">
+          <Checkbox 
+            id="show-archived"
+            checked={showArchived}
+            onCheckedChange={(checked) => setShowArchived(!!checked)}
+          />
+          <label
+            htmlFor="show-archived"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Show archived jobs
+          </label>
+        </div>
+        <Card>
+          <CardContent className="py-8">
+            <div className="text-center text-zinc-500">
+              {showArchived 
+                ? "No job applications yet (including archived). Add your first job application above!"
+                : "No active job applications. Add your first job application above or check 'Show archived jobs' to see archived ones!"
+              }
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center space-x-2 mb-4">
+        <Checkbox 
+          id="show-archived"
+          checked={showArchived}
+          onCheckedChange={(checked) => setShowArchived(!!checked)}
+        />
+        <label
+          htmlFor="show-archived"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Show archived jobs
+        </label>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {STATUS_COLUMNS.map((column) => {
           const columnJobs = getJobsByStatus(column.id);
@@ -135,7 +200,10 @@ export function JobsKanban() {
               </div>
               <div className="space-y-3 min-h-[200px]">
                 {columnJobs.map((job) => (
-                  <Card key={job.id} className="p-3">
+                  <Card 
+                    key={job.id} 
+                    className={`p-3 ${job.archived ? 'bg-zinc-50 dark:bg-zinc-900 border-dashed opacity-70' : ''}`}
+                  >
                     <div className="space-y-2">
                       <div className="flex items-start justify-between">
                         <div className="space-y-1 min-w-0 flex-1">
@@ -144,6 +212,11 @@ export function JobsKanban() {
                             <span className="font-medium text-sm truncate">
                               {job.employer.name}
                             </span>
+                            {job.archived && (
+                              <Badge variant="outline" className="text-xs px-1 py-0">
+                                Archived
+                              </Badge>
+                            )}
                           </div>
                           <p className="text-xs text-zinc-900 dark:text-zinc-100 font-medium truncate">
                             {job.title}
@@ -190,20 +263,60 @@ export function JobsKanban() {
                             {new Date(job.createdAt).toLocaleDateString()}
                           </div>
                         </div>
-                        <div className="flex flex-col gap-1 ml-2">
-                          <JobViewDialog job={job} />
-                          <ActivityLogDialog
-                            job={job}
-                          />
-                          <JobUpdateDialog job={job} onJobUpdated={loadJobs} />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() => handleDeleteJob(job.id!)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <div className="ml-2">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48">
+                              <JobViewDialog job={job}>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                              </JobViewDialog>
+                              
+                              <ActivityLogDialog job={job}>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <FileText className="h-4 w-4 mr-2" />
+                                  Activity Log
+                                </DropdownMenuItem>
+                              </ActivityLogDialog>
+                              
+                              <JobUpdateDialog job={job} onJobUpdated={loadJobs}>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Update Status
+                                </DropdownMenuItem>
+                              </JobUpdateDialog>
+                              
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onSelect={() => handleToggleArchive(job.id!)}
+                              >
+                                {job.archived ? (
+                                  <>
+                                    <ArchiveRestore className="h-4 w-4 mr-2" />
+                                    Unarchive
+                                  </>
+                                ) : (
+                                  <>
+                                    <Archive className="h-4 w-4 mr-2" />
+                                    Archive
+                                  </>
+                                )}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onSelect={() => handleDeleteJob(job.id!)}
+                                className="text-red-600 dark:text-red-400"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
 

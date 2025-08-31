@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Job, Keyword } from "@/lib/database";
 import {
   Eye,
@@ -26,10 +25,14 @@ import {
 } from "lucide-react";
 
 interface JobViewDialogProps {
-  job: Job & { employer: { name: string; notes?: string }; keywords: Keyword[] };
+  job: Job & {
+    employer: { name: string; notes?: string };
+    keywords: Keyword[];
+  };
+  children?: React.ReactNode;
 }
 
-export function JobViewDialog({ job }: JobViewDialogProps) {
+export function JobViewDialog({ job, children }: JobViewDialogProps) {
   const [open, setOpen] = useState(false);
 
   const getStatusColor = (status: string) => {
@@ -66,9 +69,11 @@ export function JobViewDialog({ job }: JobViewDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-          <Eye className="h-4 w-4" />
-        </Button>
+        {children || (
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+            <Eye className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
@@ -149,7 +154,9 @@ export function JobViewDialog({ job }: JobViewDialogProps) {
                     </label>
                     <div className="flex items-center gap-1">
                       <Hash className="h-4 w-4 text-zinc-500" />
-                      <span className="font-mono text-sm">{job.referenceNumber}</span>
+                      <span className="font-mono text-sm">
+                        {job.referenceNumber}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -171,8 +178,13 @@ export function JobViewDialog({ job }: JobViewDialogProps) {
                     </label>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 text-zinc-500" />
-                      <span className={`font-medium ${getInterestLevelColor(job.interestLevel)}`}>
-                        {getInterestLevelEmoji(job.interestLevel)} {job.interestLevel}/10
+                      <span
+                        className={`font-medium ${getInterestLevelColor(
+                          job.interestLevel
+                        )}`}
+                      >
+                        {getInterestLevelEmoji(job.interestLevel)}{" "}
+                        {job.interestLevel}/10
                       </span>
                     </div>
                   </div>
@@ -196,7 +208,7 @@ export function JobViewDialog({ job }: JobViewDialogProps) {
                   </div>
                 )}
               </div>
-              
+
               {job.notes && (
                 <div>
                   <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">

@@ -25,9 +25,10 @@ import { FileText, Calendar, ArrowUpDown } from "lucide-react";
 
 interface ActivityLogDialogProps {
   job: Job & { employer: { name: string } };
+  children?: React.ReactNode;
 }
 
-export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
+export function ActivityLogDialog({ job, children }: ActivityLogDialogProps) {
   const [open, setOpen] = useState(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(false);
@@ -71,9 +72,11 @@ export function ActivityLogDialog({ job }: ActivityLogDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-          <FileText className="h-4 w-4" />
-        </Button>
+        {children || (
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+            <FileText className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>

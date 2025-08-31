@@ -17,6 +17,7 @@ export interface Job {
   referenceNumber?: string;
   salaryEstimate?: string;
   interestLevel?: number;
+  archived?: boolean;
   status:
     | "not applied"
     | "applied"
@@ -58,7 +59,7 @@ export class EmployerKeywordsDB extends Dexie {
     super("EmployerKeywordsDB");
     this.version(1).stores({
       employers: "++id, name, notes, createdAt, updatedAt",
-      jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, status, [employerId+title], createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, archived, status, [employerId+title], createdAt, updatedAt",
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
       activities:
         "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
