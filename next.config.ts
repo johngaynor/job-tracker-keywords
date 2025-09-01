@@ -3,12 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "export", // enables `next export`
   images: {
-    unoptimized: true, // since GitHub Pages can’t handle Next’s Image Optimization
+    unoptimized: true, // GitHub Pages can’t handle Next’s Image Optimization
   },
-  basePath:
-    process.env.NODE_ENV === "production" ? "/job-tracker-keywords" : "",
-  assetPrefix:
-    process.env.NODE_ENV === "production" ? "/job-tracker-keywords/" : "",
+  basePath: "", // remove repo-specific path
+  assetPrefix: "", // remove repo-specific path
 };
 
 export default nextConfig;

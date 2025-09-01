@@ -1,0 +1,2929 @@
+{
+  "version": "1.0",
+  "exportDate": "2025-09-01T03:11:19.563030Z",
+  "employers": [
+    {
+      "name": "Employer 1",
+      "createdAt": "2025-08-13T10:34:53.251367Z",
+      "updatedAt": "2025-08-21T09:46:53.251386Z",
+      "id": 1,
+      "industry": "SaaS",
+      "favorited": false
+    },
+    {
+      "name": "Employer 2",
+      "createdAt": "2025-08-28T22:48:53.251396Z",
+      "updatedAt": "2025-08-28T00:01:53.251401Z",
+      "id": 2,
+      "industry": "Retail",
+      "favorited": false
+    },
+    {
+      "name": "Employer 3",
+      "createdAt": "2025-08-19T22:17:53.251408Z",
+      "updatedAt": "2025-08-20T14:36:53.251412Z",
+      "id": 3,
+      "industry": "Automotive",
+      "favorited": false
+    },
+    {
+      "name": "Employer 4",
+      "createdAt": "2025-08-26T01:48:53.251418Z",
+      "updatedAt": "2025-08-16T18:16:53.251422Z",
+      "id": 4,
+      "industry": "Finance",
+      "favorited": true
+    },
+    {
+      "name": "Employer 5",
+      "createdAt": "2025-08-17T14:47:53.251427Z",
+      "updatedAt": "2025-08-24T10:36:53.251432Z",
+      "id": 5,
+      "industry": "SaaS",
+      "favorited": true
+    },
+    {
+      "name": "Employer 6",
+      "createdAt": "2025-08-27T16:54:53.251437Z",
+      "updatedAt": "2025-08-21T19:21:53.251441Z",
+      "id": 6,
+      "industry": "Energy",
+      "favorited": false
+    },
+    {
+      "name": "Employer 7",
+      "createdAt": "2025-08-25T11:28:53.251447Z",
+      "updatedAt": "2025-08-12T12:38:53.251451Z",
+      "id": 7,
+      "industry": "Finance",
+      "favorited": false
+    },
+    {
+      "name": "Employer 8",
+      "createdAt": "2025-08-27T03:40:53.251458Z",
+      "updatedAt": "2025-08-21T04:58:53.251462Z",
+      "id": 8,
+      "industry": "Healthcare",
+      "favorited": false
+    },
+    {
+      "name": "Employer 9",
+      "createdAt": "2025-08-19T10:50:53.251468Z",
+      "updatedAt": "2025-08-29T03:50:53.251473Z",
+      "id": 9,
+      "industry": "SaaS",
+      "favorited": false
+    },
+    {
+      "name": "Employer 10",
+      "createdAt": "2025-08-24T04:28:53.251478Z",
+      "updatedAt": "2025-08-19T05:23:53.251483Z",
+      "id": 10,
+      "industry": "Automotive",
+      "favorited": false
+    },
+    {
+      "name": "Employer 11",
+      "createdAt": "2025-09-01T01:12:53.251488Z",
+      "updatedAt": "2025-08-27T21:44:53.251493Z",
+      "id": 11,
+      "industry": "Media",
+      "favorited": false
+    },
+    {
+      "name": "Employer 12",
+      "createdAt": "2025-08-26T04:55:53.251498Z",
+      "updatedAt": "2025-08-12T16:17:53.251502Z",
+      "id": 12,
+      "industry": "Energy",
+      "favorited": false
+    },
+    {
+      "name": "Employer 13",
+      "createdAt": "2025-09-01T03:06:53.251507Z",
+      "updatedAt": "2025-08-18T03:58:53.251512Z",
+      "id": 13,
+      "industry": "Tech",
+      "favorited": false
+    },
+    {
+      "name": "Employer 14",
+      "createdAt": "2025-08-17T17:41:53.251517Z",
+      "updatedAt": "2025-08-30T02:40:53.251521Z",
+      "id": 14,
+      "industry": "Media",
+      "favorited": false
+    },
+    {
+      "name": "Employer 15",
+      "createdAt": "2025-08-21T23:47:53.251527Z",
+      "updatedAt": "2025-08-28T09:16:53.251531Z",
+      "id": 15,
+      "industry": "Defense",
+      "favorited": true
+    },
+    {
+      "name": "Employer 16",
+      "createdAt": "2025-08-13T03:35:53.251536Z",
+      "updatedAt": "2025-08-11T12:24:53.251542Z",
+      "id": 16,
+      "industry": "Tech",
+      "favorited": false
+    },
+    {
+      "name": "Employer 17",
+      "createdAt": "2025-08-13T10:57:53.251547Z",
+      "updatedAt": "2025-08-31T08:09:53.251551Z",
+      "id": 17,
+      "industry": "Retail",
+      "favorited": false
+    },
+    {
+      "name": "Employer 18",
+      "createdAt": "2025-08-18T05:41:53.251556Z",
+      "updatedAt": "2025-08-31T07:37:53.251560Z",
+      "id": 18,
+      "industry": "Automotive",
+      "favorited": false
+    },
+    {
+      "name": "Employer 19",
+      "createdAt": "2025-08-15T15:30:53.251566Z",
+      "updatedAt": "2025-08-26T02:21:53.251570Z",
+      "id": 19,
+      "industry": "Healthcare",
+      "favorited": true
+    },
+    {
+      "name": "Employer 20",
+      "createdAt": "2025-08-19T17:04:53.251575Z",
+      "updatedAt": "2025-08-23T18:58:53.251579Z",
+      "id": 20,
+      "industry": "Retail",
+      "favorited": false
+    },
+    {
+      "name": "Employer 21",
+      "createdAt": "2025-08-12T13:46:53.251585Z",
+      "updatedAt": "2025-08-31T07:50:53.251589Z",
+      "id": 21,
+      "industry": "Healthcare",
+      "favorited": true
+    },
+    {
+      "name": "Employer 22",
+      "createdAt": "2025-08-18T19:34:53.251594Z",
+      "updatedAt": "2025-08-25T15:30:53.251599Z",
+      "id": 22,
+      "industry": "Media",
+      "favorited": false
+    },
+    {
+      "name": "Employer 23",
+      "createdAt": "2025-08-25T17:06:53.251604Z",
+      "updatedAt": "2025-08-28T17:44:53.251608Z",
+      "id": 23,
+      "industry": "Retail",
+      "favorited": false
+    },
+    {
+      "name": "Employer 24",
+      "createdAt": "2025-08-21T21:45:53.251614Z",
+      "updatedAt": "2025-08-12T12:38:53.251618Z",
+      "id": 24,
+      "industry": "Media",
+      "favorited": false
+    },
+    {
+      "name": "Employer 25",
+      "createdAt": "2025-08-21T19:03:53.251623Z",
+      "updatedAt": "2025-08-15T10:06:53.251628Z",
+      "id": 25,
+      "industry": "SaaS",
+      "favorited": false
+    },
+    {
+      "name": "Employer 26",
+      "createdAt": "2025-08-17T23:40:53.251633Z",
+      "updatedAt": "2025-08-20T23:50:53.251637Z",
+      "id": 26,
+      "industry": "Retail",
+      "favorited": false
+    },
+    {
+      "name": "Employer 27",
+      "createdAt": "2025-08-22T13:21:53.251643Z",
+      "updatedAt": "2025-08-12T21:31:53.251647Z",
+      "id": 27,
+      "industry": "Tech",
+      "favorited": false
+    },
+    {
+      "name": "Employer 28",
+      "createdAt": "2025-08-19T08:39:53.251654Z",
+      "updatedAt": "2025-08-15T19:11:53.251660Z",
+      "id": 28,
+      "industry": "Defense",
+      "favorited": false
+    },
+    {
+      "name": "Employer 29",
+      "createdAt": "2025-08-17T18:22:53.251669Z",
+      "updatedAt": "2025-08-19T17:55:53.251676Z",
+      "id": 29,
+      "industry": "Media",
+      "favorited": true
+    },
+    {
+      "name": "Employer 30",
+      "createdAt": "2025-08-26T02:20:53.251685Z",
+      "updatedAt": "2025-08-27T19:46:53.251692Z",
+      "id": 30,
+      "industry": "Energy",
+      "favorited": false
+    }
+  ],
+  "jobs": [
+    {
+      "employerId": 17,
+      "title": "DevOps Engineer",
+      "salaryEstimate": "$75k-$164k",
+      "interestLevel": 10,
+      "status": "not applied",
+      "createdAt": "2025-08-27T21:19:53.252358Z",
+      "updatedAt": "2025-08-30T08:54:53.252370Z",
+      "id": 1
+    },
+    {
+      "employerId": 22,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$127k-$160k",
+      "interestLevel": 5,
+      "status": "applied",
+      "createdAt": "2025-08-30T21:11:53.252431Z",
+      "updatedAt": "2025-08-11T20:04:53.252436Z",
+      "id": 2
+    },
+    {
+      "employerId": 30,
+      "title": "Data Engineer",
+      "salaryEstimate": "$75k-$168k",
+      "interestLevel": 5,
+      "status": "applied",
+      "createdAt": "2025-08-25T22:33:53.252489Z",
+      "updatedAt": "2025-08-22T20:45:53.252493Z",
+      "id": 3
+    },
+    {
+      "employerId": 21,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$149k-$163k",
+      "interestLevel": 7,
+      "status": "applied",
+      "createdAt": "2025-08-23T16:23:53.252542Z",
+      "updatedAt": "2025-08-17T16:46:53.252546Z",
+      "id": 4
+    },
+    {
+      "employerId": 14,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$81k-$191k",
+      "interestLevel": 9,
+      "status": "applied",
+      "createdAt": "2025-08-17T00:48:53.252602Z",
+      "updatedAt": "2025-08-28T23:42:53.252607Z",
+      "id": 5
+    },
+    {
+      "employerId": 7,
+      "title": "Software Engineer",
+      "salaryEstimate": "$100k-$200k",
+      "interestLevel": 9,
+      "status": "applied",
+      "createdAt": "2025-08-30T06:01:53.252645Z",
+      "updatedAt": "2025-08-13T04:50:53.252649Z",
+      "id": 6,
+      "favorited": true
+    },
+    {
+      "employerId": 7,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$66k-$182k",
+      "interestLevel": 4,
+      "status": "applied",
+      "createdAt": "2025-08-18T22:59:53.252697Z",
+      "updatedAt": "2025-08-12T03:03:53.252701Z",
+      "id": 7
+    },
+    {
+      "employerId": 20,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$60k-$158k",
+      "interestLevel": 8,
+      "status": "not applied",
+      "createdAt": "2025-08-12T18:17:53.252754Z",
+      "updatedAt": "2025-08-16T02:40:53.252761Z",
+      "id": 8
+    },
+    {
+      "employerId": 28,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$89k-$187k",
+      "interestLevel": 1,
+      "status": "withdrawn",
+      "createdAt": "2025-08-27T00:44:53.252806Z",
+      "updatedAt": "2025-08-14T06:34:53.252810Z",
+      "id": 9
+    },
+    {
+      "employerId": 6,
+      "title": "Mobile Developer",
+      "salaryEstimate": "$148k-$200k",
+      "interestLevel": 10,
+      "status": "applied",
+      "createdAt": "2025-08-22T07:22:53.252865Z",
+      "updatedAt": "2025-08-23T23:59:53.252870Z",
+      "id": 10
+    },
+    {
+      "employerId": 7,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$106k-$179k",
+      "interestLevel": 2,
+      "status": "not applied",
+      "createdAt": "2025-08-24T06:11:53.252926Z",
+      "updatedAt": "2025-08-18T08:32:53.252930Z",
+      "id": 11
+    },
+    {
+      "employerId": 13,
+      "title": "Full Stack Engineer",
+      "salaryEstimate": "$86k-$169k",
+      "interestLevel": 7,
+      "status": "applied",
+      "createdAt": "2025-08-11T04:25:53.252986Z",
+      "updatedAt": "2025-08-18T08:17:53.252992Z",
+      "id": 12
+    },
+    {
+      "employerId": 13,
+      "title": "Backend Developer",
+      "salaryEstimate": "$131k-$151k",
+      "interestLevel": 2,
+      "status": "applied",
+      "createdAt": "2025-08-28T02:07:53.253030Z",
+      "updatedAt": "2025-08-23T04:14:53.253034Z",
+      "id": 13
+    },
+    {
+      "employerId": 23,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$139k-$186k",
+      "interestLevel": 8,
+      "status": "not applied",
+      "createdAt": "2025-08-20T03:57:53.253091Z",
+      "updatedAt": "2025-08-20T14:08:53.253098Z",
+      "id": 14
+    },
+    {
+      "employerId": 10,
+      "title": "QA Engineer",
+      "salaryEstimate": "$67k-$190k",
+      "interestLevel": 1,
+      "status": "not applied",
+      "createdAt": "2025-08-24T18:40:53.253163Z",
+      "updatedAt": "2025-08-18T15:33:53.253168Z",
+      "id": 15
+    },
+    {
+      "employerId": 20,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$149k-$165k",
+      "interestLevel": 8,
+      "status": "not applied",
+      "createdAt": "2025-08-21T19:47:53.253225Z",
+      "updatedAt": "2025-08-11T21:02:53.253230Z",
+      "id": 16
+    },
+    {
+      "employerId": 10,
+      "title": "Mobile Developer",
+      "salaryEstimate": "$114k-$165k",
+      "interestLevel": 6,
+      "status": "not applied",
+      "createdAt": "2025-08-18T11:22:53.253327Z",
+      "updatedAt": "2025-08-15T01:15:53.253331Z",
+      "id": 17,
+      "favorited": true
+    },
+    {
+      "employerId": 23,
+      "title": "QA Engineer",
+      "salaryEstimate": "$104k-$188k",
+      "interestLevel": 5,
+      "status": "rejected",
+      "createdAt": "2025-08-27T22:13:53.253382Z",
+      "updatedAt": "2025-08-21T07:37:53.253387Z",
+      "id": 18
+    },
+    {
+      "employerId": 7,
+      "title": "Backend Developer",
+      "salaryEstimate": "$135k-$169k",
+      "interestLevel": 7,
+      "status": "not applied",
+      "createdAt": "2025-08-23T10:30:53.253425Z",
+      "updatedAt": "2025-08-18T23:12:53.253429Z",
+      "id": 19,
+      "archived": true
+    },
+    {
+      "employerId": 20,
+      "title": "Software Engineer",
+      "salaryEstimate": "$141k-$180k",
+      "interestLevel": 2,
+      "status": "not applied",
+      "createdAt": "2025-08-29T02:07:53.253487Z",
+      "updatedAt": "2025-08-28T04:05:53.253492Z",
+      "id": 20
+    },
+    {
+      "employerId": 22,
+      "title": "Mobile Developer",
+      "salaryEstimate": "$121k-$175k",
+      "interestLevel": 8,
+      "status": "not applied",
+      "createdAt": "2025-08-28T22:53:53.253550Z",
+      "updatedAt": "2025-08-12T03:35:53.253555Z",
+      "id": 21
+    },
+    {
+      "employerId": 3,
+      "title": "Full Stack Engineer",
+      "salaryEstimate": "$90k-$175k",
+      "interestLevel": 6,
+      "status": "interview",
+      "createdAt": "2025-08-19T21:30:53.253612Z",
+      "updatedAt": "2025-08-20T09:58:53.253617Z",
+      "id": 22,
+      "archived": true
+    },
+    {
+      "employerId": 25,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$64k-$189k",
+      "interestLevel": 1,
+      "status": "applied",
+      "createdAt": "2025-08-27T21:35:53.253655Z",
+      "updatedAt": "2025-08-13T12:00:53.253659Z",
+      "id": 23
+    },
+    {
+      "employerId": 24,
+      "title": "Backend Developer",
+      "salaryEstimate": "$109k-$162k",
+      "interestLevel": 4,
+      "status": "applied",
+      "createdAt": "2025-08-30T05:23:53.253717Z",
+      "updatedAt": "2025-08-22T11:41:53.253721Z",
+      "id": 24,
+      "favorited": true
+    },
+    {
+      "employerId": 4,
+      "title": "Data Engineer",
+      "salaryEstimate": "$112k-$158k",
+      "interestLevel": 1,
+      "status": "applied",
+      "createdAt": "2025-08-18T03:56:53.253779Z",
+      "updatedAt": "2025-08-17T18:20:53.253783Z",
+      "id": 25
+    },
+    {
+      "employerId": 1,
+      "title": "Full Stack Engineer",
+      "salaryEstimate": "$100k-$177k",
+      "interestLevel": 3,
+      "status": "withdrawn",
+      "createdAt": "2025-08-30T03:27:53.253841Z",
+      "updatedAt": "2025-08-29T13:43:53.253847Z",
+      "id": 26
+    },
+    {
+      "employerId": 28,
+      "title": "Data Engineer",
+      "salaryEstimate": "$148k-$172k",
+      "interestLevel": 1,
+      "status": "interview",
+      "createdAt": "2025-08-21T21:08:53.253895Z",
+      "updatedAt": "2025-08-14T12:07:53.253900Z",
+      "id": 27
+    },
+    {
+      "employerId": 19,
+      "title": "Frontend Developer",
+      "salaryEstimate": "$123k-$151k",
+      "interestLevel": 6,
+      "status": "withdrawn",
+      "createdAt": "2025-08-20T01:13:53.253938Z",
+      "updatedAt": "2025-08-24T06:26:53.253943Z",
+      "id": 28
+    },
+    {
+      "employerId": 28,
+      "title": "Cloud Engineer",
+      "salaryEstimate": "$120k-$157k",
+      "interestLevel": 9,
+      "status": "interview",
+      "createdAt": "2025-08-25T08:37:53.253999Z",
+      "updatedAt": "2025-08-29T07:35:53.254005Z",
+      "id": 29
+    },
+    {
+      "employerId": 28,
+      "title": "Software Engineer",
+      "salaryEstimate": "$148k-$153k",
+      "interestLevel": 8,
+      "status": "rejected",
+      "createdAt": "2025-08-15T23:50:53.254042Z",
+      "updatedAt": "2025-08-19T08:14:53.254049Z",
+      "id": 30
+    },
+    {
+      "employerId": 4,
+      "title": "DevOps Engineer",
+      "salaryEstimate": "$80k-$173k",
+      "interestLevel": 4,
+      "status": "not applied",
+      "createdAt": "2025-08-24T20:55:53.254096Z",
+      "updatedAt": "2025-08-29T01:52:53.254100Z",
+      "id": 31
+    },
+    {
+      "employerId": 1,
+      "title": "Frontend Developer",
+      "salaryEstimate": "$147k-$172k",
+      "interestLevel": 2,
+      "status": "applied",
+      "createdAt": "2025-08-28T19:10:53.254159Z",
+      "updatedAt": "2025-08-29T21:31:53.254166Z",
+      "id": 32
+    },
+    {
+      "employerId": 9,
+      "title": "Full Stack Engineer",
+      "salaryEstimate": "$117k-$178k",
+      "interestLevel": 6,
+      "status": "offer",
+      "createdAt": "2025-08-29T07:29:53.254235Z",
+      "updatedAt": "2025-08-12T07:37:53.254239Z",
+      "id": 33
+    },
+    {
+      "employerId": 9,
+      "title": "Software Engineer",
+      "salaryEstimate": "$94k-$186k",
+      "interestLevel": 6,
+      "status": "applied",
+      "createdAt": "2025-08-16T10:35:53.254297Z",
+      "updatedAt": "2025-08-11T12:15:53.254301Z",
+      "id": 34,
+      "favorited": true
+    },
+    {
+      "employerId": 3,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$95k-$195k",
+      "interestLevel": 2,
+      "status": "interview",
+      "createdAt": "2025-08-25T23:53:53.254358Z",
+      "updatedAt": "2025-08-16T00:01:53.254362Z",
+      "id": 35
+    },
+    {
+      "employerId": 23,
+      "title": "DevOps Engineer",
+      "salaryEstimate": "$83k-$164k",
+      "interestLevel": 4,
+      "status": "not applied",
+      "createdAt": "2025-08-14T13:39:53.254418Z",
+      "updatedAt": "2025-08-31T10:14:53.254422Z",
+      "id": 36
+    },
+    {
+      "employerId": 15,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$109k-$196k",
+      "interestLevel": 5,
+      "status": "offer",
+      "createdAt": "2025-08-20T22:56:53.254479Z",
+      "updatedAt": "2025-08-13T21:46:53.254484Z",
+      "id": 37,
+      "archived": true
+    },
+    {
+      "employerId": 25,
+      "title": "QA Engineer",
+      "salaryEstimate": "$115k-$167k",
+      "interestLevel": 3,
+      "status": "applied",
+      "createdAt": "2025-08-21T17:27:53.254540Z",
+      "updatedAt": "2025-08-31T15:19:53.254544Z",
+      "id": 38
+    },
+    {
+      "employerId": 30,
+      "title": "DevOps Engineer",
+      "salaryEstimate": "$132k-$196k",
+      "interestLevel": 8,
+      "status": "not applied",
+      "createdAt": "2025-08-25T10:23:53.254600Z",
+      "updatedAt": "2025-08-26T06:54:53.254604Z",
+      "id": 39,
+      "favorited": true
+    },
+    {
+      "employerId": 7,
+      "title": "Machine Learning Engineer",
+      "salaryEstimate": "$128k-$153k",
+      "interestLevel": 4,
+      "status": "applied",
+      "createdAt": "2025-08-31T22:28:53.254641Z",
+      "updatedAt": "2025-08-13T12:16:53.254645Z",
+      "id": 40
+    },
+    {
+      "employerId": 12,
+      "title": "QA Engineer",
+      "salaryEstimate": "$120k-$153k",
+      "interestLevel": 2,
+      "status": "withdrawn",
+      "createdAt": "2025-08-27T02:29:53.254692Z",
+      "updatedAt": "2025-08-15T20:09:53.254696Z",
+      "id": 41
+    },
+    {
+      "employerId": 5,
+      "title": "Data Engineer",
+      "salaryEstimate": "$69k-$167k",
+      "interestLevel": 2,
+      "status": "applied",
+      "createdAt": "2025-08-25T03:35:53.254737Z",
+      "updatedAt": "2025-08-29T10:17:53.254741Z",
+      "id": 42
+    },
+    {
+      "employerId": 20,
+      "title": "QA Engineer",
+      "salaryEstimate": "$126k-$199k",
+      "interestLevel": 9,
+      "status": "withdrawn",
+      "createdAt": "2025-08-12T00:07:53.254797Z",
+      "updatedAt": "2025-08-19T18:07:53.254801Z",
+      "id": 43
+    },
+    {
+      "employerId": 10,
+      "title": "QA Engineer",
+      "salaryEstimate": "$114k-$160k",
+      "interestLevel": 3,
+      "status": "rejected",
+      "createdAt": "2025-08-25T06:32:53.254848Z",
+      "updatedAt": "2025-08-31T05:27:53.254852Z",
+      "id": 44,
+      "favorited": true
+    },
+    {
+      "employerId": 20,
+      "title": "Software Engineer",
+      "salaryEstimate": "$102k-$166k",
+      "interestLevel": 4,
+      "status": "applied",
+      "createdAt": "2025-08-24T06:05:53.254891Z",
+      "updatedAt": "2025-08-17T17:31:53.254898Z",
+      "id": 45
+    },
+    {
+      "employerId": 30,
+      "title": "Backend Developer",
+      "salaryEstimate": "$86k-$198k",
+      "interestLevel": 5,
+      "status": "applied",
+      "createdAt": "2025-08-19T14:31:53.254961Z",
+      "updatedAt": "2025-08-25T17:07:53.254966Z",
+      "id": 46,
+      "favorited": true
+    },
+    {
+      "employerId": 7,
+      "title": "Software Engineer",
+      "salaryEstimate": "$121k-$172k",
+      "interestLevel": 10,
+      "status": "applied",
+      "createdAt": "2025-08-14T02:07:53.255003Z",
+      "updatedAt": "2025-08-11T15:06:53.255007Z",
+      "id": 47
+    },
+    {
+      "employerId": 27,
+      "title": "Data Engineer",
+      "salaryEstimate": "$113k-$187k",
+      "interestLevel": 1,
+      "status": "rejected",
+      "createdAt": "2025-08-15T03:12:53.255054Z",
+      "updatedAt": "2025-08-15T07:48:53.255059Z",
+      "id": 48,
+      "archived": true
+    },
+    {
+      "employerId": 25,
+      "title": "Data Engineer",
+      "salaryEstimate": "$89k-$187k",
+      "interestLevel": 6,
+      "status": "not applied",
+      "createdAt": "2025-08-30T20:14:53.255096Z",
+      "updatedAt": "2025-08-26T22:02:53.255100Z",
+      "id": 49
+    },
+    {
+      "employerId": 28,
+      "title": "Full Stack Engineer",
+      "salaryEstimate": "$150k-$168k",
+      "interestLevel": 7,
+      "status": "not applied",
+      "createdAt": "2025-08-28T09:30:53.255167Z",
+      "updatedAt": "2025-08-15T07:50:53.255172Z",
+      "id": 50
+    }
+  ],
+  "keywords": [
+    {
+      "jobId": 1,
+      "keyword": "html",
+      "createdAt": "2025-08-20T06:57:53.252390Z",
+      "updatedAt": "2025-08-30T07:30:53.252395Z",
+      "id": 1
+    },
+    {
+      "jobId": 1,
+      "keyword": "docker",
+      "createdAt": "2025-09-01T01:42:53.252400Z",
+      "updatedAt": "2025-08-24T13:48:53.252405Z",
+      "id": 2
+    },
+    {
+      "jobId": 1,
+      "keyword": "graphql",
+      "createdAt": "2025-08-17T20:30:53.252409Z",
+      "updatedAt": "2025-08-25T20:09:53.252414Z",
+      "id": 3
+    },
+    {
+      "jobId": 1,
+      "keyword": "azure",
+      "createdAt": "2025-08-24T00:26:53.252418Z",
+      "updatedAt": "2025-08-22T07:07:53.252423Z",
+      "id": 4
+    },
+    {
+      "jobId": 2,
+      "keyword": "javascript",
+      "createdAt": "2025-08-27T23:53:53.252446Z",
+      "updatedAt": "2025-08-27T11:11:53.252450Z",
+      "id": 5
+    },
+    {
+      "jobId": 2,
+      "keyword": "java",
+      "createdAt": "2025-08-20T04:37:53.252455Z",
+      "updatedAt": "2025-08-18T11:37:53.252460Z",
+      "id": 6
+    },
+    {
+      "jobId": 2,
+      "keyword": "graphql",
+      "createdAt": "2025-08-17T20:48:53.252466Z",
+      "updatedAt": "2025-08-30T08:32:53.252471Z",
+      "id": 7
+    },
+    {
+      "jobId": 2,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-29T01:39:53.252476Z",
+      "updatedAt": "2025-08-13T14:10:53.252480Z",
+      "id": 8
+    },
+    {
+      "jobId": 3,
+      "keyword": "html",
+      "createdAt": "2025-08-23T05:26:53.252503Z",
+      "updatedAt": "2025-08-30T17:23:53.252507Z",
+      "id": 9
+    },
+    {
+      "jobId": 3,
+      "keyword": "docker",
+      "createdAt": "2025-08-19T15:20:53.252512Z",
+      "updatedAt": "2025-08-29T04:55:53.252517Z",
+      "id": 10
+    },
+    {
+      "jobId": 3,
+      "keyword": "azure",
+      "createdAt": "2025-08-24T22:35:53.252521Z",
+      "updatedAt": "2025-08-15T15:24:53.252526Z",
+      "id": 11
+    },
+    {
+      "jobId": 3,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-15T02:19:53.252530Z",
+      "updatedAt": "2025-08-13T18:49:53.252534Z",
+      "id": 12
+    },
+    {
+      "jobId": 4,
+      "keyword": "python",
+      "createdAt": "2025-08-14T13:03:53.252556Z",
+      "updatedAt": "2025-08-12T23:13:53.252560Z",
+      "id": 13
+    },
+    {
+      "jobId": 4,
+      "keyword": "sql",
+      "createdAt": "2025-08-21T06:05:53.252565Z",
+      "updatedAt": "2025-08-25T02:30:53.252569Z",
+      "id": 14
+    },
+    {
+      "jobId": 4,
+      "keyword": "graphql",
+      "createdAt": "2025-08-21T10:50:53.252573Z",
+      "updatedAt": "2025-08-26T08:10:53.252578Z",
+      "id": 15
+    },
+    {
+      "jobId": 4,
+      "keyword": "css",
+      "createdAt": "2025-08-15T01:50:53.252582Z",
+      "updatedAt": "2025-08-12T12:40:53.252586Z",
+      "id": 16
+    },
+    {
+      "jobId": 4,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-31T19:55:53.252591Z",
+      "updatedAt": "2025-08-20T02:49:53.252595Z",
+      "id": 17
+    },
+    {
+      "jobId": 5,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-19T11:46:53.252615Z",
+      "updatedAt": "2025-08-16T07:13:53.252620Z",
+      "id": 18
+    },
+    {
+      "jobId": 5,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-30T15:00:53.252624Z",
+      "updatedAt": "2025-08-25T14:08:53.252628Z",
+      "id": 19
+    },
+    {
+      "jobId": 5,
+      "keyword": "typescript",
+      "createdAt": "2025-08-17T09:56:53.252633Z",
+      "updatedAt": "2025-08-14T12:16:53.252637Z",
+      "id": 20
+    },
+    {
+      "jobId": 6,
+      "keyword": "react",
+      "createdAt": "2025-08-30T17:41:53.252659Z",
+      "updatedAt": "2025-08-16T17:37:53.252663Z",
+      "id": 21
+    },
+    {
+      "jobId": 6,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-21T15:19:53.252668Z",
+      "updatedAt": "2025-08-14T05:37:53.252672Z",
+      "id": 22
+    },
+    {
+      "jobId": 6,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-29T02:13:53.252677Z",
+      "updatedAt": "2025-08-15T07:59:53.252681Z",
+      "id": 23
+    },
+    {
+      "jobId": 6,
+      "keyword": "node.js",
+      "createdAt": "2025-08-23T14:09:53.252685Z",
+      "updatedAt": "2025-08-24T03:07:53.252690Z",
+      "id": 24
+    },
+    {
+      "jobId": 7,
+      "keyword": "typescript",
+      "createdAt": "2025-08-18T17:53:53.252710Z",
+      "updatedAt": "2025-08-19T06:45:53.252714Z",
+      "id": 25
+    },
+    {
+      "jobId": 7,
+      "keyword": "graphql",
+      "createdAt": "2025-08-16T19:27:53.252719Z",
+      "updatedAt": "2025-08-23T23:48:53.252723Z",
+      "id": 26
+    },
+    {
+      "jobId": 7,
+      "keyword": "testing",
+      "createdAt": "2025-08-29T06:06:53.252728Z",
+      "updatedAt": "2025-08-23T20:24:53.252732Z",
+      "id": 27
+    },
+    {
+      "jobId": 7,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-15T13:24:53.252736Z",
+      "updatedAt": "2025-08-13T03:39:53.252742Z",
+      "id": 28
+    },
+    {
+      "jobId": 8,
+      "keyword": "agile",
+      "createdAt": "2025-09-01T00:24:53.252775Z",
+      "updatedAt": "2025-08-28T21:44:53.252781Z",
+      "id": 29
+    },
+    {
+      "jobId": 8,
+      "keyword": "javascript",
+      "createdAt": "2025-08-23T13:12:53.252785Z",
+      "updatedAt": "2025-08-13T19:47:53.252789Z",
+      "id": 30
+    },
+    {
+      "jobId": 8,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-26T03:48:53.252794Z",
+      "updatedAt": "2025-08-11T22:47:53.252798Z",
+      "id": 31
+    },
+    {
+      "jobId": 9,
+      "keyword": "node.js",
+      "createdAt": "2025-08-14T13:23:53.252819Z",
+      "updatedAt": "2025-08-19T07:59:53.252824Z",
+      "id": 32
+    },
+    {
+      "jobId": 9,
+      "keyword": "aws",
+      "createdAt": "2025-08-29T02:02:53.252828Z",
+      "updatedAt": "2025-08-14T17:58:53.252832Z",
+      "id": 33
+    },
+    {
+      "jobId": 9,
+      "keyword": "java",
+      "createdAt": "2025-08-12T12:36:53.252837Z",
+      "updatedAt": "2025-08-30T10:55:53.252841Z",
+      "id": 34
+    },
+    {
+      "jobId": 9,
+      "keyword": "html",
+      "createdAt": "2025-08-25T14:25:53.252845Z",
+      "updatedAt": "2025-08-12T18:11:53.252850Z",
+      "id": 35
+    },
+    {
+      "jobId": 9,
+      "keyword": "agile",
+      "createdAt": "2025-08-31T23:14:53.252854Z",
+      "updatedAt": "2025-08-31T09:36:53.252858Z",
+      "id": 36
+    },
+    {
+      "jobId": 10,
+      "keyword": "react",
+      "createdAt": "2025-08-11T10:14:53.252880Z",
+      "updatedAt": "2025-08-11T20:24:53.252884Z",
+      "id": 37
+    },
+    {
+      "jobId": 10,
+      "keyword": "python",
+      "createdAt": "2025-08-31T01:48:53.252888Z",
+      "updatedAt": "2025-08-11T08:59:53.252892Z",
+      "id": 38
+    },
+    {
+      "jobId": 10,
+      "keyword": "typescript",
+      "createdAt": "2025-08-30T13:20:53.252897Z",
+      "updatedAt": "2025-08-19T04:14:53.252901Z",
+      "id": 39
+    },
+    {
+      "jobId": 10,
+      "keyword": "testing",
+      "createdAt": "2025-08-12T10:10:53.252906Z",
+      "updatedAt": "2025-08-23T20:59:53.252910Z",
+      "id": 40
+    },
+    {
+      "jobId": 10,
+      "keyword": "javascript",
+      "createdAt": "2025-08-15T09:07:53.252915Z",
+      "updatedAt": "2025-08-30T12:30:53.252919Z",
+      "id": 41
+    },
+    {
+      "jobId": 11,
+      "keyword": "sql",
+      "createdAt": "2025-08-24T05:26:53.252939Z",
+      "updatedAt": "2025-08-24T19:45:53.252944Z",
+      "id": 42
+    },
+    {
+      "jobId": 11,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-19T18:10:53.252948Z",
+      "updatedAt": "2025-08-18T22:19:53.252952Z",
+      "id": 43
+    },
+    {
+      "jobId": 11,
+      "keyword": "agile",
+      "createdAt": "2025-08-18T16:02:53.252957Z",
+      "updatedAt": "2025-08-19T19:41:53.252961Z",
+      "id": 44
+    },
+    {
+      "jobId": 11,
+      "keyword": "graphql",
+      "createdAt": "2025-08-22T07:26:53.252967Z",
+      "updatedAt": "2025-08-12T08:16:53.252974Z",
+      "id": 45
+    },
+    {
+      "jobId": 12,
+      "keyword": "azure",
+      "createdAt": "2025-08-11T10:31:53.253001Z",
+      "updatedAt": "2025-08-18T19:51:53.253005Z",
+      "id": 46
+    },
+    {
+      "jobId": 12,
+      "keyword": "java",
+      "createdAt": "2025-08-23T05:59:53.253010Z",
+      "updatedAt": "2025-08-16T01:19:53.253014Z",
+      "id": 47
+    },
+    {
+      "jobId": 12,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-18T09:30:53.253019Z",
+      "updatedAt": "2025-08-20T19:50:53.253023Z",
+      "id": 48
+    },
+    {
+      "jobId": 13,
+      "keyword": "node.js",
+      "createdAt": "2025-08-28T22:55:53.253043Z",
+      "updatedAt": "2025-08-26T14:29:53.253047Z",
+      "id": 49
+    },
+    {
+      "jobId": 13,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-31T19:05:53.253052Z",
+      "updatedAt": "2025-08-16T22:02:53.253056Z",
+      "id": 50
+    },
+    {
+      "jobId": 13,
+      "keyword": "graphql",
+      "createdAt": "2025-08-19T09:59:53.253060Z",
+      "updatedAt": "2025-08-22T06:25:53.253064Z",
+      "id": 51
+    },
+    {
+      "jobId": 13,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-28T08:52:53.253069Z",
+      "updatedAt": "2025-08-27T10:07:53.253076Z",
+      "id": 52
+    },
+    {
+      "jobId": 14,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-11T09:15:53.253113Z",
+      "updatedAt": "2025-08-29T11:36:53.253119Z",
+      "id": 53
+    },
+    {
+      "jobId": 14,
+      "keyword": "react",
+      "createdAt": "2025-08-19T13:31:53.253124Z",
+      "updatedAt": "2025-08-25T06:51:53.253128Z",
+      "id": 54
+    },
+    {
+      "jobId": 14,
+      "keyword": "python",
+      "createdAt": "2025-08-25T03:12:53.253133Z",
+      "updatedAt": "2025-08-18T16:56:53.253137Z",
+      "id": 55
+    },
+    {
+      "jobId": 14,
+      "keyword": "javascript",
+      "createdAt": "2025-08-11T05:36:53.253142Z",
+      "updatedAt": "2025-08-14T10:00:53.253146Z",
+      "id": 56
+    },
+    {
+      "jobId": 14,
+      "keyword": "typescript",
+      "createdAt": "2025-08-31T19:26:53.253151Z",
+      "updatedAt": "2025-08-19T20:44:53.253156Z",
+      "id": 57
+    },
+    {
+      "jobId": 15,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-25T13:56:53.253178Z",
+      "updatedAt": "2025-08-30T15:04:53.253182Z",
+      "id": 58
+    },
+    {
+      "jobId": 15,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-16T11:08:53.253187Z",
+      "updatedAt": "2025-08-30T11:39:53.253191Z",
+      "id": 59
+    },
+    {
+      "jobId": 15,
+      "keyword": "sql",
+      "createdAt": "2025-08-11T17:38:53.253196Z",
+      "updatedAt": "2025-08-25T07:57:53.253200Z",
+      "id": 60
+    },
+    {
+      "jobId": 15,
+      "keyword": "azure",
+      "createdAt": "2025-08-28T22:16:53.253205Z",
+      "updatedAt": "2025-08-16T10:23:53.253209Z",
+      "id": 61
+    },
+    {
+      "jobId": 15,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-22T06:59:53.253213Z",
+      "updatedAt": "2025-08-11T17:02:53.253218Z",
+      "id": 62
+    },
+    {
+      "jobId": 16,
+      "keyword": "docker",
+      "createdAt": "2025-08-14T19:58:53.253239Z",
+      "updatedAt": "2025-08-12T01:01:53.253243Z",
+      "id": 63
+    },
+    {
+      "jobId": 16,
+      "keyword": "aws",
+      "createdAt": "2025-08-18T10:05:53.253289Z",
+      "updatedAt": "2025-08-19T17:47:53.253297Z",
+      "id": 64
+    },
+    {
+      "jobId": 16,
+      "keyword": "python",
+      "createdAt": "2025-08-26T15:27:53.253304Z",
+      "updatedAt": "2025-08-28T12:55:53.253309Z",
+      "id": 65
+    },
+    {
+      "jobId": 16,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-24T12:20:53.253314Z",
+      "updatedAt": "2025-08-11T16:17:53.253319Z",
+      "id": 66
+    },
+    {
+      "jobId": 17,
+      "keyword": "sql",
+      "createdAt": "2025-08-22T13:27:53.253342Z",
+      "updatedAt": "2025-08-31T19:38:53.253346Z",
+      "id": 67
+    },
+    {
+      "jobId": 17,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-15T23:35:53.253351Z",
+      "updatedAt": "2025-08-31T13:05:53.253355Z",
+      "id": 68
+    },
+    {
+      "jobId": 17,
+      "keyword": "css",
+      "createdAt": "2025-08-16T18:04:53.253360Z",
+      "updatedAt": "2025-08-22T10:04:53.253364Z",
+      "id": 69
+    },
+    {
+      "jobId": 17,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-11T14:24:53.253369Z",
+      "updatedAt": "2025-08-29T02:21:53.253374Z",
+      "id": 70
+    },
+    {
+      "jobId": 18,
+      "keyword": "node.js",
+      "createdAt": "2025-08-28T01:15:53.253395Z",
+      "updatedAt": "2025-08-24T10:39:53.253400Z",
+      "id": 71
+    },
+    {
+      "jobId": 18,
+      "keyword": "docker",
+      "createdAt": "2025-08-16T14:28:53.253404Z",
+      "updatedAt": "2025-08-22T05:01:53.253409Z",
+      "id": 72
+    },
+    {
+      "jobId": 18,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-24T22:07:53.253413Z",
+      "updatedAt": "2025-08-25T05:16:53.253418Z",
+      "id": 73
+    },
+    {
+      "jobId": 19,
+      "keyword": "testing",
+      "createdAt": "2025-08-18T13:09:53.253439Z",
+      "updatedAt": "2025-08-27T01:35:53.253444Z",
+      "id": 74
+    },
+    {
+      "jobId": 19,
+      "keyword": "aws",
+      "createdAt": "2025-08-25T01:16:53.253448Z",
+      "updatedAt": "2025-08-28T09:28:53.253453Z",
+      "id": 75
+    },
+    {
+      "jobId": 19,
+      "keyword": "node.js",
+      "createdAt": "2025-08-27T04:22:53.253457Z",
+      "updatedAt": "2025-08-13T08:24:53.253462Z",
+      "id": 76
+    },
+    {
+      "jobId": 19,
+      "keyword": "react",
+      "createdAt": "2025-08-27T19:11:53.253466Z",
+      "updatedAt": "2025-08-19T03:29:53.253471Z",
+      "id": 77
+    },
+    {
+      "jobId": 19,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-25T13:33:53.253476Z",
+      "updatedAt": "2025-08-26T08:43:53.253480Z",
+      "id": 78
+    },
+    {
+      "jobId": 20,
+      "keyword": "typescript",
+      "createdAt": "2025-08-28T17:16:53.253501Z",
+      "updatedAt": "2025-08-12T11:48:53.253505Z",
+      "id": 79
+    },
+    {
+      "jobId": 20,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-15T19:12:53.253510Z",
+      "updatedAt": "2025-08-11T12:27:53.253514Z",
+      "id": 80
+    },
+    {
+      "jobId": 20,
+      "keyword": "c#",
+      "createdAt": "2025-08-11T13:03:53.253519Z",
+      "updatedAt": "2025-08-31T16:05:53.253523Z",
+      "id": 81
+    },
+    {
+      "jobId": 20,
+      "keyword": "node.js",
+      "createdAt": "2025-08-12T16:28:53.253528Z",
+      "updatedAt": "2025-08-22T07:50:53.253532Z",
+      "id": 82
+    },
+    {
+      "jobId": 20,
+      "keyword": "azure",
+      "createdAt": "2025-08-14T12:39:53.253537Z",
+      "updatedAt": "2025-08-18T12:17:53.253543Z",
+      "id": 83
+    },
+    {
+      "jobId": 21,
+      "keyword": "aws",
+      "createdAt": "2025-08-17T10:55:53.253564Z",
+      "updatedAt": "2025-08-12T15:00:53.253568Z",
+      "id": 84
+    },
+    {
+      "jobId": 21,
+      "keyword": "azure",
+      "createdAt": "2025-08-20T07:54:53.253572Z",
+      "updatedAt": "2025-08-28T12:44:53.253577Z",
+      "id": 85
+    },
+    {
+      "jobId": 21,
+      "keyword": "javascript",
+      "createdAt": "2025-08-15T21:01:53.253581Z",
+      "updatedAt": "2025-08-15T17:58:53.253586Z",
+      "id": 86
+    },
+    {
+      "jobId": 21,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-16T11:21:53.253591Z",
+      "updatedAt": "2025-08-30T07:01:53.253596Z",
+      "id": 87
+    },
+    {
+      "jobId": 21,
+      "keyword": "agile",
+      "createdAt": "2025-08-14T06:44:53.253600Z",
+      "updatedAt": "2025-08-18T05:06:53.253604Z",
+      "id": 88
+    },
+    {
+      "jobId": 22,
+      "keyword": "python",
+      "createdAt": "2025-08-27T16:47:53.253626Z",
+      "updatedAt": "2025-08-31T21:34:53.253630Z",
+      "id": 89
+    },
+    {
+      "jobId": 22,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-31T05:12:53.253634Z",
+      "updatedAt": "2025-08-13T23:34:53.253639Z",
+      "id": 90
+    },
+    {
+      "jobId": 22,
+      "keyword": "react",
+      "createdAt": "2025-08-19T04:26:53.253643Z",
+      "updatedAt": "2025-08-20T16:41:53.253647Z",
+      "id": 91
+    },
+    {
+      "jobId": 23,
+      "keyword": "html",
+      "createdAt": "2025-08-15T02:19:53.253669Z",
+      "updatedAt": "2025-08-31T13:22:53.253673Z",
+      "id": 92
+    },
+    {
+      "jobId": 23,
+      "keyword": "python",
+      "createdAt": "2025-08-24T06:47:53.253678Z",
+      "updatedAt": "2025-08-22T12:27:53.253682Z",
+      "id": 93
+    },
+    {
+      "jobId": 23,
+      "keyword": "agile",
+      "createdAt": "2025-08-29T11:49:53.253687Z",
+      "updatedAt": "2025-08-15T18:41:53.253691Z",
+      "id": 94
+    },
+    {
+      "jobId": 23,
+      "keyword": "docker",
+      "createdAt": "2025-08-14T14:39:53.253695Z",
+      "updatedAt": "2025-08-13T01:34:53.253700Z",
+      "id": 95
+    },
+    {
+      "jobId": 23,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-15T22:57:53.253704Z",
+      "updatedAt": "2025-08-21T10:24:53.253708Z",
+      "id": 96
+    },
+    {
+      "jobId": 24,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-28T10:41:53.253731Z",
+      "updatedAt": "2025-08-27T10:07:53.253736Z",
+      "id": 97
+    },
+    {
+      "jobId": 24,
+      "keyword": "java",
+      "createdAt": "2025-08-18T19:06:53.253740Z",
+      "updatedAt": "2025-08-15T05:46:53.253745Z",
+      "id": 98
+    },
+    {
+      "jobId": 24,
+      "keyword": "css",
+      "createdAt": "2025-08-30T17:52:53.253750Z",
+      "updatedAt": "2025-08-23T08:36:53.253754Z",
+      "id": 99
+    },
+    {
+      "jobId": 24,
+      "keyword": "html",
+      "createdAt": "2025-08-18T06:51:53.253758Z",
+      "updatedAt": "2025-08-11T12:31:53.253763Z",
+      "id": 100
+    },
+    {
+      "jobId": 24,
+      "keyword": "typescript",
+      "createdAt": "2025-08-24T21:42:53.253767Z",
+      "updatedAt": "2025-08-13T06:56:53.253772Z",
+      "id": 101
+    },
+    {
+      "jobId": 25,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-24T16:55:53.253792Z",
+      "updatedAt": "2025-08-21T20:51:53.253796Z",
+      "id": 102
+    },
+    {
+      "jobId": 25,
+      "keyword": "agile",
+      "createdAt": "2025-08-19T23:55:53.253801Z",
+      "updatedAt": "2025-08-15T14:45:53.253806Z",
+      "id": 103
+    },
+    {
+      "jobId": 25,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-12T09:12:53.253810Z",
+      "updatedAt": "2025-08-18T13:32:53.253815Z",
+      "id": 104
+    },
+    {
+      "jobId": 25,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-28T16:48:53.253822Z",
+      "updatedAt": "2025-08-23T21:18:53.253829Z",
+      "id": 105
+    },
+    {
+      "jobId": 26,
+      "keyword": "testing",
+      "createdAt": "2025-08-26T14:03:53.253856Z",
+      "updatedAt": "2025-08-13T07:56:53.253860Z",
+      "id": 106
+    },
+    {
+      "jobId": 26,
+      "keyword": "typescript",
+      "createdAt": "2025-08-14T12:26:53.253865Z",
+      "updatedAt": "2025-08-17T13:21:53.253869Z",
+      "id": 107
+    },
+    {
+      "jobId": 26,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-18T07:11:53.253874Z",
+      "updatedAt": "2025-08-22T11:01:53.253878Z",
+      "id": 108
+    },
+    {
+      "jobId": 26,
+      "keyword": "react",
+      "createdAt": "2025-08-20T00:45:53.253883Z",
+      "updatedAt": "2025-08-27T03:10:53.253887Z",
+      "id": 109
+    },
+    {
+      "jobId": 27,
+      "keyword": "sql",
+      "createdAt": "2025-08-13T15:39:53.253908Z",
+      "updatedAt": "2025-08-23T02:11:53.253912Z",
+      "id": 110
+    },
+    {
+      "jobId": 27,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-25T06:48:53.253917Z",
+      "updatedAt": "2025-08-21T02:11:53.253921Z",
+      "id": 111
+    },
+    {
+      "jobId": 27,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-25T17:43:53.253926Z",
+      "updatedAt": "2025-08-13T16:33:53.253930Z",
+      "id": 112
+    },
+    {
+      "jobId": 28,
+      "keyword": "docker",
+      "createdAt": "2025-08-23T04:38:53.253952Z",
+      "updatedAt": "2025-08-13T06:11:53.253956Z",
+      "id": 113
+    },
+    {
+      "jobId": 28,
+      "keyword": "typescript",
+      "createdAt": "2025-08-15T14:01:53.253961Z",
+      "updatedAt": "2025-08-18T03:43:53.253965Z",
+      "id": 114
+    },
+    {
+      "jobId": 28,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-16T16:39:53.253970Z",
+      "updatedAt": "2025-08-20T08:38:53.253974Z",
+      "id": 115
+    },
+    {
+      "jobId": 28,
+      "keyword": "c#",
+      "createdAt": "2025-08-12T04:16:53.253979Z",
+      "updatedAt": "2025-08-19T14:23:53.253983Z",
+      "id": 116
+    },
+    {
+      "jobId": 28,
+      "keyword": "aws",
+      "createdAt": "2025-08-20T19:29:53.253988Z",
+      "updatedAt": "2025-08-30T02:16:53.253992Z",
+      "id": 117
+    },
+    {
+      "jobId": 29,
+      "keyword": "typescript",
+      "createdAt": "2025-08-25T12:34:53.254013Z",
+      "updatedAt": "2025-08-31T23:18:53.254017Z",
+      "id": 118
+    },
+    {
+      "jobId": 29,
+      "keyword": "c#",
+      "createdAt": "2025-08-20T03:03:53.254022Z",
+      "updatedAt": "2025-08-12T21:05:53.254026Z",
+      "id": 119
+    },
+    {
+      "jobId": 29,
+      "keyword": "python",
+      "createdAt": "2025-08-27T12:06:53.254031Z",
+      "updatedAt": "2025-08-14T00:12:53.254035Z",
+      "id": 120
+    },
+    {
+      "jobId": 30,
+      "keyword": "aws",
+      "createdAt": "2025-08-13T14:12:53.254064Z",
+      "updatedAt": "2025-08-20T20:55:53.254071Z",
+      "id": 121
+    },
+    {
+      "jobId": 30,
+      "keyword": "testing",
+      "createdAt": "2025-08-18T14:41:53.254075Z",
+      "updatedAt": "2025-08-27T19:59:53.254080Z",
+      "id": 122
+    },
+    {
+      "jobId": 30,
+      "keyword": "c#",
+      "createdAt": "2025-08-31T08:45:53.254085Z",
+      "updatedAt": "2025-08-22T05:37:53.254089Z",
+      "id": 123
+    },
+    {
+      "jobId": 31,
+      "keyword": "azure",
+      "createdAt": "2025-08-19T11:04:53.254110Z",
+      "updatedAt": "2025-08-31T03:46:53.254114Z",
+      "id": 124
+    },
+    {
+      "jobId": 31,
+      "keyword": "aws",
+      "createdAt": "2025-08-14T23:11:53.254118Z",
+      "updatedAt": "2025-08-27T22:50:53.254123Z",
+      "id": 125
+    },
+    {
+      "jobId": 31,
+      "keyword": "graphql",
+      "createdAt": "2025-08-19T21:00:53.254128Z",
+      "updatedAt": "2025-08-19T10:30:53.254133Z",
+      "id": 126
+    },
+    {
+      "jobId": 31,
+      "keyword": "typescript",
+      "createdAt": "2025-08-19T21:00:53.254137Z",
+      "updatedAt": "2025-08-21T03:58:53.254142Z",
+      "id": 127
+    },
+    {
+      "jobId": 31,
+      "keyword": "node.js",
+      "createdAt": "2025-08-18T10:56:53.254146Z",
+      "updatedAt": "2025-08-16T17:16:53.254150Z",
+      "id": 128
+    },
+    {
+      "jobId": 32,
+      "keyword": "docker",
+      "createdAt": "2025-08-28T00:29:53.254181Z",
+      "updatedAt": "2025-08-31T00:20:53.254188Z",
+      "id": 129
+    },
+    {
+      "jobId": 32,
+      "keyword": "sql",
+      "createdAt": "2025-08-16T14:47:53.254196Z",
+      "updatedAt": "2025-08-20T05:20:53.254201Z",
+      "id": 130
+    },
+    {
+      "jobId": 32,
+      "keyword": "node.js",
+      "createdAt": "2025-08-13T21:18:53.254206Z",
+      "updatedAt": "2025-08-19T23:19:53.254210Z",
+      "id": 131
+    },
+    {
+      "jobId": 32,
+      "keyword": "html",
+      "createdAt": "2025-08-25T23:16:53.254214Z",
+      "updatedAt": "2025-08-21T19:25:53.254219Z",
+      "id": 132
+    },
+    {
+      "jobId": 32,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-31T03:46:53.254223Z",
+      "updatedAt": "2025-08-30T20:18:53.254227Z",
+      "id": 133
+    },
+    {
+      "jobId": 33,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-22T10:56:53.254249Z",
+      "updatedAt": "2025-08-12T18:03:53.254253Z",
+      "id": 134
+    },
+    {
+      "jobId": 33,
+      "keyword": "c#",
+      "createdAt": "2025-08-30T18:20:53.254258Z",
+      "updatedAt": "2025-08-23T09:45:53.254263Z",
+      "id": 135
+    },
+    {
+      "jobId": 33,
+      "keyword": "node.js",
+      "createdAt": "2025-08-31T01:51:53.254267Z",
+      "updatedAt": "2025-08-17T19:51:53.254272Z",
+      "id": 136
+    },
+    {
+      "jobId": 33,
+      "keyword": "sql",
+      "createdAt": "2025-08-27T14:03:53.254277Z",
+      "updatedAt": "2025-08-26T19:31:53.254281Z",
+      "id": 137
+    },
+    {
+      "jobId": 33,
+      "keyword": "agile",
+      "createdAt": "2025-08-13T16:45:53.254286Z",
+      "updatedAt": "2025-08-25T10:58:53.254290Z",
+      "id": 138
+    },
+    {
+      "jobId": 34,
+      "keyword": "c#",
+      "createdAt": "2025-08-21T14:41:53.254310Z",
+      "updatedAt": "2025-08-29T10:35:53.254315Z",
+      "id": 139
+    },
+    {
+      "jobId": 34,
+      "keyword": "css",
+      "createdAt": "2025-08-31T05:40:53.254319Z",
+      "updatedAt": "2025-08-16T14:31:53.254323Z",
+      "id": 140
+    },
+    {
+      "jobId": 34,
+      "keyword": "python",
+      "createdAt": "2025-08-16T11:27:53.254329Z",
+      "updatedAt": "2025-08-18T05:27:53.254333Z",
+      "id": 141
+    },
+    {
+      "jobId": 34,
+      "keyword": "react",
+      "createdAt": "2025-08-18T16:19:53.254338Z",
+      "updatedAt": "2025-08-25T12:01:53.254342Z",
+      "id": 142
+    },
+    {
+      "jobId": 34,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-29T06:48:53.254347Z",
+      "updatedAt": "2025-08-22T02:39:53.254351Z",
+      "id": 143
+    },
+    {
+      "jobId": 35,
+      "keyword": "docker",
+      "createdAt": "2025-08-31T07:55:53.254371Z",
+      "updatedAt": "2025-08-23T21:33:53.254376Z",
+      "id": 144
+    },
+    {
+      "jobId": 35,
+      "keyword": "typescript",
+      "createdAt": "2025-08-15T18:51:53.254380Z",
+      "updatedAt": "2025-08-27T08:46:53.254384Z",
+      "id": 145
+    },
+    {
+      "jobId": 35,
+      "keyword": "sql",
+      "createdAt": "2025-08-17T15:09:53.254389Z",
+      "updatedAt": "2025-08-26T05:00:53.254393Z",
+      "id": 146
+    },
+    {
+      "jobId": 35,
+      "keyword": "c#",
+      "createdAt": "2025-08-29T12:55:53.254398Z",
+      "updatedAt": "2025-08-12T18:55:53.254402Z",
+      "id": 147
+    },
+    {
+      "jobId": 35,
+      "keyword": "html",
+      "createdAt": "2025-08-26T16:19:53.254407Z",
+      "updatedAt": "2025-08-29T07:54:53.254411Z",
+      "id": 148
+    },
+    {
+      "jobId": 36,
+      "keyword": "typescript",
+      "createdAt": "2025-08-30T15:00:53.254431Z",
+      "updatedAt": "2025-08-23T10:32:53.254436Z",
+      "id": 149
+    },
+    {
+      "jobId": 36,
+      "keyword": "python",
+      "createdAt": "2025-08-12T11:46:53.254441Z",
+      "updatedAt": "2025-08-26T07:16:53.254445Z",
+      "id": 150
+    },
+    {
+      "jobId": 36,
+      "keyword": "node.js",
+      "createdAt": "2025-08-29T12:59:53.254450Z",
+      "updatedAt": "2025-08-23T00:57:53.254454Z",
+      "id": 151
+    },
+    {
+      "jobId": 36,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-18T07:59:53.254459Z",
+      "updatedAt": "2025-08-19T10:26:53.254463Z",
+      "id": 152
+    },
+    {
+      "jobId": 36,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-13T04:37:53.254468Z",
+      "updatedAt": "2025-08-30T20:25:53.254472Z",
+      "id": 153
+    },
+    {
+      "jobId": 37,
+      "keyword": "python",
+      "createdAt": "2025-08-27T15:30:53.254493Z",
+      "updatedAt": "2025-08-22T07:14:53.254497Z",
+      "id": 154
+    },
+    {
+      "jobId": 37,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-31T20:05:53.254502Z",
+      "updatedAt": "2025-08-16T03:51:53.254506Z",
+      "id": 155
+    },
+    {
+      "jobId": 37,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-28T15:27:53.254511Z",
+      "updatedAt": "2025-08-28T11:23:53.254515Z",
+      "id": 156
+    },
+    {
+      "jobId": 37,
+      "keyword": "mongodb",
+      "createdAt": "2025-08-21T21:08:53.254519Z",
+      "updatedAt": "2025-08-30T10:20:53.254524Z",
+      "id": 157
+    },
+    {
+      "jobId": 37,
+      "keyword": "agile",
+      "createdAt": "2025-08-26T05:55:53.254528Z",
+      "updatedAt": "2025-08-23T09:26:53.254533Z",
+      "id": 158
+    },
+    {
+      "jobId": 38,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-30T00:53:53.254553Z",
+      "updatedAt": "2025-08-27T18:50:53.254558Z",
+      "id": 159
+    },
+    {
+      "jobId": 38,
+      "keyword": "node.js",
+      "createdAt": "2025-08-31T09:30:53.254562Z",
+      "updatedAt": "2025-08-19T12:14:53.254566Z",
+      "id": 160
+    },
+    {
+      "jobId": 38,
+      "keyword": "docker",
+      "createdAt": "2025-08-15T03:24:53.254571Z",
+      "updatedAt": "2025-08-17T20:03:53.254575Z",
+      "id": 161
+    },
+    {
+      "jobId": 38,
+      "keyword": "java",
+      "createdAt": "2025-08-24T08:41:53.254580Z",
+      "updatedAt": "2025-08-12T12:14:53.254584Z",
+      "id": 162
+    },
+    {
+      "jobId": 38,
+      "keyword": "typescript",
+      "createdAt": "2025-08-24T11:31:53.254588Z",
+      "updatedAt": "2025-08-23T23:40:53.254592Z",
+      "id": 163
+    },
+    {
+      "jobId": 39,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-20T07:20:53.254612Z",
+      "updatedAt": "2025-08-28T20:49:53.254617Z",
+      "id": 164
+    },
+    {
+      "jobId": 39,
+      "keyword": "python",
+      "createdAt": "2025-08-17T21:22:53.254621Z",
+      "updatedAt": "2025-08-30T06:11:53.254625Z",
+      "id": 165
+    },
+    {
+      "jobId": 39,
+      "keyword": "sql",
+      "createdAt": "2025-08-31T14:17:53.254630Z",
+      "updatedAt": "2025-08-31T22:50:53.254634Z",
+      "id": 166
+    },
+    {
+      "jobId": 40,
+      "keyword": "aws",
+      "createdAt": "2025-08-24T22:31:53.254654Z",
+      "updatedAt": "2025-08-28T07:08:53.254658Z",
+      "id": 167
+    },
+    {
+      "jobId": 40,
+      "keyword": "html",
+      "createdAt": "2025-08-22T17:18:53.254663Z",
+      "updatedAt": "2025-08-25T23:57:53.254667Z",
+      "id": 168
+    },
+    {
+      "jobId": 40,
+      "keyword": "sql",
+      "createdAt": "2025-08-12T17:36:53.254672Z",
+      "updatedAt": "2025-08-29T23:41:53.254676Z",
+      "id": 169
+    },
+    {
+      "jobId": 40,
+      "keyword": "react",
+      "createdAt": "2025-08-27T12:43:53.254681Z",
+      "updatedAt": "2025-08-11T23:09:53.254685Z",
+      "id": 170
+    },
+    {
+      "jobId": 41,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-17T12:26:53.254706Z",
+      "updatedAt": "2025-08-19T17:58:53.254711Z",
+      "id": 171
+    },
+    {
+      "jobId": 41,
+      "keyword": "azure",
+      "createdAt": "2025-08-17T03:12:53.254715Z",
+      "updatedAt": "2025-08-13T08:16:53.254720Z",
+      "id": 172
+    },
+    {
+      "jobId": 41,
+      "keyword": "node.js",
+      "createdAt": "2025-08-20T15:47:53.254724Z",
+      "updatedAt": "2025-08-15T09:18:53.254728Z",
+      "id": 173
+    },
+    {
+      "jobId": 42,
+      "keyword": "c#",
+      "createdAt": "2025-09-01T02:12:53.254750Z",
+      "updatedAt": "2025-08-24T17:18:53.254755Z",
+      "id": 174
+    },
+    {
+      "jobId": 42,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-27T22:48:53.254759Z",
+      "updatedAt": "2025-08-23T11:32:53.254763Z",
+      "id": 175
+    },
+    {
+      "jobId": 42,
+      "keyword": "javascript",
+      "createdAt": "2025-08-12T23:59:53.254768Z",
+      "updatedAt": "2025-08-16T11:05:53.254772Z",
+      "id": 176
+    },
+    {
+      "jobId": 42,
+      "keyword": "python",
+      "createdAt": "2025-08-29T19:32:53.254777Z",
+      "updatedAt": "2025-08-17T11:02:53.254781Z",
+      "id": 177
+    },
+    {
+      "jobId": 42,
+      "keyword": "testing",
+      "createdAt": "2025-08-18T17:06:53.254786Z",
+      "updatedAt": "2025-08-12T18:11:53.254790Z",
+      "id": 178
+    },
+    {
+      "jobId": 43,
+      "keyword": "react",
+      "createdAt": "2025-08-31T13:19:53.254810Z",
+      "updatedAt": "2025-08-12T04:13:53.254814Z",
+      "id": 179
+    },
+    {
+      "jobId": 43,
+      "keyword": "node.js",
+      "createdAt": "2025-08-20T01:44:53.254819Z",
+      "updatedAt": "2025-08-15T22:33:53.254823Z",
+      "id": 180
+    },
+    {
+      "jobId": 43,
+      "keyword": "ci/cd",
+      "createdAt": "2025-08-28T04:32:53.254827Z",
+      "updatedAt": "2025-08-27T04:12:53.254832Z",
+      "id": 181
+    },
+    {
+      "jobId": 43,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-23T15:26:53.254836Z",
+      "updatedAt": "2025-08-11T05:02:53.254840Z",
+      "id": 182
+    },
+    {
+      "jobId": 44,
+      "keyword": "agile",
+      "createdAt": "2025-08-14T11:15:53.254860Z",
+      "updatedAt": "2025-08-16T17:57:53.254865Z",
+      "id": 183
+    },
+    {
+      "jobId": 44,
+      "keyword": "react",
+      "createdAt": "2025-08-29T08:17:53.254869Z",
+      "updatedAt": "2025-08-13T19:45:53.254874Z",
+      "id": 184
+    },
+    {
+      "jobId": 44,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-30T05:33:53.254879Z",
+      "updatedAt": "2025-08-23T17:31:53.254883Z",
+      "id": 185
+    },
+    {
+      "jobId": 45,
+      "keyword": "graphql",
+      "createdAt": "2025-08-27T18:04:53.254913Z",
+      "updatedAt": "2025-08-24T07:03:53.254919Z",
+      "id": 186
+    },
+    {
+      "jobId": 45,
+      "keyword": "postgresql",
+      "createdAt": "2025-08-29T02:36:53.254923Z",
+      "updatedAt": "2025-08-12T09:48:53.254927Z",
+      "id": 187
+    },
+    {
+      "jobId": 45,
+      "keyword": "testing",
+      "createdAt": "2025-08-15T01:12:53.254932Z",
+      "updatedAt": "2025-08-24T16:10:53.254936Z",
+      "id": 188
+    },
+    {
+      "jobId": 45,
+      "keyword": "typescript",
+      "createdAt": "2025-08-19T18:37:53.254941Z",
+      "updatedAt": "2025-08-13T21:18:53.254945Z",
+      "id": 189
+    },
+    {
+      "jobId": 45,
+      "keyword": "docker",
+      "createdAt": "2025-08-28T14:07:53.254949Z",
+      "updatedAt": "2025-08-16T17:17:53.254954Z",
+      "id": 190
+    },
+    {
+      "jobId": 46,
+      "keyword": "docker",
+      "createdAt": "2025-08-29T21:13:53.254974Z",
+      "updatedAt": "2025-08-22T05:38:53.254978Z",
+      "id": 191
+    },
+    {
+      "jobId": 46,
+      "keyword": "spring boot",
+      "createdAt": "2025-08-19T02:52:53.254983Z",
+      "updatedAt": "2025-08-19T00:50:53.254987Z",
+      "id": 192
+    },
+    {
+      "jobId": 46,
+      "keyword": "sql",
+      "createdAt": "2025-08-27T11:04:53.254992Z",
+      "updatedAt": "2025-08-19T20:25:53.254996Z",
+      "id": 193
+    },
+    {
+      "jobId": 47,
+      "keyword": "aws",
+      "createdAt": "2025-08-14T21:19:53.255016Z",
+      "updatedAt": "2025-08-15T01:42:53.255021Z",
+      "id": 194
+    },
+    {
+      "jobId": 47,
+      "keyword": "graphql",
+      "createdAt": "2025-08-27T13:14:53.255025Z",
+      "updatedAt": "2025-08-13T12:05:53.255029Z",
+      "id": 195
+    },
+    {
+      "jobId": 47,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-11T14:56:53.255034Z",
+      "updatedAt": "2025-08-30T23:21:53.255038Z",
+      "id": 196
+    },
+    {
+      "jobId": 47,
+      "keyword": "docker",
+      "createdAt": "2025-08-15T09:12:53.255043Z",
+      "updatedAt": "2025-08-28T00:01:53.255047Z",
+      "id": 197
+    },
+    {
+      "jobId": 48,
+      "keyword": "azure",
+      "createdAt": "2025-08-25T09:08:53.255067Z",
+      "updatedAt": "2025-08-22T07:37:53.255071Z",
+      "id": 198
+    },
+    {
+      "jobId": 48,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-26T15:39:53.255076Z",
+      "updatedAt": "2025-08-27T03:33:53.255080Z",
+      "id": 199
+    },
+    {
+      "jobId": 48,
+      "keyword": "sql",
+      "createdAt": "2025-08-31T01:54:53.255084Z",
+      "updatedAt": "2025-08-18T23:20:53.255089Z",
+      "id": 200
+    },
+    {
+      "jobId": 49,
+      "keyword": "azure",
+      "createdAt": "2025-08-11T19:42:53.255109Z",
+      "updatedAt": "2025-08-13T03:46:53.255114Z",
+      "id": 201
+    },
+    {
+      "jobId": 49,
+      "keyword": "kubernetes",
+      "createdAt": "2025-08-18T01:41:53.255119Z",
+      "updatedAt": "2025-08-21T17:35:53.255125Z",
+      "id": 202
+    },
+    {
+      "jobId": 49,
+      "keyword": "java",
+      "createdAt": "2025-08-29T09:26:53.255133Z",
+      "updatedAt": "2025-08-30T06:53:53.255141Z",
+      "id": 203
+    },
+    {
+      "jobId": 49,
+      "keyword": "node.js",
+      "createdAt": "2025-08-29T12:45:53.255147Z",
+      "updatedAt": "2025-08-17T13:36:53.255151Z",
+      "id": 204
+    },
+    {
+      "jobId": 49,
+      "keyword": "testing",
+      "createdAt": "2025-08-27T12:45:53.255155Z",
+      "updatedAt": "2025-08-19T03:21:53.255160Z",
+      "id": 205
+    },
+    {
+      "jobId": 50,
+      "keyword": "c#",
+      "createdAt": "2025-08-24T09:17:53.255181Z",
+      "updatedAt": "2025-08-21T06:15:53.255185Z",
+      "id": 206
+    },
+    {
+      "jobId": 50,
+      "keyword": "react",
+      "createdAt": "2025-08-14T20:52:53.255190Z",
+      "updatedAt": "2025-08-29T18:40:53.255194Z",
+      "id": 207
+    },
+    {
+      "jobId": 50,
+      "keyword": "sql",
+      "createdAt": "2025-08-24T13:50:53.255198Z",
+      "updatedAt": "2025-08-22T09:36:53.255203Z",
+      "id": 208
+    }
+  ],
+  "activities": [
+    {
+      "jobId": 2,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-23T05:30:53.255657Z",
+      "updatedAt": "2025-08-11T06:32:53.255667Z",
+      "id": 1
+    },
+    {
+      "jobId": 3,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-23T14:12:53.255676Z",
+      "updatedAt": "2025-08-22T01:21:53.255681Z",
+      "id": 2
+    },
+    {
+      "jobId": 4,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-24T14:53:53.255686Z",
+      "updatedAt": "2025-08-17T08:41:53.255690Z",
+      "id": 3
+    },
+    {
+      "jobId": 5,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-22T08:59:53.255695Z",
+      "updatedAt": "2025-08-15T02:16:53.255699Z",
+      "id": 4
+    },
+    {
+      "jobId": 6,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-26T19:40:53.255704Z",
+      "updatedAt": "2025-08-29T11:03:53.255709Z",
+      "id": 5
+    },
+    {
+      "jobId": 7,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-13T03:58:53.255714Z",
+      "updatedAt": "2025-08-17T14:57:53.255718Z",
+      "id": 6
+    },
+    {
+      "jobId": 10,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-14T07:13:53.255726Z",
+      "updatedAt": "2025-08-29T21:55:53.255730Z",
+      "id": 7
+    },
+    {
+      "jobId": 12,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-17T07:51:53.255736Z",
+      "updatedAt": "2025-08-11T03:31:53.255740Z",
+      "id": 8
+    },
+    {
+      "jobId": 13,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-11T11:46:53.255745Z",
+      "updatedAt": "2025-08-31T02:59:53.255750Z",
+      "id": 9
+    },
+    {
+      "jobId": 18,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-15T04:15:53.255756Z",
+      "updatedAt": "2025-08-24T12:31:53.255761Z",
+      "id": 10
+    },
+    {
+      "jobId": 18,
+      "type": "status_change",
+      "category": "rejected",
+      "previousStatus": "applied",
+      "newStatus": "rejected",
+      "createdAt": "2025-08-24T06:28:53.255766Z",
+      "updatedAt": "2025-08-15T21:27:53.255770Z",
+      "id": 11
+    },
+    {
+      "jobId": 22,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-13T22:56:53.255776Z",
+      "updatedAt": "2025-08-25T16:32:53.255780Z",
+      "id": 12
+    },
+    {
+      "jobId": 22,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-18T16:04:53.255785Z",
+      "updatedAt": "2025-09-01T01:58:53.255789Z",
+      "id": 13
+    },
+    {
+      "jobId": 23,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-22T23:24:53.255794Z",
+      "updatedAt": "2025-08-29T08:25:53.255798Z",
+      "id": 14
+    },
+    {
+      "jobId": 24,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-21T17:04:53.255803Z",
+      "updatedAt": "2025-08-11T16:33:53.255807Z",
+      "id": 15
+    },
+    {
+      "jobId": 25,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-28T18:27:53.255812Z",
+      "updatedAt": "2025-08-23T18:28:53.255816Z",
+      "id": 16
+    },
+    {
+      "jobId": 27,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-15T14:29:53.255822Z",
+      "updatedAt": "2025-08-27T07:48:53.255828Z",
+      "id": 17
+    },
+    {
+      "jobId": 27,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-22T00:42:53.255833Z",
+      "updatedAt": "2025-08-15T21:32:53.255837Z",
+      "id": 18
+    },
+    {
+      "jobId": 29,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-19T19:22:53.255842Z",
+      "updatedAt": "2025-08-29T09:03:53.255846Z",
+      "id": 19
+    },
+    {
+      "jobId": 29,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-30T04:48:53.255851Z",
+      "updatedAt": "2025-08-16T20:39:53.255855Z",
+      "id": 20
+    },
+    {
+      "jobId": 30,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-25T00:40:53.255860Z",
+      "updatedAt": "2025-08-31T22:45:53.255864Z",
+      "id": 21
+    },
+    {
+      "jobId": 30,
+      "type": "status_change",
+      "category": "rejected",
+      "previousStatus": "applied",
+      "newStatus": "rejected",
+      "createdAt": "2025-08-20T21:56:53.255869Z",
+      "updatedAt": "2025-08-11T06:41:53.255873Z",
+      "id": 22
+    },
+    {
+      "jobId": 32,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-20T02:35:53.255878Z",
+      "updatedAt": "2025-08-14T05:50:53.255883Z",
+      "id": 23
+    },
+    {
+      "jobId": 33,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-14T06:21:53.255888Z",
+      "updatedAt": "2025-08-19T22:04:53.255893Z",
+      "id": 24
+    },
+    {
+      "jobId": 33,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-16T00:39:53.255898Z",
+      "updatedAt": "2025-08-23T07:45:53.255902Z",
+      "id": 25
+    },
+    {
+      "jobId": 33,
+      "type": "status_change",
+      "category": "offer",
+      "previousStatus": "interview",
+      "newStatus": "offer",
+      "createdAt": "2025-08-27T17:38:53.255907Z",
+      "updatedAt": "2025-08-23T15:49:53.255912Z",
+      "id": 26
+    },
+    {
+      "jobId": 34,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-14T05:46:53.255917Z",
+      "updatedAt": "2025-08-31T08:05:53.255921Z",
+      "id": 27
+    },
+    {
+      "jobId": 35,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-16T19:35:53.255926Z",
+      "updatedAt": "2025-08-23T04:27:53.255930Z",
+      "id": 28
+    },
+    {
+      "jobId": 35,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-29T06:34:53.255935Z",
+      "updatedAt": "2025-08-24T16:39:53.255939Z",
+      "id": 29
+    },
+    {
+      "jobId": 37,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-21T21:53:53.255944Z",
+      "updatedAt": "2025-08-26T04:15:53.255948Z",
+      "id": 30
+    },
+    {
+      "jobId": 37,
+      "type": "status_change",
+      "category": "interview",
+      "previousStatus": "applied",
+      "newStatus": "interview",
+      "createdAt": "2025-08-24T01:06:53.255953Z",
+      "updatedAt": "2025-08-24T18:09:53.255957Z",
+      "id": 31
+    },
+    {
+      "jobId": 37,
+      "type": "status_change",
+      "category": "offer",
+      "previousStatus": "interview",
+      "newStatus": "offer",
+      "createdAt": "2025-08-26T11:53:53.255964Z",
+      "updatedAt": "2025-08-25T21:52:53.255971Z",
+      "id": 32
+    },
+    {
+      "jobId": 38,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-25T14:35:53.255978Z",
+      "updatedAt": "2025-08-11T07:40:53.255986Z",
+      "id": 33
+    },
+    {
+      "jobId": 40,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-22T23:13:53.255995Z",
+      "updatedAt": "2025-08-15T08:57:53.256255Z",
+      "id": 34
+    },
+    {
+      "jobId": 42,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-13T07:46:53.256304Z",
+      "updatedAt": "2025-08-20T17:26:53.256314Z",
+      "id": 35
+    },
+    {
+      "jobId": 44,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-20T02:36:53.256325Z",
+      "updatedAt": "2025-08-12T14:31:53.256331Z",
+      "id": 36
+    },
+    {
+      "jobId": 44,
+      "type": "status_change",
+      "category": "rejected",
+      "previousStatus": "applied",
+      "newStatus": "rejected",
+      "createdAt": "2025-08-30T17:19:53.256336Z",
+      "updatedAt": "2025-08-31T12:34:53.256341Z",
+      "id": 37
+    },
+    {
+      "jobId": 45,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-27T15:19:53.256347Z",
+      "updatedAt": "2025-08-26T23:14:53.256352Z",
+      "id": 38
+    },
+    {
+      "jobId": 46,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-28T14:56:53.256358Z",
+      "updatedAt": "2025-08-13T03:51:53.256365Z",
+      "id": 39
+    },
+    {
+      "jobId": 47,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-17T19:06:53.256375Z",
+      "updatedAt": "2025-08-26T04:30:53.256380Z",
+      "id": 40
+    },
+    {
+      "jobId": 48,
+      "type": "status_change",
+      "category": "applied",
+      "previousStatus": "not applied",
+      "newStatus": "applied",
+      "createdAt": "2025-08-21T10:01:53.256386Z",
+      "updatedAt": "2025-08-13T03:54:53.256390Z",
+      "id": 41
+    },
+    {
+      "jobId": 48,
+      "type": "status_change",
+      "category": "rejected",
+      "previousStatus": "applied",
+      "newStatus": "rejected",
+      "createdAt": "2025-08-23T06:06:53.256397Z",
+      "updatedAt": "2025-08-18T03:14:53.256401Z",
+      "id": 42
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Bob Smith at event",
+      "createdAt": "2025-08-12T11:07:53.256639Z",
+      "updatedAt": "2025-08-21T09:07:53.256647Z",
+      "id": 43
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-31T21:44:53.256654Z",
+      "updatedAt": "2025-08-26T08:14:53.256663Z",
+      "id": 44
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Alice Johnson at event",
+      "createdAt": "2025-08-15T11:26:53.256669Z",
+      "updatedAt": "2025-08-29T08:39:53.256673Z",
+      "id": 45
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-13T03:09:53.256679Z",
+      "updatedAt": "2025-08-28T17:47:53.256690Z",
+      "id": 46
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Bob Smith at event",
+      "createdAt": "2025-08-11T04:39:53.256700Z",
+      "updatedAt": "2025-08-30T05:00:53.256706Z",
+      "id": 47
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Bob Smith at event",
+      "createdAt": "2025-08-13T02:52:53.256712Z",
+      "updatedAt": "2025-08-30T19:26:53.256716Z",
+      "id": 48
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Charlie Lee at event",
+      "createdAt": "2025-08-12T08:16:53.256722Z",
+      "updatedAt": "2025-08-28T00:57:53.256726Z",
+      "id": 49
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Charlie Lee at event",
+      "createdAt": "2025-08-30T12:19:53.256734Z",
+      "updatedAt": "2025-08-17T15:04:53.256739Z",
+      "id": 50
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Diana Patel at event",
+      "createdAt": "2025-08-26T18:50:53.256745Z",
+      "updatedAt": "2025-08-25T07:32:53.256749Z",
+      "id": 51
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-18T05:56:53.256755Z",
+      "updatedAt": "2025-08-29T16:45:53.256759Z",
+      "id": 52
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-24T02:21:53.256765Z",
+      "updatedAt": "2025-08-18T22:31:53.256773Z",
+      "id": 53
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Diana Patel at event",
+      "createdAt": "2025-08-29T01:11:53.256783Z",
+      "updatedAt": "2025-08-13T12:27:53.256787Z",
+      "id": 54
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Charlie Lee at event",
+      "createdAt": "2025-08-15T08:27:53.256793Z",
+      "updatedAt": "2025-08-12T23:48:53.256797Z",
+      "id": 55
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-20T16:28:53.256803Z",
+      "updatedAt": "2025-08-20T08:32:53.256808Z",
+      "id": 56
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-15T04:34:53.256814Z",
+      "updatedAt": "2025-08-12T05:57:53.256818Z",
+      "id": 57
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Alice Johnson at event",
+      "createdAt": "2025-08-30T05:08:53.256824Z",
+      "updatedAt": "2025-08-16T21:55:53.256829Z",
+      "id": 58
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Ethan Chen at event",
+      "createdAt": "2025-08-28T04:43:53.256834Z",
+      "updatedAt": "2025-08-14T12:50:53.256839Z",
+      "id": 59
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Bob Smith at event",
+      "createdAt": "2025-08-19T20:21:53.256845Z",
+      "updatedAt": "2025-08-25T04:47:53.256852Z",
+      "id": 60
+    },
+    {
+      "type": "activity",
+      "category": "linkedin_outreach",
+      "notes": "Connected with Diana Patel at event",
+      "createdAt": "2025-08-23T23:25:53.256874Z",
+      "updatedAt": "2025-08-23T07:17:53.256880Z",
+      "id": 61
+    },
+    {
+      "type": "activity",
+      "category": "networking_event",
+      "notes": "Connected with Bob Smith at event",
+      "createdAt": "2025-08-14T02:46:53.256886Z",
+      "updatedAt": "2025-08-19T17:22:53.256890Z",
+      "id": 62
+    }
+  ],
+  "goals": [
+    {
+      "type": "productive_activities",
+      "targetNumber": 10,
+      "frequencyDays": 1,
+      "createdAt": "2025-08-31T21:45:44.934Z",
+      "updatedAt": "2025-08-31T21:45:44.934Z",
+      "id": 1
+    },
+    {
+      "type": "applications_created",
+      "targetNumber": 5,
+      "frequencyDays": 1,
+      "createdAt": "2025-08-31T21:45:45.880Z",
+      "updatedAt": "2025-08-31T21:45:45.880Z",
+      "id": 2
+    },
+    {
+      "type": "applications_applied",
+      "targetNumber": 1,
+      "frequencyDays": 7,
+      "createdAt": "2025-08-31T21:45:46.616Z",
+      "updatedAt": "2025-08-31T21:45:46.616Z",
+      "id": 3
+    }
+  ],
+  "userKeywords": [
+    {
+      "keyword": "javascript",
+      "createdAt": "2025-09-01T02:30:16.111Z",
+      "updatedAt": "2025-09-01T02:30:16.111Z",
+      "id": 1
+    },
+    {
+      "keyword": "react",
+      "createdAt": "2025-09-01T02:41:51.039Z",
+      "updatedAt": "2025-09-01T02:41:51.039Z",
+      "id": 2
+    },
+    {
+      "keyword": "typescript",
+      "createdAt": "2025-09-01T02:41:52.119Z",
+      "updatedAt": "2025-09-01T02:41:52.119Z",
+      "id": 3
+    },
+    {
+      "keyword": "node.js",
+      "createdAt": "2025-09-01T02:41:52.628Z",
+      "updatedAt": "2025-09-01T02:41:52.628Z",
+      "id": 4
+    },
+    {
+      "keyword": "python",
+      "createdAt": "2025-09-01T02:42:04.742Z",
+      "updatedAt": "2025-09-01T02:42:04.742Z",
+      "id": 5
+    },
+    {
+      "keyword": "html",
+      "createdAt": "2025-09-01T02:42:05.567Z",
+      "updatedAt": "2025-09-01T02:42:05.567Z",
+      "id": 6
+    },
+    {
+      "keyword": "css",
+      "createdAt": "2025-09-01T02:42:06.197Z",
+      "updatedAt": "2025-09-01T02:42:06.197Z",
+      "id": 7
+    },
+    {
+      "keyword": "sql",
+      "createdAt": "2025-09-01T02:42:08.792Z",
+      "updatedAt": "2025-09-01T02:42:08.792Z",
+      "id": 8
+    },
+    {
+      "keyword": "mongodb",
+      "createdAt": "2025-09-01T02:42:08.958Z",
+      "updatedAt": "2025-09-01T02:42:08.958Z",
+      "id": 9
+    },
+    {
+      "keyword": "postgresql",
+      "createdAt": "2025-09-01T02:42:09.234Z",
+      "updatedAt": "2025-09-01T02:42:09.234Z",
+      "id": 10
+    },
+    {
+      "keyword": "mysql",
+      "createdAt": "2025-09-01T02:42:09.497Z",
+      "updatedAt": "2025-09-01T02:42:09.497Z",
+      "id": 11
+    },
+    {
+      "keyword": "aws",
+      "createdAt": "2025-09-01T02:42:10.195Z",
+      "updatedAt": "2025-09-01T02:42:10.195Z",
+      "id": 12
+    },
+    {
+      "keyword": "ci/cd",
+      "createdAt": "2025-09-01T02:42:15.647Z",
+      "updatedAt": "2025-09-01T02:42:15.647Z",
+      "id": 13
+    },
+    {
+      "keyword": "agile",
+      "createdAt": "2025-09-01T02:42:21.708Z",
+      "updatedAt": "2025-09-01T02:42:21.708Z",
+      "id": 14
+    },
+    {
+      "keyword": "jira",
+      "createdAt": "2025-09-01T02:42:24.861Z",
+      "updatedAt": "2025-09-01T02:42:24.861Z",
+      "id": 15
+    },
+    {
+      "keyword": "confluence",
+      "createdAt": "2025-09-01T02:42:27.015Z",
+      "updatedAt": "2025-09-01T02:42:27.015Z",
+      "id": 16
+    },
+    {
+      "keyword": "scrum",
+      "createdAt": "2025-09-01T02:42:33.349Z",
+      "updatedAt": "2025-09-01T02:42:33.349Z",
+      "id": 17
+    }
+  ]
+}

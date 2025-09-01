@@ -213,7 +213,10 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                   <Skeleton className="h-4 w-32" />
                   <div className="space-y-2">
                     {[...Array(8)].map((_, i) => (
-                      <div key={i} className="flex items-center justify-between p-2 border rounded">
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-2 border rounded"
+                      >
                         <Skeleton className="h-4 w-24" />
                         <Skeleton className="h-6 w-6 rounded" />
                       </div>
@@ -258,7 +261,10 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
               {/* Table rows skeleton */}
               <div className="space-y-2">
                 {[...Array(10)].map((_, i) => (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2 border-b border-muted last:border-b-0">
+                  <div
+                    key={i}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2 border-b border-muted last:border-b-0"
+                  >
                     <div className="flex items-center gap-2">
                       <Skeleton className="h-4 w-6" />
                       <Skeleton className="h-6 w-20" />

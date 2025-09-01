@@ -120,6 +120,55 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     fileInputRef.current?.click();
   };
 
+  const handleTestDataImport = async () => {
+    if (
+      !window.confirm(
+        "This will replace all existing data with test data including employers, jobs, keywords, activities, goals, and user keywords. Continue?"
+      )
+    ) {
+      return;
+    }
+
+    setIsImporting(true);
+    setError(null);
+    setImportResult(null);
+
+    try {
+      // Fetch the test data from public folder
+      const response = await fetch("/test-data.json");
+      if (!response.ok) {
+        throw new Error("Failed to fetch test data file");
+      }
+
+      const testDataText = await response.text();
+
+      // Create a File object from the fetched data
+      const blob = new Blob([testDataText], { type: "application/json" });
+      const file = new File([blob], "test-data.json", {
+        type: "application/json",
+      });
+
+      // Use the same import method as file uploads
+      const result = await ImportExportService.importFromFile(file);
+
+      setImportResult(result);
+      toast.success("Test data imported successfully!", {
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
+      });
+      onDataChanged();
+      await loadExportStats();
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to import test data";
+      setError(errorMessage);
+      toast.error("Import failed", {
+        description: errorMessage,
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Export Section */}
@@ -248,14 +297,26 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             className="hidden"
           />
 
-          <Button
-            onClick={triggerFileSelect}
-            disabled={isImporting}
-            className="flex items-center gap-2"
-          >
-            <FileText className="h-4 w-4" />
-            {isImporting ? "Importing..." : "Choose File to Import"}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={triggerFileSelect}
+              disabled={isImporting}
+              className="flex items-center gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              {isImporting ? "Importing..." : "Choose File to Import"}
+            </Button>
+            
+            <Button
+              onClick={handleTestDataImport}
+              disabled={isImporting}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Database className="h-4 w-4" />
+              {isImporting ? "Importing..." : "Import Test Data"}
+            </Button>
+          </div>
 
           {/* Import Results */}
           {importResult && (
