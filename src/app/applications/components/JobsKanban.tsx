@@ -79,6 +79,7 @@ interface JobsKanbanProps {
 export function JobsKanban({ showArchived }: JobsKanbanProps) {
   const [jobs, setJobs] = useState<JobWithKeywords[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const loadJobs = useCallback(async () => {
     try {
@@ -109,6 +110,10 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
       setLoading(false);
     }
   }, [showArchived]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     loadJobs();
@@ -164,14 +169,14 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
         // Sort favorites first, then by interest level descending, then by creation date (newest first)
         if (a.favorited && !b.favorited) return -1;
         if (!a.favorited && b.favorited) return 1;
-        
+
         // If both are favorited or both are not favorited, sort by interest level
         const aInterest = a.interestLevel || 0;
         const bInterest = b.interestLevel || 0;
         if (aInterest !== bInterest) {
           return bInterest - aInterest; // Descending order (highest interest first)
         }
-        
+
         // If interest levels are the same, sort by creation date (newest first)
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -179,7 +184,8 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
       });
   };
 
-  if (loading) {
+  // Prevent hydration mismatch by not showing loading state on server
+  if (!mounted || loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Skeleton for each status column */}

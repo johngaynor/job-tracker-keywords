@@ -60,6 +60,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
   const [userKeywords, setUserKeywords] = useState<UserKeyword[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const loadApplicationStats = async () => {
     try {
@@ -99,6 +100,10 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
       setLoading(false);
     }
   }, [viewMode]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     loadStats();
@@ -168,14 +173,15 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
     }
   };
 
-  if (loading) {
+  // Prevent hydration mismatch by not showing loading state on server
+  if (!mounted || loading) {
     if (viewMode === "user") {
       return (
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <Skeleton className="h-6 w-48" />
-              <Skeleton className="h-4 w-96 mt-2" />
+              <Skeleton className="h-4 w-full max-w-96 mt-2" />
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -232,12 +238,12 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
       return (
         <Card>
           <CardHeader>
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="space-y-1.5">
                 <Skeleton className="h-6 w-48" />
-                <Skeleton className="h-4 w-96" />
+                <Skeleton className="h-4 w-full max-w-96" />
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <div className="flex items-center space-x-2">
                   <Skeleton className="h-4 w-4" />
                   <Skeleton className="h-4 w-32" />
@@ -271,7 +277,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Skeleton className="h-4 w-12" />
-                      {Math.random() > 0.5 && <Skeleton className="h-5 w-8" />}
+                      {i % 2 === 0 && <Skeleton className="h-5 w-8" />}
                     </div>
                     <div className="flex items-center gap-2">
                       <Skeleton className="h-4 w-12" />
@@ -496,7 +502,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-1.5">
             <CardTitle>
               {applicationViewMode === "popular"
@@ -510,8 +516,8 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
             </CardDescription>
           </div>
 
-          {/* Toggle buttons to the right */}
-          <div className="flex items-center gap-4">
+          {/* Toggle buttons and controls */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="weighted-scores"

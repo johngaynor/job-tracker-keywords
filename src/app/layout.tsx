@@ -16,8 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Job Application Tracker",
-  description: "Track your job applications and analyze keywords.",
+  title: "Job Tracker",
+  description: "Search with Precision.",
+  icons: {
+    icon: "/favicon-96x96.png",
+    shortcut: "/favicon-96x96.png",
+    apple: [{ url: "/apple-icon-180x180.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({

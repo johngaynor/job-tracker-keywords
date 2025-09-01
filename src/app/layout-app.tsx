@@ -141,7 +141,6 @@ export default function AppLayout({ children }: LayoutProps) {
 
           {/* Main Content */}
           <div className="space-y-6">{children}</div>
-          
           {/* Footer */}
           <Footer />
         </div>

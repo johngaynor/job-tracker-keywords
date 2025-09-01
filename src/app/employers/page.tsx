@@ -86,6 +86,7 @@ export default function EmployersPage() {
   const [employers, setEmployers] = useState<EmployerWithStats[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [sortBy, setSortBy] = useState<"alphabetical" | "favorites">(
     "favorites"
   );
@@ -104,6 +105,10 @@ export default function EmployersPage() {
     notes: "",
     favorite: false,
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -333,7 +338,8 @@ export default function EmployersPage() {
       .join(" ");
   };
 
-  if (loading) {
+  // Prevent hydration mismatch by not showing loading state on server
+  if (!mounted || loading) {
     return (
       <div className="space-y-6">
         {/* Header skeleton */}
@@ -354,11 +360,11 @@ export default function EmployersPage() {
         {/* Main card skeleton */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <Skeleton className="h-6 w-40" />
-              <div className="flex items-center gap-3">
-                <Skeleton className="h-10 w-36" />
-                <Skeleton className="h-10 w-48" />
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Skeleton className="h-10 w-full sm:w-36" />
+                <Skeleton className="h-10 w-full sm:w-48" />
               </div>
             </div>
             <div className="relative mt-4">
@@ -446,9 +452,9 @@ export default function EmployersPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <CardTitle>Employer Directory</CardTitle>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button
                 onClick={() => setCreateDialogOpen(true)}
                 className="flex items-center gap-2"
@@ -462,7 +468,7 @@ export default function EmployersPage() {
                   setSortBy(value)
                 }
               >
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
