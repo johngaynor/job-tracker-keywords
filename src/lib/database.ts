@@ -1,9 +1,32 @@
 import Dexie, { Table } from "dexie";
 
+export type Industry =
+  | "SaaS"
+  | "Finance"
+  | "Healthcare"
+  | "Education"
+  | "E-Commerce"
+  | "Transportation"
+  | "Energy"
+  | "Telecommunications"
+  | "Government"
+  | "Defense"
+  | "Gaming"
+  | "Manufacturing"
+  | "Biotech"
+  | "Nonprofit"
+  | "Real Estate"
+  | "Agriculture"
+  | "Travel"
+  | "Cybersecurity"
+  | "Consulting"
+  | "Other";
+
 export interface Employer {
   id?: number;
   name: string;
   notes?: string;
+  industry?: Industry;
   favorited?: boolean;
   createdAt: Date;
   updatedAt: Date;

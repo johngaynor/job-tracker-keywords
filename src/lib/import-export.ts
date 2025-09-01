@@ -153,6 +153,7 @@ export class ImportExportService {
           const newId = await db.employers.add({
             name: employer.name,
             notes: employer.notes,
+            industry: employer.industry,
             favorited: employer.favorited || false,
             createdAt: new Date(employer.createdAt), // Preserve original timestamp
             updatedAt: new Date(employer.updatedAt), // Preserve original timestamp

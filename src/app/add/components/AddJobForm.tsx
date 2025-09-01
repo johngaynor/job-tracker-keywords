@@ -16,7 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { employerService, jobService, keywordService } from "@/lib/db-services";
-import { Employer } from "@/lib/database";
+import { Employer, Industry } from "@/lib/database";
 import { Plus, X } from "lucide-react";
 
 // Default keywords organized by category
@@ -96,6 +96,29 @@ const SOFT_SKILLS = [
   "organizational skills",
 ];
 
+const INDUSTRY_OPTIONS: Industry[] = [
+  "Agriculture",
+  "Biotech",
+  "Consulting",
+  "Cybersecurity",
+  "Defense",
+  "E-Commerce",
+  "Education",
+  "Energy",
+  "Finance",
+  "Gaming",
+  "Government",
+  "Healthcare",
+  "Manufacturing",
+  "Nonprofit",
+  "Other",
+  "Real Estate",
+  "SaaS",
+  "Telecommunications",
+  "Transportation",
+  "Travel",
+];
+
 interface AddJobFormProps {
   employers: Employer[];
   onJobAdded: () => void;
@@ -105,6 +128,9 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [selectedEmployer, setSelectedEmployer] = useState<string>("");
   const [newEmployerName, setNewEmployerName] = useState("");
   const [newEmployerNotes, setNewEmployerNotes] = useState("");
+  const [newEmployerIndustry, setNewEmployerIndustry] = useState<
+    Industry | undefined
+  >(undefined);
   const [jobTitle, setJobTitle] = useState("");
   const [jobNotes, setJobNotes] = useState("");
   const [jobLink, setJobLink] = useState("");
@@ -160,7 +186,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       if (selectedEmployer === "new" && newEmployerName.trim()) {
         employerId = await employerService.create(
           newEmployerName.trim(),
-          newEmployerNotes.trim() || undefined
+          newEmployerNotes.trim() || undefined,
+          newEmployerIndustry
         );
       } else if (selectedEmployer && selectedEmployer !== "new") {
         employerId = parseInt(selectedEmployer);
@@ -196,6 +223,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       setSelectedEmployer("");
       setNewEmployerName("");
       setNewEmployerNotes("");
+      setNewEmployerIndustry(undefined);
       setJobTitle("");
       setJobNotes("");
       setJobLink("");
@@ -242,15 +270,37 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
 
           {selectedEmployer === "new" && (
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="newEmployer">New Employer Name</Label>
-                <Input
-                  id="newEmployer"
-                  value={newEmployerName}
-                  onChange={(e) => setNewEmployerName(e.target.value)}
-                  placeholder="Enter employer name"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="newEmployer">New Employer Name</Label>
+                  <Input
+                    id="newEmployer"
+                    value={newEmployerName}
+                    onChange={(e) => setNewEmployerName(e.target.value)}
+                    placeholder="Enter employer name"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="employerIndustry">Industry (optional)</Label>
+                  <Select
+                    value={newEmployerIndustry || ""}
+                    onValueChange={(value) =>
+                      setNewEmployerIndustry(value as Industry)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select industry" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {INDUSTRY_OPTIONS.map((industry) => (
+                        <SelectItem key={industry} value={industry}>
+                          {industry}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="employerNotes">Employer Notes (optional)</Label>

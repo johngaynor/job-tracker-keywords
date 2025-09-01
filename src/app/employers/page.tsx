@@ -212,6 +212,7 @@ export default function EmployersPage() {
                   <TableRow>
                     <TableHead className="w-[50px] text-center">⭐</TableHead>
                     <TableHead>Company</TableHead>
+                    <TableHead>Industry</TableHead>
                     <TableHead>Status Breakdown</TableHead>
                     <TableHead>Last Activity</TableHead>
                   </TableRow>
@@ -240,6 +241,11 @@ export default function EmployersPage() {
                           <Building2 className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium">{employer.name}</span>
                         </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {employer.industry || "—"}
+                        </span>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">

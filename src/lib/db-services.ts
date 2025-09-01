@@ -1,12 +1,25 @@
-import { db, Employer, Job, Keyword, Activity, Goal } from "./database";
+import {
+  db,
+  Employer,
+  Job,
+  Keyword,
+  Activity,
+  Goal,
+  Industry,
+} from "./database";
 
 // Employer operations
 export const employerService = {
-  async create(name: string, notes?: string): Promise<number> {
+  async create(
+    name: string,
+    notes?: string,
+    industry?: Industry
+  ): Promise<number> {
     const now = new Date();
     return await db.employers.add({
       name,
       notes,
+      industry,
       favorited: false,
       createdAt: now,
       updatedAt: now,
