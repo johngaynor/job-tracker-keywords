@@ -37,6 +37,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     keywordsImported: number;
     activitiesImported: number;
     goalsImported: number;
+    userKeywordsImported: number;
     skipped: number;
   } | null>(null);
   const [exportStats, setExportStats] = useState<{
@@ -45,6 +46,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     totalKeywords: number;
     totalActivities: number;
     totalGoals: number;
+    totalUserKeywords: number;
     lastModified?: Date;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -91,7 +93,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
 
       setImportResult(result);
       toast.success("Data imported successfully!", {
-        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, and ${result.goalsImported} goals.`,
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
       });
       onDataChanged();
       await loadExportStats();
@@ -178,6 +180,15 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </div>
                 <div className="text-2xl font-bold">
                   {exportStats.totalGoals}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+                  <Hash className="h-4 w-4" />
+                  User Keywords
+                </div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalUserKeywords}
                 </div>
               </div>
             </div>
@@ -293,6 +304,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   </div>
                   <div className="font-medium">
                     {importResult.goalsImported} imported
+                  </div>
+                </div>
+                <div>
+                  <div className="text-green-600 dark:text-green-400">
+                    User Keywords
+                  </div>
+                  <div className="font-medium">
+                    {importResult.userKeywordsImported} imported
                   </div>
                 </div>
               </div>

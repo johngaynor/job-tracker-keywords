@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -14,85 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { keywordService, userKeywordService } from "@/lib/db-services";
 import { UserKeyword } from "@/lib/database";
+import { TECHNICAL_SKILLS, SOFT_SKILLS } from "@/lib/constants";
 import { BarChart3, TrendingUp, Plus, X } from "lucide-react";
 import { toast } from "sonner";
-
-// Default keywords organized by category
-const TECHNICAL_SKILLS = [
-  "react",
-  "javascript",
-  "typescript",
-  "node.js",
-  "python",
-  "java",
-  "c#",
-  "php",
-  "html",
-  "css",
-  "sql",
-  "mongodb",
-  "postgresql",
-  "mysql",
-  "aws",
-  "azure",
-  "docker",
-  "kubernetes",
-  "git",
-  "rest api",
-  "graphql",
-  "microservices",
-  "ci/cd",
-  "testing",
-  "jest",
-  "cypress",
-  "selenium",
-  "linux",
-  "windows",
-  "macos",
-  "angular",
-  "vue.js",
-  "express.js",
-  "spring",
-  "django",
-  "flask",
-  "laravel",
-  "ruby on rails",
-  "golang",
-  "rust",
-  "swift",
-  "kotlin",
-  "flutter",
-  "react native",
-  "terraform",
-  "jenkins",
-];
-
-const SOFT_SKILLS = [
-  "communication",
-  "teamwork",
-  "leadership",
-  "problem solving",
-  "analytical thinking",
-  "project management",
-  "remote work",
-  "collaboration",
-  "mentoring",
-  "training",
-  "agile",
-  "scrum",
-  "adaptability",
-  "creativity",
-  "time management",
-  "critical thinking",
-  "decision making",
-  "conflict resolution",
-  "presentation skills",
-  "customer service",
-  "strategic planning",
-  "multitasking",
-  "attention to detail",
-  "organizational skills",
-];
 
 interface KeywordStat {
   keyword: string;
@@ -146,7 +70,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
     }
   };
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     setLoading(true);
     try {
       if (viewMode === "application") {
@@ -157,11 +81,11 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [viewMode]);
 
   useEffect(() => {
     loadStats();
-  }, [viewMode]);
+  }, [loadStats]);
 
   const handleAddKeyword = async () => {
     if (!newKeyword.trim()) {

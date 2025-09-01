@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { employerService, jobService } from "@/lib/db-services";
-import { Employer, Job, Industry } from "@/lib/database";
+import { Employer, Industry } from "@/lib/database";
 import {
   Search,
   Building2,

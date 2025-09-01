@@ -7,7 +7,7 @@ import { KeywordStats } from "./components/KeywordStats";
 
 type ViewMode = "user" | "application";
 
-export default function StatsPage() {
+export default function KeywordsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("application");
 
   return (

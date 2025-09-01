@@ -336,7 +336,7 @@ export const keywordService = {
 export const userKeywordService = {
   async create(keyword: string): Promise<number> {
     const now = new Date();
-    
+
     // Check if keyword already exists
     const existing = await db.userKeywords
       .where("keyword")

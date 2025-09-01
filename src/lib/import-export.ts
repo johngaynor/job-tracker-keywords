@@ -4,8 +4,9 @@ import {
   keywordService,
   activityService,
   goalService,
+  userKeywordService,
 } from "./db-services";
-import { Employer, Job, Keyword, Activity, Goal, db } from "./database";
+import { Employer, Job, Keyword, Activity, Goal, UserKeyword, db } from "./database";
 
 export interface ExportData {
   version: string;
@@ -15,6 +16,7 @@ export interface ExportData {
   keywords: Keyword[];
   activities: Activity[];
   goals?: Goal[]; // Optional for backward compatibility
+  userKeywords?: UserKeyword[]; // Optional for backward compatibility
 }
 
 export class ImportExportService {
@@ -29,12 +31,13 @@ export class ImportExportService {
       const startTime = performance.now();
 
       // Use direct database access for better performance
-      const [employers, jobs, keywords, activities, goals] = await Promise.all([
+      const [employers, jobs, keywords, activities, goals, userKeywords] = await Promise.all([
         db.employers.toArray(),
         db.jobs.toArray(),
         db.keywords.toArray(),
         db.activities.toArray(),
         db.goals.toArray(),
+        db.userKeywords.toArray(),
       ]);
 
       const endTime = performance.now();
@@ -44,7 +47,7 @@ export class ImportExportService {
         )}ms`
       );
       console.log(
-        `Exported: ${employers.length} employers, ${jobs.length} jobs, ${keywords.length} keywords, ${activities.length} activities, ${goals.length} goals`
+        `Exported: ${employers.length} employers, ${jobs.length} jobs, ${keywords.length} keywords, ${activities.length} activities, ${goals.length} goals, ${userKeywords.length} user keywords`
       );
 
       return {
@@ -55,6 +58,7 @@ export class ImportExportService {
         keywords,
         activities,
         goals: goals || [], // Ensure goals is always an array
+        userKeywords: userKeywords || [], // Ensure userKeywords is always an array
       };
     } catch (error) {
       console.error("Error exporting data:", error);
@@ -127,6 +131,7 @@ export class ImportExportService {
     keywordsImported: number;
     activitiesImported: number;
     goalsImported: number;
+    userKeywordsImported: number;
     skipped: number;
   }> {
     try {
@@ -138,6 +143,7 @@ export class ImportExportService {
       let keywordsImported = 0;
       let activitiesImported = 0;
       let goalsImported = 0;
+      let userKeywordsImported = 0;
       let skipped = 0;
 
       // Always clear existing data before importing
@@ -267,12 +273,24 @@ export class ImportExportService {
         }
       }
 
+      // Import user keywords
+      for (const userKeyword of data.userKeywords || []) {
+        try {
+          await userKeywordService.create(userKeyword.keyword);
+          userKeywordsImported++;
+        } catch (error) {
+          console.warn(`Failed to import user keyword: ${userKeyword.keyword}`, error);
+          skipped++;
+        }
+      }
+
       return {
         employersImported,
         jobsImported,
         keywordsImported,
         activitiesImported,
         goalsImported,
+        userKeywordsImported,
         skipped,
       };
     } catch (error) {
@@ -290,6 +308,7 @@ export class ImportExportService {
     keywordsImported: number;
     activitiesImported: number;
     goalsImported: number;
+    userKeywordsImported: number;
     skipped: number;
   }> {
     return new Promise((resolve, reject) => {
@@ -370,7 +389,7 @@ export class ImportExportService {
     // Use Dexie transaction for efficient bulk deletion
     await db.transaction(
       "rw",
-      [db.activities, db.keywords, db.jobs, db.employers, db.goals],
+      [db.activities, db.keywords, db.jobs, db.employers, db.goals, db.userKeywords],
       async () => {
         console.log("Clearing activities...");
         await db.activities.clear();
@@ -391,6 +410,10 @@ export class ImportExportService {
         console.log("Clearing goals...");
         await db.goals.clear();
         console.log("Goals cleared ✓");
+
+        console.log("Clearing user keywords...");
+        await db.userKeywords.clear();
+        console.log("User keywords cleared ✓");
       }
     );
 
@@ -406,15 +429,17 @@ export class ImportExportService {
     totalKeywords: number;
     totalActivities: number;
     totalGoals: number;
+    totalUserKeywords: number;
     lastModified?: Date;
   }> {
     try {
-      const [employers, jobs, keywords, activities, goals] = await Promise.all([
+      const [employers, jobs, keywords, activities, goals, userKeywords] = await Promise.all([
         employerService.getAll(),
         jobService.getAll(),
         keywordService.getAll(),
         activityService.getAll(),
         goalService.getAll(),
+        userKeywordService.getAll(),
       ]);
 
       // Find the most recent update
@@ -424,6 +449,7 @@ export class ImportExportService {
         ...keywords,
         ...activities,
         ...goals,
+        ...userKeywords,
       ]
         .map((item) => new Date(item.updatedAt))
         .sort((a, b) => b.getTime() - a.getTime())[0];
@@ -434,6 +460,7 @@ export class ImportExportService {
         totalKeywords: keywords.length,
         totalActivities: activities.length,
         totalGoals: goals.length,
+        totalUserKeywords: userKeywords.length,
         lastModified,
       };
     } catch (error) {
