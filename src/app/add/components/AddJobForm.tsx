@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { employerService, jobService, keywordService } from "@/lib/db-services";
 import { Employer, Industry } from "@/lib/database";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Star } from "lucide-react";
 
 // Default keywords organized by category
 const TECHNICAL_SKILLS = [
@@ -131,12 +131,14 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
   const [newEmployerIndustry, setNewEmployerIndustry] = useState<
     Industry | undefined
   >(undefined);
+  const [newEmployerFavorite, setNewEmployerFavorite] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [jobNotes, setJobNotes] = useState("");
   const [jobLink, setJobLink] = useState("");
   const [jobReferenceNumber, setJobReferenceNumber] = useState("");
   const [jobSalaryEstimate, setJobSalaryEstimate] = useState("");
   const [jobInterestLevel, setJobInterestLevel] = useState<string>("");
+  const [jobFavorite, setJobFavorite] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [newKeyword, setNewKeyword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -187,7 +189,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         employerId = await employerService.create(
           newEmployerName.trim(),
           newEmployerNotes.trim() || undefined,
-          newEmployerIndustry
+          newEmployerIndustry,
+          newEmployerFavorite
         );
       } else if (selectedEmployer && selectedEmployer !== "new") {
         employerId = parseInt(selectedEmployer);
@@ -202,7 +205,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
         jobLink.trim() || undefined,
         jobReferenceNumber.trim() || undefined,
         jobSalaryEstimate.trim() || undefined,
-        jobInterestLevel ? parseInt(jobInterestLevel) : undefined
+        jobInterestLevel ? parseInt(jobInterestLevel) : undefined,
+        jobFavorite
       );
 
       // Add keywords
@@ -224,12 +228,14 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
       setNewEmployerName("");
       setNewEmployerNotes("");
       setNewEmployerIndustry(undefined);
+      setNewEmployerFavorite(false);
       setJobTitle("");
       setJobNotes("");
       setJobLink("");
       setJobReferenceNumber("");
       setJobSalaryEstimate("");
       setJobInterestLevel("");
+      setJobFavorite(false);
       setKeywords([]);
       setNewKeyword("");
 
@@ -270,7 +276,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
 
           {selectedEmployer === "new" && (
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="newEmployer">New Employer Name</Label>
                   <Input
@@ -301,6 +307,35 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="space-y-2">
+                  <Label>Favorite Employer?</Label>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={newEmployerFavorite ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setNewEmployerFavorite(true)}
+                      className="flex items-center gap-1"
+                    >
+                      <Star
+                        className={`h-4 w-4 ${
+                          newEmployerFavorite ? "fill-current" : ""
+                        }`}
+                      />
+                      Favorite
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={!newEmployerFavorite ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setNewEmployerFavorite(false)}
+                      className="flex items-center gap-1"
+                    >
+                      <Star className="h-4 w-4" />
+                      Normal
+                    </Button>
+                  </div>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="employerNotes">Employer Notes (optional)</Label>
@@ -315,8 +350,8 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
             </div>
           )}
 
-          {/* Row 1: Employer (already above), Job Title, Job Link */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Row 1: Job Title, Job Link, Job Favorite */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="jobTitle">Job Title</Label>
               <Input
@@ -336,6 +371,33 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 onChange={(e) => setJobLink(e.target.value)}
                 placeholder="https://company.com/job-posting"
               />
+            </div>
+            <div className="space-y-2">
+              <Label>Favorite Application?</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={jobFavorite ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setJobFavorite(true)}
+                  className="flex items-center gap-1"
+                >
+                  <Star
+                    className={`h-4 w-4 ${jobFavorite ? "fill-current" : ""}`}
+                  />
+                  Favorite
+                </Button>
+                <Button
+                  type="button"
+                  variant={!jobFavorite ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setJobFavorite(false)}
+                  className="flex items-center gap-1"
+                >
+                  <Star className="h-4 w-4" />
+                  Normal
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -405,7 +467,7 @@ export function AddJobForm({ employers, onJobAdded }: AddJobFormProps) {
                 {/* Add keyword form */}
                 <div className="flex gap-2 items-end">
                   <div className="flex-1">
-                    <Label htmlFor="keyword" className="text-sm">
+                    <Label htmlFor="keyword" className="text-sm pb-2">
                       Keyword
                     </Label>
                     <Input

@@ -13,14 +13,15 @@ export const employerService = {
   async create(
     name: string,
     notes?: string,
-    industry?: Industry
+    industry?: Industry,
+    favorited?: boolean
   ): Promise<number> {
     const now = new Date();
     return await db.employers.add({
       name,
       notes,
       industry,
-      favorited: false,
+      favorited: favorited || false,
       createdAt: now,
       updatedAt: now,
     });
@@ -79,7 +80,8 @@ export const jobService = {
     link?: string,
     referenceNumber?: string,
     salaryEstimate?: string,
-    interestLevel?: number
+    interestLevel?: number,
+    favorited?: boolean
   ): Promise<number> {
     const now = new Date();
     return await db.jobs.add({
@@ -91,7 +93,7 @@ export const jobService = {
       salaryEstimate,
       interestLevel,
       archived: false,
-      favorited: false,
+      favorited: favorited || false,
       status: "not applied",
       createdAt: now,
       updatedAt: now,
