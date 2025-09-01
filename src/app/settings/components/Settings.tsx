@@ -26,12 +26,7 @@ import { ImportExport } from "./ImportExport";
 import { ImportExportService } from "@/lib/import-export";
 import { goalService } from "@/lib/db-services";
 import { Goal } from "@/lib/database";
-import {
-  Trash2,
-  AlertTriangle,
-  Settings as SettingsIcon,
-  Target,
-} from "lucide-react";
+import { Trash2, AlertTriangle, Target } from "lucide-react";
 
 interface SettingsProps {
   onDataChanged: () => void;
@@ -286,7 +281,6 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 mb-6">
-        <SettingsIcon className="h-6 w-6" />
         <h2 className="text-2xl font-bold">Settings</h2>
       </div>
 
