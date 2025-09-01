@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,7 +40,6 @@ import { Employer, Job, Industry } from "@/lib/database";
 import {
   Search,
   Building2,
-  Briefcase,
   Calendar,
   Star,
   Eye,
@@ -85,7 +83,6 @@ interface EmployerWithStats extends Employer {
 
 export default function EmployersPage() {
   const [employers, setEmployers] = useState<EmployerWithStats[]>([]);
-  const [jobs, setJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<"alphabetical" | "favorites">(
@@ -161,7 +158,6 @@ export default function EmployersPage() {
       );
 
       setEmployers(employersWithStats);
-      setJobs(jobsData);
     } catch (error) {
       console.error("Error loading employers data:", error);
     } finally {

@@ -459,55 +459,6 @@ export default function Dashboard() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "not applied":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
-      case "applied":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-      case "interview":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
-      case "offer":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
-      case "rejected":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
-      case "withdrawn":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
-    }
-  };
-
-  const formatStatusLabel = (status: string) => {
-    const statusMap: Record<string, string> = {
-      "not applied": "Not Applied",
-      applied: "Applied",
-      interview: "Interview",
-      offer: "Offer",
-      rejected: "Rejected",
-      withdrawn: "Withdrawn",
-    };
-    return (
-      statusMap[status] ||
-      status
-        .split(" ")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
-    );
-  };
-
-  const getChartColorByLabel = (statusLabel: string) => {
-    const statusMap: Record<string, string> = {
-      "Not Applied": "#6B7280",
-      Applied: "#3B82F6",
-      Interview: "#F59E0B",
-      Offer: "#10B981",
-      Rejected: "#EF4444",
-      Withdrawn: "#8B5CF6",
-    };
-    return statusMap[statusLabel] || "#6B7280";
-  };
-
   // Chart keys for the new cumulative chart
   const chartKeys = [
     "Applications Created",

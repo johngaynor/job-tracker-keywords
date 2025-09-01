@@ -19,7 +19,6 @@ import {
 import {
   Briefcase,
   BarChart3,
-  Plus,
   Settings,
   Info,
   LayoutDashboard,

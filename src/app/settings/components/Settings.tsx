@@ -269,67 +269,6 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
     }
   };
 
-  // Alternative simpler method for testing
-  const handleDirectWipe = async () => {
-    console.log("handleDirectWipe: Starting direct database clear...");
-    setIsWiping(true);
-
-    try {
-      // Import the database and clear tables directly
-      const { db } = await import("@/lib/database");
-
-      console.log("Direct clear: Using efficient bulk deletion...");
-
-      // Use Dexie's transaction for atomic operations
-      await db.transaction(
-        "rw",
-        [db.activities, db.keywords, db.jobs, db.employers, db.goals],
-        async () => {
-          console.log("Direct clear: Clearing activities...");
-          await db.activities.clear();
-          console.log("Direct clear: Activities cleared ✓");
-
-          console.log("Direct clear: Clearing keywords...");
-          await db.keywords.clear();
-          console.log("Direct clear: Keywords cleared ✓");
-
-          console.log("Direct clear: Clearing jobs...");
-          await db.jobs.clear();
-          console.log("Direct clear: Jobs cleared ✓");
-
-          console.log("Direct clear: Clearing employers...");
-          await db.employers.clear();
-          console.log("Direct clear: Employers cleared ✓");
-
-          console.log("Direct clear: Clearing goals...");
-          await db.goals.clear();
-          console.log("Direct clear: Goals cleared ✓");
-        }
-      );
-
-      console.log("Direct clear: Transaction completed successfully!");
-
-      setWipeComplete(true);
-      toast.success("All data deleted successfully (direct method)!", {
-        description: "Your database has been completely wiped.",
-      });
-      onDataChanged();
-
-      // Hide the success message after 3 seconds
-      setTimeout(() => {
-        setWipeComplete(false);
-      }, 3000);
-    } catch (error) {
-      console.error("Error in direct wipe:", error);
-      toast.error("Failed to delete data (direct method)", {
-        description: "Please try again.",
-      });
-    } finally {
-      setIsWiping(false);
-      setShowWipeConfirm(false);
-    }
-  };
-
   const confirmWipe = () => {
     setShowWipeConfirm(true);
   };
