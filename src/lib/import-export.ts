@@ -6,7 +6,15 @@ import {
   goalService,
   userKeywordService,
 } from "./db-services";
-import { Employer, Job, Keyword, Activity, Goal, UserKeyword, db } from "./database";
+import {
+  Employer,
+  Job,
+  Keyword,
+  Activity,
+  Goal,
+  UserKeyword,
+  db,
+} from "./database";
 
 export interface ExportData {
   version: string;
@@ -31,14 +39,15 @@ export class ImportExportService {
       const startTime = performance.now();
 
       // Use direct database access for better performance
-      const [employers, jobs, keywords, activities, goals, userKeywords] = await Promise.all([
-        db.employers.toArray(),
-        db.jobs.toArray(),
-        db.keywords.toArray(),
-        db.activities.toArray(),
-        db.goals.toArray(),
-        db.userKeywords.toArray(),
-      ]);
+      const [employers, jobs, keywords, activities, goals, userKeywords] =
+        await Promise.all([
+          db.employers.toArray(),
+          db.jobs.toArray(),
+          db.keywords.toArray(),
+          db.activities.toArray(),
+          db.goals.toArray(),
+          db.userKeywords.toArray(),
+        ]);
 
       const endTime = performance.now();
       console.log(
@@ -279,7 +288,10 @@ export class ImportExportService {
           await userKeywordService.create(userKeyword.keyword);
           userKeywordsImported++;
         } catch (error) {
-          console.warn(`Failed to import user keyword: ${userKeyword.keyword}`, error);
+          console.warn(
+            `Failed to import user keyword: ${userKeyword.keyword}`,
+            error
+          );
           skipped++;
         }
       }
@@ -389,7 +401,14 @@ export class ImportExportService {
     // Use Dexie transaction for efficient bulk deletion
     await db.transaction(
       "rw",
-      [db.activities, db.keywords, db.jobs, db.employers, db.goals, db.userKeywords],
+      [
+        db.activities,
+        db.keywords,
+        db.jobs,
+        db.employers,
+        db.goals,
+        db.userKeywords,
+      ],
       async () => {
         console.log("Clearing activities...");
         await db.activities.clear();
@@ -433,14 +452,15 @@ export class ImportExportService {
     lastModified?: Date;
   }> {
     try {
-      const [employers, jobs, keywords, activities, goals, userKeywords] = await Promise.all([
-        employerService.getAll(),
-        jobService.getAll(),
-        keywordService.getAll(),
-        activityService.getAll(),
-        goalService.getAll(),
-        userKeywordService.getAll(),
-      ]);
+      const [employers, jobs, keywords, activities, goals, userKeywords] =
+        await Promise.all([
+          employerService.getAll(),
+          jobService.getAll(),
+          keywordService.getAll(),
+          activityService.getAll(),
+          goalService.getAll(),
+          userKeywordService.getAll(),
+        ]);
 
       // Find the most recent update
       const lastModified = [

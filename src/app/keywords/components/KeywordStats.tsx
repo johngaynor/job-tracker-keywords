@@ -38,9 +38,9 @@ interface KeywordStatsProps {
 export function KeywordStats({ viewMode }: KeywordStatsProps) {
   // Application keywords state
   const [popularStats, setPopularStats] = useState<KeywordStat[]>([]);
-  const [targetedStats, setTargetedStats] = useState<WeightedKeywordStat[]>([]);
+  const [missingSkillsStats, setMissingSkillsStats] = useState<WeightedKeywordStat[]>([]);
   const [applicationViewMode, setApplicationViewMode] = useState<
-    "popular" | "targeted"
+    "popular" | "missing"
   >("popular");
 
   // User keywords state
@@ -50,12 +50,12 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
 
   const loadApplicationStats = async () => {
     try {
-      const [popular, targeted] = await Promise.all([
+      const [popular, missingSkills] = await Promise.all([
         keywordService.getKeywordStats(),
         keywordService.getWeightedKeywordStats(),
       ]);
       setPopularStats(popular);
-      setTargetedStats(targeted);
+      setMissingSkillsStats(missingSkills);
     } catch (error) {
       console.error("Error loading keyword stats:", error);
     }
@@ -343,7 +343,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
 
   // Application view (existing functionality)
   const currentStats =
-    applicationViewMode === "popular" ? popularStats : targetedStats;
+    applicationViewMode === "popular" ? popularStats : missingSkillsStats;
 
   return (
     <div className="space-y-6">
@@ -358,13 +358,13 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
           Popular
         </Button>
         <Button
-          variant={applicationViewMode === "targeted" ? "default" : "outline"}
+          variant={applicationViewMode === "missing" ? "default" : "outline"}
           size="sm"
-          onClick={() => setApplicationViewMode("targeted")}
+          onClick={() => setApplicationViewMode("missing")}
           className="flex items-center gap-2"
         >
           <TrendingUp className="h-4 w-4" />
-          Targeted
+          Missing Skills
         </Button>
       </div>
 
