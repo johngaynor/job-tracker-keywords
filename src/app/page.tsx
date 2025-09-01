@@ -33,7 +33,13 @@ import {
   Tooltip as RechartsTooltip,
 } from "recharts";
 
-type TimeRange = "today" | "week" | "last7days" | "month" | "last30days" | "all";
+type TimeRange =
+  | "today"
+  | "week"
+  | "last7days"
+  | "month"
+  | "last30days"
+  | "all";
 
 interface DashboardStats {
   applicationsCreated: number;

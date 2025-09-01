@@ -113,7 +113,7 @@ export class ImportExportService {
       const now = new Date();
       const dateStr = now.toISOString().split("T")[0]; // YYYY-MM-DD
       const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-"); // HH-MM-SS
-      a.download = `employer-keywords-export-${dateStr}-${timeStr}.json`;
+      a.download = `job-applications-tracker-${dateStr}-${timeStr}.json`;
 
       document.body.appendChild(a);
       a.click();
