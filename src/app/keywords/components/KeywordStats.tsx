@@ -642,7 +642,7 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                         className={`h-2 rounded-full ${
                           applicationViewMode === "popular"
                             ? "bg-blue-200 dark:bg-blue-800"
-                            : "bg-green-200 dark:bg-green-800"
+                            : "bg-red-200 dark:bg-red-800"
                         }`}
                         style={{
                           width: `${Math.min(
