@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -168,13 +169,116 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
   };
 
   if (loading) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center py-8">
-          <div className="text-muted-foreground">Loading...</div>
-        </CardContent>
-      </Card>
-    );
+    if (viewMode === "user") {
+      return (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-4 w-96 mt-2" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Left column skeleton */}
+                <div className="space-y-4">
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <Skeleton className="h-4 w-24 mb-2" />
+                      <Skeleton className="h-10 w-full" />
+                    </div>
+                    <Skeleton className="h-10 w-20" />
+                  </div>
+                  <div className="space-y-3">
+                    <Skeleton className="h-4 w-32" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-28" />
+                      <div className="flex flex-wrap gap-1">
+                        {[...Array(6)].map((_, i) => (
+                          <Skeleton key={i} className="h-6 w-16" />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-24" />
+                      <div className="flex flex-wrap gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Skeleton key={i} className="h-6 w-20" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Right column skeleton */}
+                <div className="space-y-3">
+                  <Skeleton className="h-4 w-32" />
+                  <div className="space-y-2">
+                    {[...Array(8)].map((_, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 border rounded">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-6 w-6 rounded" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    } else {
+      return (
+        <Card>
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div className="space-y-1.5">
+                <Skeleton className="h-6 w-48" />
+                <Skeleton className="h-4 w-96" />
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center space-x-2">
+                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-4 rounded-full" />
+                </div>
+                <div className="flex gap-2">
+                  <Skeleton className="h-8 w-20" />
+                  <Skeleton className="h-8 w-28" />
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {/* Table header skeleton */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm font-medium border-b pb-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              {/* Table rows skeleton */}
+              <div className="space-y-2">
+                {[...Array(10)].map((_, i) => (
+                  <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2 border-b border-muted last:border-b-0">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-6" />
+                      <Skeleton className="h-6 w-20" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-12" />
+                      {Math.random() > 0.5 && <Skeleton className="h-5 w-8" />}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-12" />
+                      <Skeleton className="h-2 w-full max-w-20" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
   }
 
   if (viewMode === "user") {
@@ -493,9 +597,14 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span>{stat.jobCount} job{stat.jobCount !== 1 ? "s" : ""}</span>
+                      <span>
+                        {stat.jobCount} job{stat.jobCount !== 1 ? "s" : ""}
+                      </span>
                       {stat.starredJobCount > 0 && (
-                        <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1 text-xs"
+                        >
                           <StarIcon className="h-3 w-3 text-yellow-500 fill-yellow-500" />
                           {stat.starredJobCount}
                         </Badge>
