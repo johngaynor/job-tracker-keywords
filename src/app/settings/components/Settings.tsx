@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -44,6 +45,7 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
 
   // Goals state
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [goalsLoading, setGoalsLoading] = useState(true);
   const [goalInputs, setGoalInputs] = useState<{
     [key: string]: {
       targetNumber: string;
@@ -60,6 +62,7 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
 
   const loadGoals = useCallback(async () => {
     try {
+      setGoalsLoading(true);
       const allGoals = await goalService.getAll();
       setGoals(allGoals);
 
@@ -86,6 +89,8 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
     } catch (error) {
       console.error("Error loading goals:", error);
       toast.error("Failed to load goals");
+    } finally {
+      setGoalsLoading(false);
     }
   }, []); // Remove goalInputs from dependencies
 
@@ -298,138 +303,177 @@ export function Settings({ onDataChanged, refreshTrigger }: SettingsProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            {Object.keys(goalInputs).map((goalType) => {
-              const existingGoal = goals.find((g) => g.type === goalType);
-              const input = goalInputs[goalType];
-
-              return (
-                <div key={goalType} className="space-y-3">
+          {goalsLoading ? (
+            <div className="space-y-6">
+              {/* Skeleton for 5 goal types */}
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="space-y-3">
                   <div>
-                    <Badge
-                      variant="secondary"
-                      className={`${getGoalTypeColors(
-                        goalType
-                      )} font-medium px-3 py-1`}
-                    >
-                      {getGoalTypeLabel(goalType)}
-                    </Badge>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {getGoalTypeDescription(goalType)}
-                    </p>
+                    <Skeleton className="h-6 w-32 mb-1" /> {/* Badge */}
+                    <Skeleton className="h-3 w-48" /> {/* Description */}
                   </div>
 
                   <div className="flex gap-3 items-end">
                     <div className="flex-1">
-                      <Label
-                        htmlFor={`target-${goalType}`}
-                        className="text-xs text-muted-foreground"
-                      >
-                        Target Number
-                      </Label>
-                      <Input
-                        id={`target-${goalType}`}
-                        type="number"
-                        min="1"
-                        step="1"
-                        placeholder="e.g., 5"
-                        value={input.targetNumber}
-                        onChange={(e) =>
-                          handleGoalInputChange(
-                            goalType,
-                            "targetNumber",
-                            e.target.value
-                          )
-                        }
-                      />
+                      <Skeleton className="h-3 w-20 mb-2" /> {/* Label */}
+                      <Skeleton className="h-10 w-full" /> {/* Input */}
                     </div>
 
                     <div className="flex-1">
-                      <Label
-                        htmlFor={`frequency-${goalType}`}
-                        className="text-xs text-muted-foreground"
-                      >
-                        Every
-                      </Label>
-                      <Input
-                        id={`frequency-${goalType}`}
-                        type="number"
-                        min="1"
-                        step="1"
-                        placeholder="e.g., 1"
-                        value={input.frequency}
-                        onChange={(e) =>
-                          handleGoalInputChange(
-                            goalType,
-                            "frequency",
-                            e.target.value
-                          )
-                        }
-                      />
+                      <Skeleton className="h-3 w-16 mb-2" /> {/* Label */}
+                      <Skeleton className="h-10 w-full" /> {/* Input */}
                     </div>
 
                     <div className="flex-1">
-                      <Label
-                        htmlFor={`unit-${goalType}`}
-                        className="text-xs text-muted-foreground"
-                      >
-                        Period
-                      </Label>
-                      <Select
-                        value={input.unit}
-                        onValueChange={(value: "days" | "weeks") =>
-                          handleGoalInputChange(goalType, "unit", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="days">Days</SelectItem>
-                          <SelectItem value="weeks">Weeks</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Skeleton className="h-3 w-14 mb-2" /> {/* Label */}
+                      <Skeleton className="h-10 w-full" /> {/* Select */}
                     </div>
 
                     <div className="flex gap-2">
-                      <Button
-                        onClick={() => saveGoal(goalType)}
-                        disabled={!input.targetNumber || !input.frequency}
-                        size="sm"
-                      >
-                        Save
-                      </Button>
-
-                      {existingGoal && (
-                        <Button
-                          onClick={() => deleteGoal(goalType)}
-                          variant="outline"
-                          size="sm"
-                        >
-                          Clear
-                        </Button>
-                      )}
+                      <Skeleton className="h-9 w-14" /> {/* Save button */}
+                      <Skeleton className="h-9 w-14" /> {/* Clear button */}
                     </div>
                   </div>
 
-                  {existingGoal && (
-                    <div className="text-xs text-muted-foreground">
-                      Current: {existingGoal.targetNumber}{" "}
-                      {getGoalTypeLabel(goalType).toLowerCase()} every{" "}
-                      {existingGoal.frequencyDays >= 7 &&
-                      existingGoal.frequencyDays % 7 === 0
-                        ? `${existingGoal.frequencyDays / 7} week${
-                            existingGoal.frequencyDays / 7 > 1 ? "s" : ""
-                          }`
-                        : `${existingGoal.frequencyDays} day${
-                            existingGoal.frequencyDays > 1 ? "s" : ""
-                          }`}
-                    </div>
-                  )}
+                  {/* Current goal indicator */}
+                  <Skeleton className="h-3 w-64" />
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {Object.keys(goalInputs).map((goalType) => {
+                const existingGoal = goals.find((g) => g.type === goalType);
+                const input = goalInputs[goalType];
+
+                return (
+                  <div key={goalType} className="space-y-3">
+                    <div>
+                      <Badge
+                        variant="secondary"
+                        className={`${getGoalTypeColors(
+                          goalType
+                        )} font-medium px-3 py-1`}
+                      >
+                        {getGoalTypeLabel(goalType)}
+                      </Badge>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {getGoalTypeDescription(goalType)}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3 items-end">
+                      <div className="flex-1">
+                        <Label
+                          htmlFor={`target-${goalType}`}
+                          className="text-xs text-muted-foreground"
+                        >
+                          Target Number
+                        </Label>
+                        <Input
+                          id={`target-${goalType}`}
+                          type="number"
+                          min="1"
+                          step="1"
+                          placeholder="e.g., 5"
+                          value={input.targetNumber}
+                          onChange={(e) =>
+                            handleGoalInputChange(
+                              goalType,
+                              "targetNumber",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <Label
+                          htmlFor={`frequency-${goalType}`}
+                          className="text-xs text-muted-foreground"
+                        >
+                          Every
+                        </Label>
+                        <Input
+                          id={`frequency-${goalType}`}
+                          type="number"
+                          min="1"
+                          step="1"
+                          placeholder="e.g., 1"
+                          value={input.frequency}
+                          onChange={(e) =>
+                            handleGoalInputChange(
+                              goalType,
+                              "frequency",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <Label
+                          htmlFor={`unit-${goalType}`}
+                          className="text-xs text-muted-foreground"
+                        >
+                          Period
+                        </Label>
+                        <Select
+                          value={input.unit}
+                          onValueChange={(value: "days" | "weeks") =>
+                            handleGoalInputChange(goalType, "unit", value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="days">Days</SelectItem>
+                            <SelectItem value="weeks">Weeks</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => saveGoal(goalType)}
+                          disabled={!input.targetNumber || !input.frequency}
+                          size="sm"
+                        >
+                          Save
+                        </Button>
+
+                        {existingGoal && (
+                          <Button
+                            onClick={() => deleteGoal(goalType)}
+                            variant="outline"
+                            size="sm"
+                          >
+                            Clear
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    {existingGoal && (
+                      <div className="text-xs text-muted-foreground">
+                        Current: {existingGoal.targetNumber}{" "}
+                        {getGoalTypeLabel(goalType).toLowerCase()} every{" "}
+                        {existingGoal.frequencyDays >= 7 &&
+                        existingGoal.frequencyDays % 7 === 0
+                          ? `${existingGoal.frequencyDays / 7} week${
+                              existingGoal.frequencyDays / 7 > 1 ? "s" : ""
+                            }`
+                          : `${existingGoal.frequencyDays} day${
+                              existingGoal.frequencyDays > 1 ? "s" : ""
+                            }`}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
 
