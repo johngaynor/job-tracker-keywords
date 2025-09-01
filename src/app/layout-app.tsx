@@ -37,8 +37,7 @@ export default function AppLayout({ children }: LayoutProps) {
 
   const tabs = [
     { value: "/", label: "Dashboard", icon: LayoutDashboard },
-    { value: "/add", label: "Add Application", icon: Plus },
-    { value: "/jobs", label: "Applications", icon: Briefcase },
+    { value: "/applications", label: "Applications", icon: Briefcase },
     { value: "/employers", label: "Employers", icon: Building2 },
     { value: "/stats", label: "Statistics", icon: BarChart3 },
     { value: "/settings", label: "Settings", icon: Settings },
@@ -86,7 +85,9 @@ export default function AppLayout({ children }: LayoutProps) {
             <div className="hidden md:flex bg-muted p-0.5 rounded-lg w-full">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
-                const isActive = pathname === tab.value;
+                const isActive = tab.value === "/" 
+                  ? pathname === "/" 
+                  : pathname.startsWith(tab.value);
                 return (
                   <Link
                     key={tab.value}
@@ -109,7 +110,9 @@ export default function AppLayout({ children }: LayoutProps) {
               <div className="flex bg-muted p-0.5 rounded-lg w-full">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
-                  const isActive = pathname === tab.value;
+                  const isActive = tab.value === "/" 
+                    ? pathname === "/" 
+                    : pathname.startsWith(tab.value);
                   return (
                     <Tooltip key={tab.value}>
                       <TooltipTrigger asChild>
