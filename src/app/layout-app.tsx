@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -140,6 +141,9 @@ export default function AppLayout({ children }: LayoutProps) {
 
           {/* Main Content */}
           <div className="space-y-6">{children}</div>
+          
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </TooltipProvider>
