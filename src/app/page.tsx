@@ -33,7 +33,7 @@ import {
   Tooltip as RechartsTooltip,
 } from "recharts";
 
-type TimeRange = "today" | "week" | "month" | "all";
+type TimeRange = "today" | "week" | "last7days" | "month" | "last30days" | "all";
 
 interface DashboardStats {
   applicationsCreated: number;
@@ -51,7 +51,7 @@ interface DashboardStats {
 }
 
 export default function Dashboard() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("week");
+  const [timeRange, setTimeRange] = useState<TimeRange>("last7days");
   const [goals, setGoals] = useState<Goal[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
     applicationsCreated: 0,
@@ -82,10 +82,22 @@ export default function Dashboard() {
           start: weekStart.toJSDate(),
           end: now.toJSDate(),
         };
+      case "last7days":
+        const last7DaysStart = now.minus({ days: 6 }).startOf("day");
+        return {
+          start: last7DaysStart.toJSDate(),
+          end: now.toJSDate(),
+        };
       case "month":
         const monthStart = today.startOf("month");
         return {
           start: monthStart.toJSDate(),
+          end: now.toJSDate(),
+        };
+      case "last30days":
+        const last30DaysStart = now.minus({ days: 29 }).startOf("day");
+        return {
+          start: last30DaysStart.toJSDate(),
           end: now.toJSDate(),
         };
       case "all":
@@ -279,7 +291,13 @@ export default function Dashboard() {
         case "week":
           formattedDate = currentDate.toFormat("ccc MMM d");
           break;
+        case "last7days":
+          formattedDate = currentDate.toFormat("ccc MMM d");
+          break;
         case "month":
+          formattedDate = currentDate.toFormat("MMM d");
+          break;
+        case "last30days":
           formattedDate = currentDate.toFormat("MMM d");
           break;
         case "all":
@@ -446,14 +464,18 @@ export default function Dashboard() {
     loadStats();
   }, [timeRange, loadStats]);
 
-  const formatTimeRangeLabel = (range: TimeRange) => {
+  const formatTimeRangeLabel = (range: TimeRange): string => {
     switch (range) {
       case "today":
         return "Today";
       case "week":
         return "This Week";
+      case "last7days":
+        return "Last 7 Days";
       case "month":
         return "This Month";
+      case "last30days":
+        return "Last 30 Days";
       case "all":
         return "All Time";
     }
@@ -563,7 +585,9 @@ export default function Dashboard() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="today">Today</SelectItem>
+            <SelectItem value="last7days">Last 7 Days</SelectItem>
             <SelectItem value="week">This Week</SelectItem>
+            <SelectItem value="last30days">Last 30 Days</SelectItem>
             <SelectItem value="month">This Month</SelectItem>
             <SelectItem value="all">All Time</SelectItem>
           </SelectContent>
