@@ -47,6 +47,7 @@ import {
   Eye,
   Edit,
   AlertTriangle,
+  Trash,
 } from "lucide-react";
 import { DateTime } from "luxon";
 
@@ -207,6 +208,38 @@ export default function EmployersPage() {
     }
   };
 
+  const handleDeleteEmployer = async (employer: EmployerWithStats) => {
+    if (!employer.id) return;
+
+    // Check if employer has any jobs
+    if (employer.jobCount > 0) {
+      toast.error("Cannot delete employer", {
+        description: `This employer has ${employer.jobCount} job application(s). Please delete them first.`,
+      });
+      return;
+    }
+
+    // Confirm deletion
+    if (
+      !confirm(
+        `Are you sure you want to delete "${employer.name}"? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await employerService.delete(employer.id);
+      toast.success("Employer deleted successfully");
+      await loadData();
+    } catch (error) {
+      console.error("Error deleting employer:", error);
+      toast.error("Failed to delete employer", {
+        description: "Please try again.",
+      });
+    }
+  };
+
   const filteredEmployers = useMemo(() => {
     let result = employers;
 
@@ -338,7 +371,7 @@ export default function EmployersPage() {
                     <TableHead>Industry</TableHead>
                     <TableHead>Status Breakdown</TableHead>
                     <TableHead>Last Activity</TableHead>
-                    <TableHead className="w-[120px]">Actions</TableHead>
+                    <TableHead className="w-[160px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -450,6 +483,14 @@ export default function EmployersPage() {
                             className="h-8 w-8 p-0"
                           >
                             <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteEmployer(employer)}
+                            className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                          >
+                            <Trash className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>
