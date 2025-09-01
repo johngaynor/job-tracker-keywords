@@ -23,6 +23,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Table,
   TableBody,
   TableCell,
@@ -40,6 +46,7 @@ import {
   Star,
   Eye,
   Edit,
+  AlertTriangle,
 } from "lucide-react";
 import { DateTime } from "luxon";
 
@@ -79,6 +86,9 @@ export default function EmployersPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<"alphabetical" | "favorites">(
+    "favorites"
+  );
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEmployer, setSelectedEmployer] =
@@ -209,13 +219,25 @@ export default function EmployersPage() {
       );
     }
 
-    // Sort: favorites first, then by name
+    // Sort based on selected sort option
     return result.sort((a, b) => {
-      if (a.favorited && !b.favorited) return -1;
-      if (!a.favorited && b.favorited) return 1;
+      // Always prioritize companies missing industry (no industry field)
+      const aHasIndustry = !!a.industry;
+      const bHasIndustry = !!b.industry;
+
+      if (!aHasIndustry && bHasIndustry) return -1;
+      if (aHasIndustry && !bHasIndustry) return 1;
+
+      if (sortBy === "favorites") {
+        // Within same industry status, sort by favorites then alphabetically
+        if (a.favorited && !b.favorited) return -1;
+        if (!a.favorited && b.favorited) return 1;
+      }
+
+      // Finally sort alphabetically
       return a.name.localeCompare(b.name);
     });
-  }, [employers, searchTerm]);
+  }, [employers, searchTerm, sortBy]);
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
@@ -276,7 +298,23 @@ export default function EmployersPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Employer Directory</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Employer Directory</CardTitle>
+            <Select
+              value={sortBy}
+              onValueChange={(value: "alphabetical" | "favorites") =>
+                setSortBy(value)
+              }
+            >
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="alphabetical">Alphabetical A-Z</SelectItem>
+                <SelectItem value="favorites">Favorites</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="relative mt-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -309,7 +347,12 @@ export default function EmployersPage() {
                 </TableHeader>
                 <TableBody>
                   {filteredEmployers.map((employer) => (
-                    <TableRow key={employer.id}>
+                    <TableRow
+                      key={employer.id}
+                      className={
+                        !employer.industry ? "bg-red-50 dark:bg-red-950/20" : ""
+                      }
+                    >
                       <TableCell className="text-center">
                         <Button
                           variant="ghost"
@@ -378,6 +421,24 @@ export default function EmployersPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-1">
+                          {!employer.industry && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 p-0 text-red-500 hover:text-red-600"
+                                  >
+                                    <AlertTriangle className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Missing information</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                           <Button
                             variant="ghost"
                             size="sm"
