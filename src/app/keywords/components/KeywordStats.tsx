@@ -22,13 +22,14 @@ import {
 import { keywordService, userKeywordService } from "@/lib/db-services";
 import { UserKeyword } from "@/lib/database";
 import { TECHNICAL_SKILLS, SOFT_SKILLS } from "@/lib/constants";
-import { BarChart3, Ban, Plus, X, Info } from "lucide-react";
+import { BarChart3, Ban, Plus, X, Info, StarIcon } from "lucide-react";
 import { toast } from "sonner";
 
 interface KeywordStat {
   keyword: string;
   totalCount: number;
   jobCount: number;
+  starredJobCount: number;
 }
 
 interface WeightedKeywordStat {
@@ -36,6 +37,7 @@ interface WeightedKeywordStat {
   totalCount: number;
   weightedScore: number;
   jobCount: number;
+  starredJobCount: number;
 }
 
 interface KeywordStatsProps {
@@ -490,8 +492,14 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                         {stat.keyword}
                       </Badge>
                     </div>
-                    <div className="text-sm">
-                      {stat.jobCount} job{stat.jobCount !== 1 ? "s" : ""}
+                    <div className="flex items-center gap-2 text-sm">
+                      <span>{stat.jobCount} job{stat.jobCount !== 1 ? "s" : ""}</span>
+                      {stat.starredJobCount > 0 && (
+                        <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+                          <StarIcon className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                          {stat.starredJobCount}
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       {applicationViewMode === "popular" ? (

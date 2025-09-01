@@ -244,21 +244,34 @@ export const keywordService = {
   },
 
   async getKeywordStats(): Promise<
-    { keyword: string; totalCount: number; jobCount: number }[]
+    { keyword: string; totalCount: number; jobCount: number; starredJobCount: number }[]
   > {
     const keywords = await db.keywords.toArray();
+    const jobs = await db.jobs.toArray();
+    
+    // Create a map for quick job lookup
+    const jobMap = new Map(jobs.map((job) => [job.id!, job]));
+    
     const stats = new Map<
       string,
-      { totalCount: number; jobIds: Set<number> }
+      { totalCount: number; jobIds: Set<number>; starredJobIds: Set<number> }
     >();
 
     for (const kw of keywords) {
+      const job = jobMap.get(kw.jobId);
       const existing = stats.get(kw.keyword) || {
         totalCount: 0,
         jobIds: new Set(),
+        starredJobIds: new Set(),
       };
       existing.totalCount += 1; // Each keyword occurrence counts as 1
       existing.jobIds.add(kw.jobId);
+      
+      // Track starred jobs
+      if (job?.favorited) {
+        existing.starredJobIds.add(kw.jobId);
+      }
+      
       stats.set(kw.keyword, existing);
     }
 
@@ -267,6 +280,7 @@ export const keywordService = {
         keyword,
         totalCount: data.totalCount,
         jobCount: data.jobIds.size,
+        starredJobCount: data.starredJobIds.size,
       }))
       .sort((a, b) => b.totalCount - a.totalCount);
   },
@@ -277,6 +291,7 @@ export const keywordService = {
       totalCount: number;
       weightedScore: number;
       jobCount: number;
+      starredJobCount: number;
     }[]
   > {
     const keywords = await db.keywords.toArray();
@@ -287,7 +302,7 @@ export const keywordService = {
 
     const stats = new Map<
       string,
-      { totalCount: number; weightedScore: number; jobIds: Set<number> }
+      { totalCount: number; weightedScore: number; jobIds: Set<number>; starredJobIds: Set<number> }
     >();
 
     for (const kw of keywords) {
@@ -298,10 +313,17 @@ export const keywordService = {
         totalCount: 0,
         weightedScore: 0,
         jobIds: new Set(),
+        starredJobIds: new Set(),
       };
       existing.totalCount += 1;
       existing.weightedScore += interestWeight; // Add weighted score based on interest level
       existing.jobIds.add(kw.jobId);
+      
+      // Track starred jobs
+      if (job?.favorited) {
+        existing.starredJobIds.add(kw.jobId);
+      }
+      
       stats.set(kw.keyword, existing);
     }
 
@@ -311,6 +333,7 @@ export const keywordService = {
         totalCount: data.totalCount,
         weightedScore: data.weightedScore,
         jobCount: data.jobIds.size,
+        starredJobCount: data.starredJobIds.size,
       }))
       .sort((a, b) => b.weightedScore - a.weightedScore);
   },
