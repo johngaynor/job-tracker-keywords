@@ -48,6 +48,7 @@ import {
   Edit,
   AlertTriangle,
   Trash,
+  Plus,
 } from "lucide-react";
 import { DateTime } from "luxon";
 
@@ -97,6 +98,13 @@ export default function EmployersPage() {
   const [editFormData, setEditFormData] = useState({
     industry: "",
     notes: "",
+  });
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    industry: "",
+    notes: "",
+    favorite: false,
   });
 
   useEffect(() => {
@@ -240,6 +248,36 @@ export default function EmployersPage() {
     }
   };
 
+  const handleCreateEmployer = async () => {
+    if (!createFormData.name.trim()) {
+      toast.error("Please enter an employer name");
+      return;
+    }
+
+    try {
+      await employerService.create(
+        createFormData.name.trim(),
+        createFormData.notes.trim() || undefined,
+        createFormData.industry as Industry || undefined,
+        createFormData.favorite
+      );
+      toast.success("Employer created successfully");
+      setCreateDialogOpen(false);
+      setCreateFormData({
+        name: "",
+        industry: "",
+        notes: "",
+        favorite: false,
+      });
+      await loadData();
+    } catch (error) {
+      console.error("Error creating employer:", error);
+      toast.error("Failed to create employer", {
+        description: "Please try again.",
+      });
+    }
+  };
+
   const filteredEmployers = useMemo(() => {
     let result = employers;
 
@@ -329,20 +367,29 @@ export default function EmployersPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Employer Directory</CardTitle>
-            <Select
-              value={sortBy}
-              onValueChange={(value: "alphabetical" | "favorites") =>
-                setSortBy(value)
-              }
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="alphabetical">Alphabetical A-Z</SelectItem>
-                <SelectItem value="favorites">Favorites</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setCreateDialogOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add New Employer
+              </Button>
+              <Select
+                value={sortBy}
+                onValueChange={(value: "alphabetical" | "favorites") =>
+                  setSortBy(value)
+                }
+              >
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="alphabetical">Alphabetical A-Z</SelectItem>
+                  <SelectItem value="favorites">Favorites</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="relative mt-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -612,6 +659,103 @@ export default function EmployersPage() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Employer Dialog */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Add New Employer</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="employerName">Company Name</Label>
+                <Input
+                  id="employerName"
+                  value={createFormData.name}
+                  onChange={(e) =>
+                    setCreateFormData(prev => ({ ...prev, name: e.target.value }))
+                  }
+                  placeholder="Enter company name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="employerIndustry">Industry</Label>
+                <Select
+                  value={createFormData.industry || "none"}
+                  onValueChange={(value) =>
+                    setCreateFormData(prev => ({ 
+                      ...prev, 
+                      industry: value === "none" ? "" : value 
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select industry" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No industry</SelectItem>
+                    {INDUSTRY_OPTIONS.map((industry) => (
+                      <SelectItem key={industry} value={industry}>
+                        {industry}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Favorite?</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={createFormData.favorite ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCreateFormData(prev => ({ ...prev, favorite: true }))}
+                  className="flex items-center gap-1"
+                >
+                  <Star className={`h-4 w-4 ${createFormData.favorite ? 'fill-current' : ''}`} />
+                  Favorite
+                </Button>
+                <Button
+                  type="button"
+                  variant={!createFormData.favorite ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCreateFormData(prev => ({ ...prev, favorite: false }))}
+                  className="flex items-center gap-1"
+                >
+                  <Star className="h-4 w-4" />
+                  Normal
+                </Button>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="employerNotes">Notes</Label>
+              <Textarea
+                id="employerNotes"
+                value={createFormData.notes}
+                onChange={(e) =>
+                  setCreateFormData(prev => ({ ...prev, notes: e.target.value }))
+                }
+                placeholder="Add notes about this employer..."
+                rows={3}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setCreateDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleCreateEmployer}>
+                Create Employer
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
