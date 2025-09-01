@@ -161,9 +161,18 @@ export function JobsKanban({ showArchived }: JobsKanbanProps) {
     return jobs
       .filter((job) => job.status === status)
       .sort((a, b) => {
-        // Sort favorites first, then by creation date (newest first)
+        // Sort favorites first, then by interest level descending, then by creation date (newest first)
         if (a.favorited && !b.favorited) return -1;
         if (!a.favorited && b.favorited) return 1;
+        
+        // If both are favorited or both are not favorited, sort by interest level
+        const aInterest = a.interestLevel || 0;
+        const bInterest = b.interestLevel || 0;
+        if (aInterest !== bInterest) {
+          return bInterest - aInterest; // Descending order (highest interest first)
+        }
+        
+        // If interest levels are the same, sort by creation date (newest first)
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
