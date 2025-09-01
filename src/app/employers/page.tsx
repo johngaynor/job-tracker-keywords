@@ -254,7 +254,7 @@ export default function EmployersPage() {
       await employerService.create(
         createFormData.name.trim(),
         createFormData.notes.trim() || undefined,
-        createFormData.industry as Industry || undefined,
+        (createFormData.industry as Industry) || undefined,
         createFormData.favorite
       );
       toast.success("Employer created successfully");
@@ -672,7 +672,10 @@ export default function EmployersPage() {
                   id="employerName"
                   value={createFormData.name}
                   onChange={(e) =>
-                    setCreateFormData(prev => ({ ...prev, name: e.target.value }))
+                    setCreateFormData((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
                   }
                   placeholder="Enter company name"
                   required
@@ -683,9 +686,9 @@ export default function EmployersPage() {
                 <Select
                   value={createFormData.industry || "none"}
                   onValueChange={(value) =>
-                    setCreateFormData(prev => ({ 
-                      ...prev, 
-                      industry: value === "none" ? "" : value 
+                    setCreateFormData((prev) => ({
+                      ...prev,
+                      industry: value === "none" ? "" : value,
                     }))
                   }
                 >
@@ -710,17 +713,25 @@ export default function EmployersPage() {
                   type="button"
                   variant={createFormData.favorite ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setCreateFormData(prev => ({ ...prev, favorite: true }))}
+                  onClick={() =>
+                    setCreateFormData((prev) => ({ ...prev, favorite: true }))
+                  }
                   className="flex items-center gap-1"
                 >
-                  <Star className={`h-4 w-4 ${createFormData.favorite ? 'fill-current' : ''}`} />
+                  <Star
+                    className={`h-4 w-4 ${
+                      createFormData.favorite ? "fill-current" : ""
+                    }`}
+                  />
                   Favorite
                 </Button>
                 <Button
                   type="button"
                   variant={!createFormData.favorite ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setCreateFormData(prev => ({ ...prev, favorite: false }))}
+                  onClick={() =>
+                    setCreateFormData((prev) => ({ ...prev, favorite: false }))
+                  }
                   className="flex items-center gap-1"
                 >
                   <Star className="h-4 w-4" />
@@ -734,22 +745,23 @@ export default function EmployersPage() {
                 id="employerNotes"
                 value={createFormData.notes}
                 onChange={(e) =>
-                  setCreateFormData(prev => ({ ...prev, notes: e.target.value }))
+                  setCreateFormData((prev) => ({
+                    ...prev,
+                    notes: e.target.value,
+                  }))
                 }
                 placeholder="Add notes about this employer..."
                 rows={3}
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setCreateDialogOpen(false)}
               >
                 Cancel
               </Button>
-              <Button onClick={handleCreateEmployer}>
-                Create Employer
-              </Button>
+              <Button onClick={handleCreateEmployer}>Create Employer</Button>
             </div>
           </div>
         </DialogContent>

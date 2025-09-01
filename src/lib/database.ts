@@ -62,6 +62,13 @@ export interface Keyword {
   updatedAt: Date;
 }
 
+export interface UserKeyword {
+  id?: number;
+  keyword: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Activity {
   id?: number;
   jobId: number;
@@ -92,6 +99,7 @@ export class EmployerKeywordsDB extends Dexie {
   employers!: Table<Employer>;
   jobs!: Table<Job>;
   keywords!: Table<Keyword>;
+  userKeywords!: Table<UserKeyword>;
   activities!: Table<Activity>;
   goals!: Table<Goal>;
 
@@ -110,6 +118,17 @@ export class EmployerKeywordsDB extends Dexie {
       employers: "++id, name, notes, createdAt, updatedAt",
       jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, archived, status, [employerId+title], createdAt, updatedAt",
       keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
+      activities:
+        "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
+      goals: "++id, type, targetNumber, frequencyDays, createdAt, updatedAt",
+    });
+
+    // Version 3: Add user keywords table
+    this.version(3).stores({
+      employers: "++id, name, notes, createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, archived, status, [employerId+title], createdAt, updatedAt",
+      keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
+      userKeywords: "++id, keyword, createdAt, updatedAt",
       activities:
         "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
       goals: "++id, type, targetNumber, frequencyDays, createdAt, updatedAt",

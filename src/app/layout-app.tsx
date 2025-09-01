@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import {
   Briefcase,
-  BarChart3,
+  Tags,
   Settings,
   Info,
   LayoutDashboard,
@@ -38,7 +38,7 @@ export default function AppLayout({ children }: LayoutProps) {
     { value: "/", label: "Dashboard", icon: LayoutDashboard },
     { value: "/applications", label: "Applications", icon: Briefcase },
     { value: "/employers", label: "Employers", icon: Building2 },
-    { value: "/stats", label: "Statistics", icon: BarChart3 },
+    { value: "/keywords", label: "Keywords", icon: Tags },
     { value: "/settings", label: "Settings", icon: Settings },
   ];
 
@@ -84,9 +84,10 @@ export default function AppLayout({ children }: LayoutProps) {
             <div className="hidden md:flex bg-muted p-0.5 rounded-lg w-full">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
-                const isActive = tab.value === "/" 
-                  ? pathname === "/" 
-                  : pathname.startsWith(tab.value);
+                const isActive =
+                  tab.value === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(tab.value);
                 return (
                   <Link
                     key={tab.value}
@@ -109,9 +110,10 @@ export default function AppLayout({ children }: LayoutProps) {
               <div className="flex bg-muted p-0.5 rounded-lg w-full">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
-                  const isActive = tab.value === "/" 
-                    ? pathname === "/" 
-                    : pathname.startsWith(tab.value);
+                  const isActive =
+                    tab.value === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(tab.value);
                   return (
                     <Tooltip key={tab.value}>
                       <TooltipTrigger asChild>

@@ -3,6 +3,7 @@ import {
   Employer,
   Job,
   Keyword,
+  UserKeyword,
   Activity,
   Goal,
   Industry,
@@ -328,6 +329,51 @@ export const keywordService = {
     console.log("keywordService.deleteAll: Starting...");
     await db.keywords.clear();
     console.log("keywordService.deleteAll: Completed ✓");
+  },
+};
+
+// User Keyword operations
+export const userKeywordService = {
+  async create(keyword: string): Promise<number> {
+    const now = new Date();
+    
+    // Check if keyword already exists
+    const existing = await db.userKeywords
+      .where("keyword")
+      .equals(keyword.toLowerCase())
+      .first();
+
+    if (existing) {
+      // Keyword already exists, just return its id
+      return existing.id!;
+    }
+
+    return await db.userKeywords.add({
+      keyword: keyword.toLowerCase(),
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+
+  async getAll(): Promise<UserKeyword[]> {
+    return await db.userKeywords.orderBy("keyword").toArray();
+  },
+
+  async update(id: number, updates: Partial<UserKeyword>): Promise<number> {
+    return await db.userKeywords.update(id, {
+      ...updates,
+      updatedAt: new Date(),
+    });
+  },
+
+  async delete(id: number): Promise<void> {
+    await db.userKeywords.delete(id);
+  },
+
+  async deleteAll(): Promise<void> {
+    console.log("userKeywordService.deleteAll: Starting...");
+    await db.userKeywords.clear();
+    console.log("userKeywordService.deleteAll: Completed ✓");
   },
 };
 
