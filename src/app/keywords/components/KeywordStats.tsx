@@ -12,10 +12,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { keywordService, userKeywordService } from "@/lib/db-services";
 import { UserKeyword } from "@/lib/database";
 import { TECHNICAL_SKILLS, SOFT_SKILLS } from "@/lib/constants";
-import { BarChart3, TrendingUp, Plus, X } from "lucide-react";
+import { BarChart3, Ban, Plus, X, Info } from "lucide-react";
 import { toast } from "sonner";
 
 interface KeywordStat {
@@ -38,10 +45,13 @@ interface KeywordStatsProps {
 export function KeywordStats({ viewMode }: KeywordStatsProps) {
   // Application keywords state
   const [popularStats, setPopularStats] = useState<KeywordStat[]>([]);
-  const [missingSkillsStats, setMissingSkillsStats] = useState<WeightedKeywordStat[]>([]);
+  const [missingSkillsStats, setMissingSkillsStats] = useState<
+    WeightedKeywordStat[]
+  >([]);
   const [applicationViewMode, setApplicationViewMode] = useState<
     "popular" | "missing"
   >("popular");
+  const [useWeightedScores, setUseWeightedScores] = useState(true);
 
   // User keywords state
   const [userKeywords, setUserKeywords] = useState<UserKeyword[]>([]);
@@ -50,12 +60,16 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
 
   const loadApplicationStats = async () => {
     try {
-      const [popular, missingSkills] = await Promise.all([
+      const [popular, missingSkills, userKeywordsData] = await Promise.all([
         keywordService.getKeywordStats(),
         keywordService.getWeightedKeywordStats(),
+        userKeywordService.getAll(),
       ]);
+
+      // Store unfiltered stats
       setPopularStats(popular);
       setMissingSkillsStats(missingSkills);
+      setUserKeywords(userKeywordsData);
     } catch (error) {
       console.error("Error loading keyword stats:", error);
     }
@@ -98,6 +112,8 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
       setNewKeyword("");
       toast.success("Keyword added successfully");
       await loadUserKeywords();
+      // Refresh application stats to update missing skills filtering
+      await loadApplicationStats();
     } catch (error) {
       console.error("Error adding keyword:", error);
       toast.error("Failed to add keyword");
@@ -111,6 +127,8 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
         await userKeywordService.create(keyword);
         toast.success(`Added "${keyword}"`);
         await loadUserKeywords();
+        // Refresh application stats to update missing skills filtering
+        await loadApplicationStats();
       } catch (error) {
         console.error("Error adding preset keyword:", error);
         toast.error("Failed to add keyword");
@@ -137,6 +155,10 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
       await userKeywordService.delete(id);
       toast.success("Keyword deleted successfully");
       await loadUserKeywords();
+      // Refresh application stats to update missing skills filtering
+      if (viewMode === "application") {
+        await loadApplicationStats();
+      }
     } catch (error) {
       console.error("Error deleting keyword:", error);
       toast.error("Failed to delete keyword");
@@ -342,46 +364,100 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
   }
 
   // Application view (existing functionality)
+  // Apply user keyword filtering only for Missing Skills view
+  const getFilteredMissingSkills = () => {
+    const userKeywordSet = new Set(
+      userKeywords.map((uk) => uk.keyword.toLowerCase())
+    );
+    return missingSkillsStats.filter(
+      (skill) => !userKeywordSet.has(skill.keyword.toLowerCase())
+    );
+  };
+
   const currentStats =
-    applicationViewMode === "popular" ? popularStats : missingSkillsStats;
+    applicationViewMode === "popular"
+      ? useWeightedScores
+        ? missingSkillsStats // Use unfiltered weighted stats for Popular view
+        : popularStats
+      : getFilteredMissingSkills(); // Apply filtering only for Missing Skills view
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-2">
-        <Button
-          variant={applicationViewMode === "popular" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setApplicationViewMode("popular")}
-          className="flex items-center gap-2"
-        >
-          <BarChart3 className="h-4 w-4" />
-          Popular
-        </Button>
-        <Button
-          variant={applicationViewMode === "missing" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setApplicationViewMode("missing")}
-          className="flex items-center gap-2"
-        >
-          <TrendingUp className="h-4 w-4" />
-          Missing Skills
-        </Button>
-      </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div className="space-y-1.5">
+            <CardTitle>
+              {applicationViewMode === "popular"
+                ? "Popular Keywords"
+                : "Missing Skills"}
+            </CardTitle>
+            <CardDescription>
+              {applicationViewMode === "popular"
+                ? "Keywords that appear most frequently across all your job applications."
+                : "Keywords that appear most frequently across all your job applications, excluding the skills you already have."}
+            </CardDescription>
+          </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {applicationViewMode === "popular"
-              ? "Popular Keywords"
-              : "Targeted Keywords (Weighted by Interest)"}
-          </CardTitle>
-          <CardDescription>
-            {applicationViewMode === "popular"
-              ? "Keywords that appear most frequently across all your job applications."
-              : "Keywords ranked by frequency and your interest level in the jobs."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          {/* Toggle buttons to the right */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="weighted-scores"
+                checked={useWeightedScores}
+                onCheckedChange={(checked) =>
+                  setUseWeightedScores(checked === true)
+                }
+              />
+              <Label
+                htmlFor="weighted-scores"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Use Weighted Scores
+              </Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      Weigh the keyword scores based on the interest level you
+                      recorded on each application.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant={
+                  applicationViewMode === "popular" ? "default" : "outline"
+                }
+                size="sm"
+                onClick={() => setApplicationViewMode("popular")}
+                className="flex items-center gap-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                Popular
+              </Button>
+              <Button
+                variant={
+                  applicationViewMode === "missing" ? "default" : "outline"
+                }
+                size="sm"
+                onClick={() => setApplicationViewMode("missing")}
+                className="flex items-center gap-2"
+              >
+                <Ban className="h-4 w-4" />
+                Missing Skills
+              </Button>
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent>
+        <div className="space-y-4">
           {currentStats.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               No keyword data available. Add some job applications with keywords
@@ -394,8 +470,10 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                 <div>Jobs</div>
                 <div>
                   {applicationViewMode === "popular"
-                    ? "Total Mentions"
-                    : "Weighted Score"}
+                    ? useWeightedScores
+                      ? "Percentage"
+                      : "Total Mentions"
+                    : "Percentage"}
                 </div>
               </div>
               <div className="space-y-2">
@@ -418,13 +496,29 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                     <div className="flex items-center gap-2">
                       {applicationViewMode === "popular" ? (
                         <span className="text-sm font-medium">
-                          {stat.totalCount}
+                          {useWeightedScores
+                            ? `${(
+                                ((stat as WeightedKeywordStat).weightedScore /
+                                  Math.max(
+                                    ...(
+                                      currentStats as WeightedKeywordStat[]
+                                    ).map((s) => s.weightedScore)
+                                  )) *
+                                100
+                              ).toFixed(1)}%`
+                            : stat.totalCount}
                         </span>
                       ) : (
                         <span className="text-sm font-medium">
-                          {(stat as WeightedKeywordStat).weightedScore.toFixed(
-                            1
-                          )}
+                          {`${(
+                            ((stat as WeightedKeywordStat).weightedScore /
+                              Math.max(
+                                ...(currentStats as WeightedKeywordStat[]).map(
+                                  (s) => s.weightedScore
+                                )
+                              )) *
+                            100
+                          ).toFixed(1)}%`}
                         </span>
                       )}
                       <div
@@ -436,10 +530,18 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
                         style={{
                           width: `${Math.min(
                             applicationViewMode === "popular"
-                              ? (stat.totalCount /
-                                  Math.max(
-                                    ...currentStats.map((s) => s.totalCount)
-                                  )) *
+                              ? useWeightedScores
+                                ? ((stat as WeightedKeywordStat).weightedScore /
+                                    Math.max(
+                                      ...(
+                                        currentStats as WeightedKeywordStat[]
+                                      ).map((s) => s.weightedScore)
+                                    )) *
+                                  100
+                                : (stat.totalCount /
+                                    Math.max(
+                                      ...currentStats.map((s) => s.totalCount)
+                                    )) *
                                   100
                               : ((stat as WeightedKeywordStat).weightedScore /
                                   Math.max(
@@ -459,8 +561,8 @@ export function KeywordStats({ viewMode }: KeywordStatsProps) {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
