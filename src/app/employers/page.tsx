@@ -289,10 +289,6 @@ export default function EmployersPage() {
             <Star className="h-4 w-4" />
             {employers.filter((e) => e.favorited).length} favorites
           </div>
-          <div className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4" />
-            {jobs.length} total applications
-          </div>
         </div>
       </div>
 
