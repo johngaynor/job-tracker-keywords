@@ -7,6 +7,22 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,9 +31,40 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { employerService, jobService } from "@/lib/db-services";
-import { Employer, Job } from "@/lib/database";
-import { Search, Building2, Briefcase, Calendar, Star } from "lucide-react";
+import { Employer, Job, Industry } from "@/lib/database";
+import {
+  Search,
+  Building2,
+  Briefcase,
+  Calendar,
+  Star,
+  Eye,
+  Edit,
+} from "lucide-react";
 import { DateTime } from "luxon";
+
+const INDUSTRY_OPTIONS: Industry[] = [
+  "Agriculture",
+  "Biotech",
+  "Consulting",
+  "Cybersecurity",
+  "Defense",
+  "E-Commerce",
+  "Education",
+  "Energy",
+  "Finance",
+  "Gaming",
+  "Government",
+  "Healthcare",
+  "Manufacturing",
+  "Nonprofit",
+  "Other",
+  "Real Estate",
+  "SaaS",
+  "Telecommunications",
+  "Transportation",
+  "Travel",
+];
 
 interface EmployerWithStats extends Employer {
   jobCount: number;
@@ -32,6 +79,14 @@ export default function EmployersPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedEmployer, setSelectedEmployer] =
+    useState<EmployerWithStats | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    industry: "",
+    notes: "",
+  });
 
   useEffect(() => {
     loadData();
@@ -103,6 +158,40 @@ export default function EmployersPage() {
     } catch (error) {
       console.error("Error toggling employer favorite:", error);
       toast.error("Failed to update favorite", {
+        description: "Please try again.",
+      });
+    }
+  };
+
+  const handleViewEmployer = (employer: EmployerWithStats) => {
+    setSelectedEmployer(employer);
+    setViewDialogOpen(true);
+  };
+
+  const handleEditEmployer = (employer: EmployerWithStats) => {
+    setSelectedEmployer(employer);
+    setEditFormData({
+      industry: employer.industry || "",
+      notes: employer.notes || "",
+    });
+    setEditDialogOpen(true);
+  };
+
+  const handleUpdateEmployer = async () => {
+    if (!selectedEmployer || !selectedEmployer.id) return;
+
+    try {
+      await employerService.update(selectedEmployer.id, {
+        industry: (editFormData.industry as Industry) || undefined,
+        notes: editFormData.notes || undefined,
+      });
+      toast.success("Employer updated successfully");
+      setEditDialogOpen(false);
+      setSelectedEmployer(null);
+      await loadData();
+    } catch (error) {
+      console.error("Error updating employer:", error);
+      toast.error("Failed to update employer", {
         description: "Please try again.",
       });
     }
@@ -215,6 +304,7 @@ export default function EmployersPage() {
                     <TableHead>Industry</TableHead>
                     <TableHead>Status Breakdown</TableHead>
                     <TableHead>Last Activity</TableHead>
+                    <TableHead className="w-[120px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -286,6 +376,26 @@ export default function EmployersPage() {
                           </span>
                         )}
                       </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleViewEmployer(employer)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditEmployer(employer)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -294,6 +404,118 @@ export default function EmployersPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* View Employer Dialog */}
+      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Employer Details</DialogTitle>
+          </DialogHeader>
+          {selectedEmployer && (
+            <div className="space-y-4">
+              <div>
+                <Label className="text-sm font-medium">Company Name</Label>
+                <div className="mt-1 text-sm">{selectedEmployer.name}</div>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">Industry</Label>
+                <div className="mt-1 text-sm">
+                  {selectedEmployer.industry || "Not specified"}
+                </div>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">Jobs</Label>
+                <div className="mt-1 text-sm">
+                  {selectedEmployer.jobCount} total,{" "}
+                  {selectedEmployer.appliedCount} applied
+                </div>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">Notes</Label>
+                <div className="mt-1 text-sm">
+                  {selectedEmployer.notes || "No notes"}
+                </div>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">Last Activity</Label>
+                <div className="mt-1 text-sm">
+                  {selectedEmployer.latestActivity
+                    ? DateTime.fromJSDate(
+                        selectedEmployer.latestActivity
+                      ).toFormat("MMM d, yyyy")
+                    : "No activity"}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Employer Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Employer</DialogTitle>
+          </DialogHeader>
+          {selectedEmployer && (
+            <div className="space-y-4">
+              <div>
+                <Label className="text-sm font-medium">Company Name</Label>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  {selectedEmployer.name} (read-only)
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="industry">Industry</Label>
+                <Select
+                  value={editFormData.industry || "none"}
+                  onValueChange={(value) =>
+                    setEditFormData((prev) => ({
+                      ...prev,
+                      industry: value === "none" ? "" : value,
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select industry" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No industry</SelectItem>
+                    {INDUSTRY_OPTIONS.map((industry) => (
+                      <SelectItem key={industry} value={industry}>
+                        {industry}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="notes">Notes</Label>
+                <Textarea
+                  id="notes"
+                  value={editFormData.notes}
+                  onChange={(e) =>
+                    setEditFormData((prev) => ({
+                      ...prev,
+                      notes: e.target.value,
+                    }))
+                  }
+                  placeholder="Add notes about this employer..."
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setEditDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleUpdateEmployer}>Save Changes</Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
