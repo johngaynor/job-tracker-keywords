@@ -185,7 +185,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {exportStats && (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <Building className="h-4 w-4" />
@@ -243,11 +243,11 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             </div>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={handleExport}
               disabled={isExporting}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <Download className="h-4 w-4" />
               {isExporting ? "Exporting..." : "Export Data"}
@@ -255,7 +255,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             <Button
               variant="outline"
               onClick={loadExportStats}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <Database className="h-4 w-4" />
               Refresh Stats
@@ -297,11 +297,11 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
             className="hidden"
           />
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={triggerFileSelect}
               disabled={isImporting}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <FileText className="h-4 w-4" />
               {isImporting ? "Importing..." : "Choose File to Import"}
@@ -311,7 +311,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
               onClick={handleTestDataImport}
               disabled={isImporting}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <Database className="h-4 w-4" />
               {isImporting ? "Importing..." : "Import Test Data"}
@@ -328,7 +328,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
                 <div>
                   <div className="text-green-600 dark:text-green-400">
                     Employers
