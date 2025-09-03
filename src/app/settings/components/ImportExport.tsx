@@ -36,6 +36,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    employerActivitiesImported: number;
     goalsImported: number;
     userKeywordsImported: number;
     skipped: number;
@@ -45,6 +46,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
     totalJobs: number;
     totalKeywords: number;
     totalActivities: number;
+    totalEmployerActivities: number;
     totalGoals: number;
     totalUserKeywords: number;
     lastModified?: Date;
@@ -93,7 +95,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
 
       setImportResult(result);
       toast.success("Data imported successfully!", {
-        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.employerActivitiesImported} employer activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
       });
       onDataChanged();
       await loadExportStats();
@@ -153,7 +155,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
 
       setImportResult(result);
       toast.success("Test data imported successfully!", {
-        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
+        description: `Imported ${result.employersImported} employers, ${result.jobsImported} jobs, ${result.keywordsImported} keywords, ${result.activitiesImported} activities, ${result.employerActivitiesImported} employer activities, ${result.goalsImported} goals, and ${result.userKeywordsImported} user keywords.`,
       });
       onDataChanged();
       await loadExportStats();
@@ -185,7 +187,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {exportStats && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                   <Building className="h-4 w-4" />
@@ -220,6 +222,15 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </div>
                 <div className="text-2xl font-bold">
                   {exportStats.totalActivities}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+                  <Building className="h-4 w-4" />
+                  Employer Activities
+                </div>
+                <div className="text-2xl font-bold">
+                  {exportStats.totalEmployerActivities}
                 </div>
               </div>
               <div className="text-center">
@@ -328,7 +339,7 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 text-sm">
                 <div>
                   <div className="text-green-600 dark:text-green-400">
                     Employers
@@ -357,6 +368,14 @@ export function ImportExport({ onDataChanged }: ImportExportProps) {
                   </div>
                   <div className="font-medium">
                     {importResult.activitiesImported} imported
+                  </div>
+                </div>
+                <div>
+                  <div className="text-green-600 dark:text-green-400">
+                    Employer Activities
+                  </div>
+                  <div className="font-medium">
+                    {importResult.employerActivitiesImported} imported
                   </div>
                 </div>
                 <div>

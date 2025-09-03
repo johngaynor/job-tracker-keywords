@@ -81,6 +81,16 @@ export interface Activity {
   updatedAt: Date;
 }
 
+export interface EmployerActivity {
+  id?: number;
+  employerId: number;
+  type: "activity"; // Only productive activities for employers
+  category: string;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Goal {
   id?: number;
   type:
@@ -101,6 +111,7 @@ export class EmployerKeywordsDB extends Dexie {
   keywords!: Table<Keyword>;
   userKeywords!: Table<UserKeyword>;
   activities!: Table<Activity>;
+  employerActivities!: Table<EmployerActivity>;
   goals!: Table<Goal>;
 
   constructor() {
@@ -131,6 +142,19 @@ export class EmployerKeywordsDB extends Dexie {
       userKeywords: "++id, keyword, createdAt, updatedAt",
       activities:
         "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
+      goals: "++id, type, targetNumber, frequencyDays, createdAt, updatedAt",
+    });
+
+    // Version 4: Add employer activities table
+    this.version(4).stores({
+      employers: "++id, name, notes, createdAt, updatedAt",
+      jobs: "++id, employerId, title, notes, link, referenceNumber, salaryEstimate, interestLevel, archived, status, [employerId+title], createdAt, updatedAt",
+      keywords: "++id, jobId, keyword, [jobId+keyword], createdAt, updatedAt",
+      userKeywords: "++id, keyword, createdAt, updatedAt",
+      activities:
+        "++id, jobId, type, category, notes, previousStatus, newStatus, createdAt, updatedAt",
+      employerActivities:
+        "++id, employerId, type, category, notes, createdAt, updatedAt",
       goals: "++id, type, targetNumber, frequencyDays, createdAt, updatedAt",
     });
   }

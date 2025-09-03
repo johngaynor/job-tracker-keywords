@@ -5,6 +5,7 @@ import {
   Keyword,
   UserKeyword,
   Activity,
+  EmployerActivity,
   Goal,
   Industry,
 } from "./database";
@@ -44,14 +45,17 @@ export const employerService = {
   },
 
   async delete(id: number): Promise<void> {
-    // Delete all related jobs and keywords first
+    // Delete all related jobs, keywords, and activities first
     const jobs = await db.jobs.where("employerId").equals(id).toArray();
     for (const job of jobs) {
       if (job.id) {
         await keywordService.deleteByJobId(job.id);
+        await activityService.deleteByJobId(job.id);
       }
     }
     await db.jobs.where("employerId").equals(id).delete();
+    // Delete employer activities
+    await employerActivityService.deleteByEmployerId(id);
     await db.employers.delete(id);
   },
 
@@ -466,6 +470,66 @@ export const activityService = {
     console.log("activityService.deleteAll: Starting...");
     await db.activities.clear();
     console.log("activityService.deleteAll: Completed ✓");
+  },
+};
+
+// Employer Activity operations
+export const employerActivityService = {
+  async create(
+    employerId: number,
+    category: string,
+    notes?: string
+  ): Promise<number> {
+    const now = new Date();
+    return await db.employerActivities.add({
+      employerId,
+      type: "activity", // Only productive activities for employers
+      category,
+      notes,
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+
+  async getByEmployerId(employerId: number): Promise<EmployerActivity[]> {
+    return await db.employerActivities
+      .where("employerId")
+      .equals(employerId)
+      .toArray()
+      .then((activities) =>
+        activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      );
+  },
+
+  async getAll(): Promise<EmployerActivity[]> {
+    return await db.employerActivities.orderBy("createdAt").reverse().toArray();
+  },
+
+  async update(
+    id: number,
+    updates: Partial<EmployerActivity>
+  ): Promise<number> {
+    return await db.employerActivities.update(id, {
+      ...updates,
+      updatedAt: new Date(),
+    });
+  },
+
+  async delete(id: number): Promise<void> {
+    await db.employerActivities.delete(id);
+  },
+
+  async deleteByEmployerId(employerId: number): Promise<number> {
+    return await db.employerActivities
+      .where("employerId")
+      .equals(employerId)
+      .delete();
+  },
+
+  async deleteAll(): Promise<void> {
+    console.log("employerActivityService.deleteAll: Starting...");
+    await db.employerActivities.clear();
+    console.log("employerActivityService.deleteAll: Completed ✓");
   },
 };
 

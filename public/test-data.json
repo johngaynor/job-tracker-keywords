@@ -2822,6 +2822,62 @@
       "id": 3
     }
   ],
+  "employerActivities": [
+    {
+      "employerId": 1,
+      "type": "activity",
+      "category": "research",
+      "notes": "Researched company culture and values on their website and LinkedIn",
+      "createdAt": "2025-08-20T09:30:00.000Z",
+      "updatedAt": "2025-08-20T09:30:00.000Z",
+      "id": 1
+    },
+    {
+      "employerId": 1,
+      "type": "activity",
+      "category": "networking",
+      "notes": "Connected with 3 employees on LinkedIn",
+      "createdAt": "2025-08-22T14:15:00.000Z",
+      "updatedAt": "2025-08-22T14:15:00.000Z",
+      "id": 2
+    },
+    {
+      "employerId": 2,
+      "type": "activity",
+      "category": "email",
+      "notes": "Sent inquiry email to HR department",
+      "createdAt": "2025-08-25T11:45:00.000Z",
+      "updatedAt": "2025-08-25T11:45:00.000Z",
+      "id": 3
+    },
+    {
+      "employerId": 3,
+      "type": "activity",
+      "category": "phone_call",
+      "notes": "Called main office to inquire about hiring process",
+      "createdAt": "2025-08-27T16:20:00.000Z",
+      "updatedAt": "2025-08-27T16:20:00.000Z",
+      "id": 4
+    },
+    {
+      "employerId": 4,
+      "type": "activity",
+      "category": "meeting",
+      "notes": "Attended virtual career fair booth",
+      "createdAt": "2025-08-29T10:00:00.000Z",
+      "updatedAt": "2025-08-29T10:00:00.000Z",
+      "id": 5
+    },
+    {
+      "employerId": 5,
+      "type": "activity",
+      "category": "follow_up",
+      "notes": "Followed up on previous application from 2 weeks ago",
+      "createdAt": "2025-08-30T13:30:00.000Z",
+      "updatedAt": "2025-08-30T13:30:00.000Z",
+      "id": 6
+    }
+  ],
   "userKeywords": [
     {
       "keyword": "javascript",

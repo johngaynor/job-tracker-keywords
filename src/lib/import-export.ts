@@ -3,6 +3,7 @@ import {
   jobService,
   keywordService,
   activityService,
+  employerActivityService,
   goalService,
   userKeywordService,
 } from "./db-services";
@@ -11,6 +12,7 @@ import {
   Job,
   Keyword,
   Activity,
+  EmployerActivity,
   Goal,
   UserKeyword,
   db,
@@ -23,6 +25,7 @@ export interface ExportData {
   jobs: Job[];
   keywords: Keyword[];
   activities: Activity[];
+  employerActivities?: EmployerActivity[]; // Optional for backward compatibility
   goals?: Goal[]; // Optional for backward compatibility
   userKeywords?: UserKeyword[]; // Optional for backward compatibility
 }
@@ -39,15 +42,23 @@ export class ImportExportService {
       const startTime = performance.now();
 
       // Use direct database access for better performance
-      const [employers, jobs, keywords, activities, goals, userKeywords] =
-        await Promise.all([
-          db.employers.toArray(),
-          db.jobs.toArray(),
-          db.keywords.toArray(),
-          db.activities.toArray(),
-          db.goals.toArray(),
-          db.userKeywords.toArray(),
-        ]);
+      const [
+        employers,
+        jobs,
+        keywords,
+        activities,
+        employerActivities,
+        goals,
+        userKeywords,
+      ] = await Promise.all([
+        db.employers.toArray(),
+        db.jobs.toArray(),
+        db.keywords.toArray(),
+        db.activities.toArray(),
+        db.employerActivities.toArray(),
+        db.goals.toArray(),
+        db.userKeywords.toArray(),
+      ]);
 
       const endTime = performance.now();
       console.log(
@@ -56,7 +67,7 @@ export class ImportExportService {
         )}ms`
       );
       console.log(
-        `Exported: ${employers.length} employers, ${jobs.length} jobs, ${keywords.length} keywords, ${activities.length} activities, ${goals.length} goals, ${userKeywords.length} user keywords`
+        `Exported: ${employers.length} employers, ${jobs.length} jobs, ${keywords.length} keywords, ${activities.length} activities, ${employerActivities.length} employer activities, ${goals.length} goals, ${userKeywords.length} user keywords`
       );
 
       return {
@@ -66,6 +77,7 @@ export class ImportExportService {
         jobs,
         keywords,
         activities,
+        employerActivities: employerActivities || [], // Ensure employerActivities is always an array
         goals: goals || [], // Ensure goals is always an array
         userKeywords: userKeywords || [], // Ensure userKeywords is always an array
       };
@@ -139,6 +151,7 @@ export class ImportExportService {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    employerActivitiesImported: number;
     goalsImported: number;
     userKeywordsImported: number;
     skipped: number;
@@ -151,6 +164,7 @@ export class ImportExportService {
       let jobsImported = 0;
       let keywordsImported = 0;
       let activitiesImported = 0;
+      let employerActivitiesImported = 0;
       let goalsImported = 0;
       let userKeywordsImported = 0;
       let skipped = 0;
@@ -267,6 +281,37 @@ export class ImportExportService {
         }
       }
 
+      // Import employer activities
+      for (const employerActivity of data.employerActivities || []) {
+        try {
+          const newEmployerId = employerIdMap.get(employerActivity.employerId);
+          if (!newEmployerId) {
+            console.warn(
+              `Skipping employer activity for employer ${employerActivity.employerId} - employer not found`
+            );
+            skipped++;
+            continue;
+          }
+
+          // Insert directly to preserve original timestamps
+          await db.employerActivities.add({
+            employerId: newEmployerId,
+            type: employerActivity.type,
+            category: employerActivity.category,
+            notes: employerActivity.notes,
+            createdAt: new Date(employerActivity.createdAt), // Preserve original timestamp
+            updatedAt: new Date(employerActivity.updatedAt), // Preserve original timestamp
+          });
+          employerActivitiesImported++;
+        } catch (error) {
+          console.warn(
+            `Failed to import employer activity: ${employerActivity.category}`,
+            error
+          );
+          skipped++;
+        }
+      }
+
       // Import goals
       for (const goal of data.goals || []) {
         try {
@@ -301,6 +346,7 @@ export class ImportExportService {
         jobsImported,
         keywordsImported,
         activitiesImported,
+        employerActivitiesImported,
         goalsImported,
         userKeywordsImported,
         skipped,
@@ -319,6 +365,7 @@ export class ImportExportService {
     jobsImported: number;
     keywordsImported: number;
     activitiesImported: number;
+    employerActivitiesImported: number;
     goalsImported: number;
     userKeywordsImported: number;
     skipped: number;
@@ -403,6 +450,7 @@ export class ImportExportService {
       "rw",
       [
         db.activities,
+        db.employerActivities,
         db.keywords,
         db.jobs,
         db.employers,
@@ -413,6 +461,10 @@ export class ImportExportService {
         console.log("Clearing activities...");
         await db.activities.clear();
         console.log("Activities cleared ✓");
+
+        console.log("Clearing employer activities...");
+        await db.employerActivities.clear();
+        console.log("Employer activities cleared ✓");
 
         console.log("Clearing keywords...");
         await db.keywords.clear();
@@ -447,20 +499,29 @@ export class ImportExportService {
     totalJobs: number;
     totalKeywords: number;
     totalActivities: number;
+    totalEmployerActivities: number;
     totalGoals: number;
     totalUserKeywords: number;
     lastModified?: Date;
   }> {
     try {
-      const [employers, jobs, keywords, activities, goals, userKeywords] =
-        await Promise.all([
-          employerService.getAll(),
-          jobService.getAll(),
-          keywordService.getAll(),
-          activityService.getAll(),
-          goalService.getAll(),
-          userKeywordService.getAll(),
-        ]);
+      const [
+        employers,
+        jobs,
+        keywords,
+        activities,
+        employerActivities,
+        goals,
+        userKeywords,
+      ] = await Promise.all([
+        employerService.getAll(),
+        jobService.getAll(),
+        keywordService.getAll(),
+        activityService.getAll(),
+        employerActivityService.getAll(),
+        goalService.getAll(),
+        userKeywordService.getAll(),
+      ]);
 
       // Find the most recent update
       const lastModified = [
@@ -468,6 +529,7 @@ export class ImportExportService {
         ...jobs,
         ...keywords,
         ...activities,
+        ...employerActivities,
         ...goals,
         ...userKeywords,
       ]
@@ -479,6 +541,7 @@ export class ImportExportService {
         totalJobs: jobs.length,
         totalKeywords: keywords.length,
         totalActivities: activities.length,
+        totalEmployerActivities: employerActivities.length,
         totalGoals: goals.length,
         totalUserKeywords: userKeywords.length,
         lastModified,

@@ -38,6 +38,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { employerService, jobService } from "@/lib/db-services";
 import { Employer, Industry } from "@/lib/database";
+import { EmployerActivityDialog } from "./components/EmployerActivityDialog";
 import {
   Search,
   Building2,
@@ -48,6 +49,7 @@ import {
   AlertTriangle,
   Trash,
   Plus,
+  Activity,
 } from "lucide-react";
 import { DateTime } from "luxon";
 
@@ -92,6 +94,7 @@ export default function EmployersPage() {
   );
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [activityDialogOpen, setActivityDialogOpen] = useState(false);
   const [selectedEmployer, setSelectedEmployer] =
     useState<EmployerWithStats | null>(null);
   const [editFormData, setEditFormData] = useState({
@@ -196,6 +199,11 @@ export default function EmployersPage() {
       notes: employer.notes || "",
     });
     setEditDialogOpen(true);
+  };
+
+  const handleViewActivities = (employer: EmployerWithStats) => {
+    setSelectedEmployer(employer);
+    setActivityDialogOpen(true);
   };
 
   const handleUpdateEmployer = async () => {
@@ -613,6 +621,14 @@ export default function EmployersPage() {
                           <Button
                             variant="ghost"
                             size="sm"
+                            onClick={() => handleViewActivities(employer)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Activity className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
                             onClick={() => handleEditEmployer(employer)}
                             className="h-8 w-8 p-0"
                           >
@@ -857,6 +873,13 @@ export default function EmployersPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Employer Activity Dialog */}
+      <EmployerActivityDialog
+        employer={selectedEmployer}
+        open={activityDialogOpen}
+        onOpenChange={setActivityDialogOpen}
+      />
     </div>
   );
 }

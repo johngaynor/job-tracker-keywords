@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StatCard } from "./components/StatCard";
-import { jobService, activityService, goalService } from "@/lib/db-services";
+import { jobService, activityService, employerActivityService, goalService } from "@/lib/db-services";
 import { Job, Activity, Goal } from "@/lib/database";
 import {
   TrendingUp,
@@ -151,9 +151,10 @@ export default function Dashboard() {
       let { start } = getDateRange(timeRange);
       const { end } = getDateRange(timeRange);
 
-      // Get all jobs and activities
+      // Get all jobs, activities, and employer activities
       const allJobs = await jobService.getAllIncludingArchived();
       const allActivities = await activityService.getAll();
+      const allEmployerActivities = await employerActivityService.getAll();
 
       // For "all time", find the earliest data point and use that as start
       if (timeRange === "all") {
@@ -167,14 +168,18 @@ export default function Dashboard() {
             activity.createdAt < earliest ? activity.createdAt : earliest,
           new Date()
         );
+        const earliestEmployerActivityDate = allEmployerActivities.reduce(
+          (earliest, activity) =>
+            activity.createdAt < earliest ? activity.createdAt : earliest,
+          new Date()
+        );
 
-        const earliestDate =
-          earliestJobDate < earliestActivityDate
-            ? earliestJobDate
-            : earliestActivityDate;
+        const earliestDate = [earliestJobDate, earliestActivityDate, earliestEmployerActivityDate].reduce(
+          (earliest, date) => date < earliest ? date : earliest
+        );
 
         // Only use earliest date if we actually have data, otherwise keep default
-        if (allJobs.length > 0 || allActivities.length > 0) {
+        if (allJobs.length > 0 || allActivities.length > 0 || allEmployerActivities.length > 0) {
           start = DateTime.fromJSDate(earliestDate).startOf("day").toJSDate();
         }
       }
@@ -216,7 +221,12 @@ export default function Dashboard() {
         (activity) => activity.newStatus === "rejected"
       ).length;
 
-      // Calculate productive activities (created applications, status changes, and activities)
+      // Filter employer activities by date
+      const employerActivitiesInRange = allEmployerActivities.filter(
+        (activity) => activity.createdAt >= start && activity.createdAt <= end
+      );
+
+      // Calculate productive activities (created applications, status changes, activities, and employer activities)
       const productiveActivitiesCount =
         applicationsCreated + // New applications created
         statusChangeActivities.length + // All status changes
@@ -225,7 +235,8 @@ export default function Dashboard() {
             activity.type !== "status_change" &&
             activity.createdAt >= start &&
             activity.createdAt <= end
-        ).length; // Other activities like emails, calls, etc.
+        ).length + // Other activities like emails, calls, etc.
+        employerActivitiesInRange.length; // Employer activities
 
       // Get current status breakdown of all jobs (not just in time range)
       const statusBreakdown: Record<string, number> = {};
